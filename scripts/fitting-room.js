@@ -11,7 +11,8 @@
    - 지금 사진에서 옷 한 벌 · 사이즈 하나만 바꾼 사진을, 키를 고르면 그 키의 몸무게별 기본 마네킹을 미리 받아 둬서 바로 바뀜
    - 사진 · 실측 그림은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
    - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
-   - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄움 → 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, Tab은 피팅룸 안에서만 돎
+   - 마네킹 사진(683×1024)은 모두 한 규칙으로 맞춤: 사람 키(똥머리 위 ~ 발끝) = 980px × 키 구간 가운데 값 / 177.5cm, 발끝은 y 1004, 가운데 정렬 → 같은 키 구간은 몸무게를 바꿔도 키가 그대로, 키 구간을 바꾸면 키가 바뀜 (새 사진도 이 규칙으로)
+   - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄움 → 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, 첫 칸 · 마지막 칸에서 Tab을 넘기면 상세 창 사진 칸으로 가라고 알림
    - 예전 숫자 판정(상품 실측표 data/fitting-items.json · 정확도 칸 · 부위별 여유)과 아래 옷 목록은 수정 시안에서 빠져서 지움 (JSON 파일은 남겨 둠) */
 
 /* ── 상품 상세 창 안에 띄울 때 (fitting-room.html?embed=1) ── */
@@ -23,6 +24,13 @@ if (EMBED) document.body.classList.add('embed');   // dim · 위아래 여백 �
 // byKey: 키보드(Esc · 닫기에서 Enter)로 닫았는지 → 상세 창이 포커스 테두리를 그릴지 정함 (브라우저는 문서마다 마지막 입력을 따로 기억해서 iframe 안 키보드를 상세 창이 모름)
 function closeEmbed(byKey) {
     parent.postMessage({ type: 'menkhet-fitting-close', byKey }, location.origin);
+}
+
+// 상세 창에 피팅룸 밖으로 Tab을 넘기라고 알림 → 상세 창이 피팅룸 앞 · 뒤 칸(썸네일 · 사진 칸)에 포커스 (main.js)
+// back: Shift+Tab으로 첫 칸 앞으로 나감 (아니면 Tab으로 마지막 칸 뒤로)
+// 양쪽 다 상세 창이 옮김 → 순서가 main.js tabItems를 따르고 테두리도 그려짐 (Tab은 그냥 두면 피팅룸 뒤에 칸이 없어 브라우저 주소창으로 감)
+function tabOutEmbed(back) {
+    parent.postMessage({ type: 'menkhet-fitting-tab', back }, location.origin);
 }
 
 /* ── 키 · 몸무게 구간 (주인님 표) ── */
@@ -406,16 +414,16 @@ document.addEventListener('keydown', (e) => {
         closeRow(true);
         return;
     }
-    // 상세 창 안에서는 Tab이 피팅룸 안에서만 돎 (뒤 상세 창은 inert라 iframe 밖으로 나가면 브라우저 주소창으로 감): 닫기 → 성별, Shift+Tab은 반대
+    // 상세 창 안에서는 피팅룸 끝에서 상세 창 사진 칸으로 넘어감 (피팅룸이 열려도 사진은 비교해 보게 그대로 — 주인님 요청): 닫기 → 사진 칸, 성별에서 Shift+Tab → 썸네일
     if (EMBED && e.key === 'Tab') {
         const first = fields.sex.toggle;
         const last = document.querySelector('.btn-close');
         if (e.shiftKey && (document.activeElement === first || document.activeElement === document.body)) {
             e.preventDefault();
-            last.focus();
+            tabOutEmbed(true);
         } else if (!e.shiftKey && document.activeElement === last) {
             e.preventDefault();
-            first.focus();
+            tabOutEmbed(false);
         }
         return;
     }

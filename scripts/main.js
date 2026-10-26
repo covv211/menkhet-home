@@ -223,12 +223,14 @@ if (detail) {
 
     /* 피팅룸: '피팅룸으로 이동'을 누르면 창 오른쪽 끝에서 밀려 들어옴 (시안 프로토타입 오버레이, 다른 페이지로 가지 않고 주소 기록도 남기지 않음)
        내용은 fitting-room.html?embed=1 하나를 처음 열 때 iframe으로 넣고 닫아도 남겨 둠 → 다시 열면 고른 몸 정보 · 옷 · 사이즈가 그대로
-       열려 있는 동안 피팅룸에 가려진 창 나머지(사진 · 정보 · 닫기)는 inert → Tab · 클릭은 피팅룸 안에서만, 바깥을 눌러도 닫히지 않음 (시안 오버레이 설정)
+       열려 있는 동안 피팅룸에 가려진 정보 · 닫기만 inert, 사진(갤러리)은 그대로 → 피팅룸 코디와 모델 코디를 나란히 비교 (주인님 요청): 휠로 넘기기 · 썸네일 · Tab은 사진 칸 · 썸네일 ↔ 피팅룸
+       사진을 눌러도 피팅룸은 닫히지 않음 (시안 오버레이 설정, 피팅룸 안에 열린 목록 · 옷 칸은 fitting-room.js가 닫음)
        닫기: 피팅룸의 닫기 · Esc(피팅룸 안 → fitting-room.js가 알림, 창 쪽 → 여기) → '피팅룸으로 이동'으로 포커스, 상세 창을 닫으면 같이 닫힘
        포커스가 iframe 경계를 넘을 때는 키보드로 했는지를 직접 넘김(focusVisible) → 브라우저가 문서마다 마지막 입력(마우스 · 키보드)을 따로 기억해서, 마우스를 쓴 문서로 키보드 포커스가 넘어가면 테두리가 안 그려지는 일이 없게 */
     const fittingLink = panel.querySelector('.btn-fitting-room');
     const fitting = panel.querySelector('.fitting-popup');
-    const coveredParts = [...panel.children].filter((part) => part !== fitting);   // 피팅룸이 열리면 inert
+    const gallery = panel.querySelector('.detail-gallery');
+    const coveredParts = [...panel.children].filter((part) => part !== fitting && part !== gallery);   // 피팅룸이 열리면 inert (정보 · 닫기)
     const FITTING_SRC = `${fittingLink.getAttribute('href')}?embed=1`;   // 링크(JS가 없을 때 가는 피팅룸 페이지)와 같은 파일
     let fittingFrame = null;   // 처음 열 때 만듦
     let fittingByKey = false;   // 키보드(Enter)로 열었는지
@@ -248,12 +250,12 @@ if (detail) {
         fittingFrame.focus();
     }
 
-    // 피팅룸 칸이 준비되면 내용을 보여 주고(style.css .ready), 그사이 열려 있으면 피팅룸 안으로 포커스
+    // 피팅룸 칸이 준비되면 내용을 보여 주고(style.css .ready), 그사이 열려 있으면 피팅룸 안으로 포커스 (받는 사이 사진 칸으로 옮겨 갔으면 그대로 둠)
     // fitting-room.js의 준비 알림(HTML을 다 읽은 때)이 먼저 오고, load(사진까지 다 받은 때)는 스크립트를 못 받았을 때를 위한 대비
     function frameReady() {
         if (fittingFrame.classList.contains('ready')) return;
         fittingFrame.classList.add('ready');
-        if (fitting.classList.contains('active')) focusFitting();
+        if (fitting.classList.contains('active') && document.activeElement === panel) focusFitting();
     }
 
     function openFitting(byKey) {
@@ -271,7 +273,7 @@ if (detail) {
         fitting.inert = false;
         coveredParts.forEach((part) => { part.inert = true; });
         if (fittingFrame.classList.contains('ready')) focusFitting();
-        else panel.focus();   // 받는 동안은 창에 포커스를 둠 → 누른 링크가 inert가 되며 포커스가 창 밖 페이지로 빠지지 않게 (Tab은 아래 keydown이 막음)
+        else panel.focus();   // 받는 동안은 창에 포커스를 둠 → 누른 링크가 inert가 되며 포커스가 창 밖 페이지로 빠지지 않게 (받는 동안 Tab은 사진 칸 · 썸네일만 돎 — 아래 keydown)
     }
 
     function closeFitting(focusLink, byKey) {
@@ -282,17 +284,31 @@ if (detail) {
         if (focusLink) fittingLink.focus({ focusVisible: byKey });   // 키보드로 닫았을 때만 테두리 (마우스로 닫으면 없음)
     }
 
+    // 창 안에서 Tab이 멈추는 곳 (가려진 칸은 inert라 빠짐): 피팅룸이 열리면 사진 칸 · 썸네일 · 피팅룸 iframe(받는 동안은 숨어 있어서 빼고), 닫히면 iframe 빼고 전부
+    function tabItems() {
+        return [...panel.querySelectorAll(FOCUSABLE)].filter((item) => !item.closest('[inert]') && (item !== fittingFrame || item.classList.contains('ready')));
+    }
+
+    // 피팅룸 첫 칸에서 Shift+Tab · 마지막 칸에서 Tab → 피팅룸 앞 · 뒤 칸(썸네일 · 사진 칸)으로 (피팅룸 안 Tab은 이 페이지로 오지 않아서 fitting-room.js가 알림)
+    function tabOutOfFitting(back) {
+        if (!fitting.classList.contains('active')) return;
+        const items = tabItems();
+        const at = items.indexOf(fittingFrame);
+        items[(at + (back ? -1 : 1) + items.length) % items.length].focus({ focusVisible: true });   // 키보드로 넘어왔으니 테두리를 그림
+    }
+
     fittingLink.addEventListener('click', (e) => {
         if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;   // 새 탭으로 열기(⌘ · Ctrl 클릭)는 그대로 피팅룸 페이지
         e.preventDefault();
         openFitting(e.detail === 0);   // 키보드 Enter로 누른 클릭은 detail 0
     });
 
-    // 피팅룸 iframe이 보낸 '준비' · '닫기'만 받음 (같은 사이트 · 지금 띄운 iframe인지 확인)
+    // 피팅룸 iframe이 보낸 '준비' · '닫기' · 'Tab으로 나가기'만 받음 (같은 사이트 · 지금 띄운 iframe인지 확인)
     window.addEventListener('message', (e) => {
         if (e.origin !== location.origin || !fittingFrame || e.source !== fittingFrame.contentWindow || !e.data) return;
         if (e.data.type === 'menkhet-fitting-ready') frameReady();
         else if (e.data.type === 'menkhet-fitting-close') closeFitting(true, e.data.byKey === true);
+        else if (e.data.type === 'menkhet-fitting-tab') tabOutOfFitting(e.data.back === true);
     });
 
     function openDetail(link = cardLinks[0]) {
@@ -363,7 +379,7 @@ if (detail) {
     });
 
     // Esc로 닫고(피팅룸이 열려 있으면 피팅룸부터), Tab은 창 안 마지막 → 처음(Shift+Tab은 반대)으로 돌림
-    // 포커스가 피팅룸 iframe 안에 있을 땐 키가 이 페이지로 오지 않음 → Esc · Tab은 fitting-room.js가 맡음
+    // 포커스가 피팅룸 iframe 안에 있을 땐 키가 이 페이지로 오지 않음 → Esc · Tab은 fitting-room.js가 맡고, 피팅룸 끝에서 Tab을 넘기면 위 tabOutOfFitting
     document.addEventListener('keydown', (e) => {
         if (!detail.classList.contains('active')) return;
         if (e.key === 'Escape') {
@@ -372,11 +388,7 @@ if (detail) {
             return;
         }
         if (e.key !== 'Tab') return;
-        if (fitting.classList.contains('active') && !fittingFrame.classList.contains('ready')) {
-            e.preventDefault();   // 피팅룸을 받는 동안은 갈 곳이 없음 → 창에 머묾 (가려진 칸은 inert, 받기 전 iframe은 숨김)
-            return;
-        }
-        const items = [...panel.querySelectorAll(FOCUSABLE)].filter((item) => !item.closest('[inert]'));   // 피팅룸이 열리면 iframe만, 닫히면 iframe 빼고
+        const items = tabItems();   // 피팅룸을 받는 동안은 사진 칸 · 썸네일만 돎
         const first = items[0];
         const last = items[items.length - 1];
         if (e.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
