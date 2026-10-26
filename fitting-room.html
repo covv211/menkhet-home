@@ -12,87 +12,110 @@
 </head>
 
 <body class="fitting-page">
-    <!-- 시안 dim(1920×1080) 위에 피팅룸 창(146:1029, 700×900)이 뜬 화면 -->
+    <!-- 시안 dim(1920×1080) 위에 피팅룸 창(수정 시안 231:1372, 700×900)이 뜬 화면 -->
     <main class="dim">
         <h1 class="blind">MENKHET 피팅룸</h1>
 
         <section class="fitting-room" aria-labelledby="fitting-room-title">
             <h2 class="blind" id="fitting-room-title">피팅룸</h2>
 
-            <!-- 몸 정보: 넣는 즉시 추천 사이즈 · 부위별 판정이 바뀜 (fitting-room.js) · 값은 이 화면에서만 쓰고 저장하거나 보내지 않음 -->
-            <form class="body-info" id="body-info" novalidate>
-                <p class="guide" id="body-guide" aria-live="polite">본인의 키와 몸 무게를 넣어 주세요.</p>
+            <!-- 몸 정보: 칸 어디를 눌러도 갈매기표 아래로 목록이 열리고, 고른 값이 칸 이름 옆에 나옴 (fitting-room.js)
+                 성별을 골라야 키, 키를 골라야 몸무게 구간이 나옴 · 고른 값은 이 화면에만 보여 주고 저장하거나 보내지 않음
+                 아직 마네킹은 바꾸지 않음 (체형별 사진은 나중에) -->
+            <div class="body-info">
+                <p class="guide">본인의 키와 몸 무게를 넣어 주세요.</p>
                 <div class="body-fields">
-                    <div class="field sex" role="radiogroup" aria-labelledby="sex-label">
+                    <div class="field sex">
                         <span class="label" id="sex-label">성별</span>
-                        <label><input type="radio" name="sex" value="female" checked><span>여자</span></label>
-                        <label><input type="radio" name="sex" value="male"><span>남자</span></label>
+                        <span class="selected" id="sex-selected"></span>
+                        <div class="select">
+                            <button type="button" class="toggle" aria-labelledby="sex-label sex-selected" aria-expanded="false" aria-controls="sex-list"></button>
+                            <ul class="select-list" id="sex-list" hidden>
+                                <li><button type="button" class="option" data-value="female" aria-pressed="false">여자</button></li>
+                                <li><button type="button" class="option" data-value="male" aria-pressed="false">남자</button></li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="field height">
-                        <label class="label" for="height">키</label>
-                        <span class="value"><input type="number" id="height" name="height" min="140" max="200" step="1" inputmode="numeric" placeholder="-" aria-describedby="body-guide"><span class="unit">cm</span></span>
+                        <span class="label" id="height-label">키</span>
+                        <span class="selected" id="height-selected"></span>
+                        <div class="select">
+                            <button type="button" class="toggle" aria-labelledby="height-label height-selected" aria-expanded="false" aria-controls="height-list"></button>
+                            <!-- 성별을 고르면 그 성별의 키 구간으로 바뀜 -->
+                            <ul class="select-list" id="height-list" hidden>
+                                <li class="hint" tabindex="-1">성별을 먼저 골라 주세요</li>
+                            </ul>
+                        </div>
                     </div>
                     <div class="field weight">
-                        <label class="label" for="weight">몸무게</label>
-                        <span class="value"><input type="number" id="weight" name="weight" min="35" max="130" step="1" inputmode="numeric" placeholder="-" aria-describedby="body-guide"><span class="unit">kg</span></span>
+                        <span class="label" id="weight-label">몸무게</span>
+                        <span class="selected" id="weight-selected"></span>
+                        <div class="select">
+                            <button type="button" class="toggle" aria-labelledby="weight-label weight-selected" aria-expanded="false" aria-controls="weight-list"></button>
+                            <!-- 키를 고르면 그 키에 맞는 몸무게 구간으로 바뀜 -->
+                            <ul class="select-list" id="weight-list" hidden>
+                                <li class="hint" tabindex="-1">키를 먼저 골라 주세요</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-            </form>
+            </div>
 
             <div class="fitting-viewer">
-                <!-- 마네킹: 시안 사진 (재킷을 입으면 재킷 룩, 아니면 니트 룩 — fitting-room.js가 바꿈) -->
                 <div class="mannequin-box">
-                    <img class="mannequin" src="images/fitting/mannequin-jacket.webp" alt="오버사이즈 스웨이드 가죽 봄버 재킷을 입은 마네킹" width="700" height="700">
+                    <!-- 마네킹: 코트 · 셔츠 · 바지 · 로퍼 3색씩 81가지 조합 사진 중 옷 칸에서 고른 색의 사진 (fitting-room.js가 바꿈) -->
+                    <img class="mannequin active" src="images/fitting/outfit/women/165-170cm/65-70kg/coat-black_shirt-skyblue_pants-black_loafers-black.webp" alt="코트 검정, 셔츠 하늘색, 바지 검정, 로퍼 검정 차림의 마네킹" width="683" height="1024">
 
-                    <!-- 사이즈: 옷 목록에서 고른 옷의 사이즈, 상품 실측표로 판정한 추천 사이즈에 '추천' 표시
-                         부위별 여유(옷 − 몸 둘레)와 등급 · 밑단 위치를 보여 줌 (내용은 fitting-room.js가 채움) · 다른 사이즈를 고르면 그 사이즈로 판정 -->
-                    <div class="size-panel" aria-labelledby="size-title">
-                        <p class="size-title" id="size-title"><span class="name">봄버 재킷</span> 사이즈</p>
-                        <ul class="size-list">
-                            <li><button type="button" class="size" data-size="S" aria-pressed="false">S</button></li>
-                            <li><button type="button" class="size" data-size="M" aria-pressed="false">M</button></li>
-                            <li><button type="button" class="size" data-size="L" aria-pressed="false">L</button></li>
-                            <li><button type="button" class="size" data-size="XL" aria-pressed="false">XL</button></li>
-                        </ul>
-                        <p class="size-fit" aria-live="polite"></p>
-                        <ul class="size-parts"></ul>
-                        <p class="size-basis"></p>
-                        <p class="size-note"></p>
-                        <button type="button" class="take-off">벗기</button>
-                    </div>
-
-                    <!-- 정확도 높이기: 평소 입는 사이즈 · 줄자로 잰 둘레 (넣는 즉시 추천이 바뀜) · 시안에 없는 칸 -->
-                    <div class="accuracy-panel">
-                        <button type="button" class="accuracy-toggle" aria-expanded="false" aria-controls="accuracy-form">정확도 <strong class="level">낮음</strong> · 치수 더 넣기</button>
-                        <form class="accuracy-form" id="accuracy-form" novalidate hidden>
-                            <fieldset class="usual">
-                                <legend>평소 입는 사이즈</legend>
-                                <label>상의 <select name="usualTop"><option value="">-</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></label>
-                                <label>하의 <select name="usualBottom"><option value="">-</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></label>
-                            </fieldset>
-                            <fieldset class="tape">
-                                <legend>줄자로 잰 둘레 (cm)</legend>
-                                <label>가슴 <input type="number" name="chest" min="60" max="150" step="0.5" inputmode="decimal" autocomplete="off" placeholder="-"></label>
-                                <label>허리 <input type="number" name="waist" min="50" max="150" step="0.5" inputmode="decimal" autocomplete="off" placeholder="-"></label>
-                                <label>엉덩이 <input type="number" name="hip" min="70" max="160" step="0.5" inputmode="decimal" autocomplete="off" placeholder="-"></label>
-                            </fieldset>
-                            <p class="privacy">넣은 값은 이 화면에서만 계산하고, 저장하거나 보내지 않아요.</p>
-                        </form>
-                    </div>
+                    <!-- 옷 칸: 지금 입은 색의 옷이 보이고, 누르면 오른쪽으로 색 3개가 펼쳐짐 → 색을 고르면 마네킹이 바뀌고 접힘 -->
+                    <ul class="side-items">
+                        <li class="side-item" data-part="coat">
+                            <ul class="side-options">
+                                <li><button type="button" class="side-option" data-color="black" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/coat-black.webp" alt="코트 검정" width="94" height="140"></button></li>
+                                <li><button type="button" class="side-option" data-color="ivory" aria-pressed="false"><img src="images/fitting/side/coat-ivory.webp" alt="코트 아이보리" width="94" height="140"></button></li>
+                                <li><button type="button" class="side-option" data-color="brown" aria-pressed="false"><img src="images/fitting/side/coat-brown.webp" alt="코트 브라운" width="94" height="140"></button></li>
+                            </ul>
+                        </li>
+                        <li class="side-item" data-part="shirt">
+                            <ul class="side-options">
+                                <li><button type="button" class="side-option" data-color="skyblue" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/shirt-skyblue.webp" alt="셔츠 하늘색" width="94" height="140"></button></li>
+                                <li><button type="button" class="side-option" data-color="white" aria-pressed="false"><img src="images/fitting/side/shirt-white.webp" alt="셔츠 흰색" width="94" height="140"></button></li>
+                                <li><button type="button" class="side-option" data-color="black" aria-pressed="false"><img src="images/fitting/side/shirt-black.webp" alt="셔츠 검정" width="94" height="140"></button></li>
+                            </ul>
+                        </li>
+                        <li class="side-item" data-part="pants">
+                            <ul class="side-options">
+                                <li><button type="button" class="side-option" data-color="black" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/pants-black.webp" alt="바지 검정" width="94" height="140"></button></li>
+                                <li><button type="button" class="side-option" data-color="skyblue" aria-pressed="false"><img src="images/fitting/side/pants-skyblue.webp" alt="바지 스카이블루" width="94" height="140"></button></li>
+                                <li><button type="button" class="side-option" data-color="gray" aria-pressed="false"><img src="images/fitting/side/pants-gray.webp" alt="바지 그레이" width="94" height="140"></button></li>
+                            </ul>
+                        </li>
+                        <li class="side-item" data-part="loafers">
+                            <ul class="side-options">
+                                <li><button type="button" class="side-option" data-color="black" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/loafers-black.webp" alt="로퍼 검정" width="94" height="140"></button></li>
+                                <li><button type="button" class="side-option" data-color="khaki" aria-pressed="false"><img src="images/fitting/side/loafers-khaki.webp" alt="로퍼 카키" width="94" height="140"></button></li>
+                                <li><button type="button" class="side-option" data-color="brown" aria-pressed="false"><img src="images/fitting/side/loafers-brown.webp" alt="로퍼 브라운" width="94" height="140"></button></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
 
-                <!-- 입혀 볼 옷: 아우터 · 상의 · 하의 · 신발 · 가방에서 하나씩 골라 조합 (같은 칸 옷을 고르면 바뀜)
-                     셔츠 · 티셔츠 · 스니커즈 · 토트백은 임시 추천 상품 (상품 정보가 정해지면 이름 · 사진 교체, 지금 사진은 3D 모델 렌더) -->
-                <ul class="item-list">
-                    <li><button type="button" class="fitting-item" data-item="jacket" aria-pressed="false"><img src="images/fitting/item-jacket.webp" alt="오버사이즈 스웨이드 가죽 봄버 재킷" width="80" height="80"><span class="slot">아우터</span><span class="reco"></span></button></li>
-                    <li><button type="button" class="fitting-item" data-item="coat" aria-pressed="false"><img src="images/women-coat/long-coat/long-coat-04.webp" alt="여자 롱코트" width="80" height="80"><span class="slot">아우터</span><span class="reco"></span></button></li>
-                    <li><button type="button" class="fitting-item" data-item="knit" aria-pressed="false"><img src="images/fitting/item-knit.webp" alt="차콜 브이넥 니트셔츠 레이어드" width="80" height="80"><span class="slot">상의</span><span class="reco"></span></button></li>
-                    <li><button type="button" class="fitting-item" data-item="shirt" aria-pressed="false"><img src="images/fitting/item-shirt.webp" alt="화이트 셔츠" width="80" height="80"><span class="slot">상의</span><span class="reco"></span></button></li>
-                    <li><button type="button" class="fitting-item" data-item="tee" aria-pressed="false"><img src="images/fitting/item-tee.webp" alt="화이트 티셔츠" width="80" height="80"><span class="slot">상의</span><span class="reco"></span></button></li>
-                    <li><button type="button" class="fitting-item" data-item="pants" aria-pressed="false"><img src="images/fitting/item-pants.webp" alt="차콜 와이드 팬츠" width="80" height="80"><span class="slot">하의</span><span class="reco"></span></button></li>
-                    <li><button type="button" class="fitting-item" data-item="shoes" aria-pressed="false"><img src="images/fitting/item-shoes.webp" alt="화이트 스니커즈" width="80" height="80"><span class="slot">신발</span></button></li>
-                    <li><button type="button" class="fitting-item" data-item="bag" aria-pressed="false"><img src="images/fitting/item-bag.webp" alt="블랙 토트백" width="80" height="80"><span class="slot">가방</span></button></li>
-                </ul>
+                <!-- 사이즈: 칸을 고르면 아래 실측 그림이 그 사이즈로 바뀜 (처음은 M, 시안에서 숨긴 '추천' 꼬리표는 넣지 않음) -->
+                <div class="size-panel" role="group" aria-labelledby="size-title">
+                    <p class="size-title" id="size-title"><span class="name">봄버 재킷</span><span class="blind"> 사이즈</span></p>
+                    <ul class="size-list">
+                        <li><button type="button" class="size" data-size="s" aria-pressed="false">S</button></li>
+                        <li><button type="button" class="size" data-size="m" aria-pressed="true">M</button></li>
+                        <li><button type="button" class="size" data-size="l" aria-pressed="false">L</button></li>
+                        <li><button type="button" class="size" data-size="xl" aria-pressed="false">XL</button></li>
+                    </ul>
+                    <img class="size-guide active" src="images/fitting/size-guide-m.svg" alt="M(66) 실측: 어깨 39.5cm, 가슴단면 49cm, 허리단면 45cm, 총장 63.5cm, 소매길이 59cm, 소매통 17.5cm" width="143" height="160">
+                    <p class="size-note">총장 ±2cm</p>
+                    <!-- 장바구니 · 바로구매: 연결할 곳이 정해지기 전이라 동작 없음 (상품 상세 창 버튼과 같음) -->
+                    <div class="size-actions">
+                        <button type="button" class="btn-cart">장바구니 담기</button>
+                        <button type="button" class="btn-buy">바로구매 하기</button>
+                    </div>
+                </div>
             </div>
 
             <!-- 닫기: 들어온 페이지(상품 상세)로 돌아감, 바로 열었으면 메인으로 -->

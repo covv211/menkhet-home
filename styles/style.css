@@ -1363,9 +1363,9 @@ footer hr {
 }
 
 /* ══════════ 피팅룸 (fitting-room.html) ══════════
-   - 시안 146:1029: 어두운 배경(dim) 가운데에 700×900 창. 화면이 1920×1080보다 작으면 폭 · 높이 중 더 모자란 쪽 비율로 줄어듦
-   - 마네킹은 시안 사진 700×700 (재킷 룩 · 니트 룩), 위에 사이즈 칸(오른쪽 위)과 정확도 칸(왼쪽 아래)을 띄움
-   - 시안에 없는 성별 칸을 키 앞에 더함 (남녀 체형 공식이 달라서) */
+   - 수정 시안 231:1372: 어두운 배경(dim) 가운데에 700×900 창. 화면이 1920×1080보다 작으면 폭 · 높이 중 더 모자란 쪽 비율로 줄어듦
+   - 위 60: 안내 문구 + 성별 · 키 · 몸무게 칸(누르면 아래로 목록) / 아래 700×840: 회색 바탕에 마네킹 + 왼쪽 옷 칸 + 오른쪽 위 사이즈 칸
+   - 옷 칸 펼침 · 마네킹 사진 · 실측 그림 바뀜은 모두 0.3s 등속 (시안 SMART_ANIMATE · DISSOLVE), 맥 '동작 줄이기'여도 그대로 (주인님 지정) */
 
 .fitting-page {
     --px: min(1px, 100vw / 1920, 100dvh / 1080);   /* 창 높이 900 + 위아래 90이 화면 높이를 넘지 않게 */
@@ -1383,459 +1383,349 @@ footer hr {
     position: relative;
     width: calc(700 * var(--px));
     height: calc(900 * var(--px));
-    padding: calc(10 * var(--px)) 0;
+    padding-top: calc(10 * var(--px));
     background: var(--surface-white);
 }
 
-/* ── 몸 정보: 안내 문구 + 성별 · 키 · 몸무게 (높이 62) ── */
+/* ── 몸 정보 (높이 40): 안내 문구 + 성별 · 키 · 몸무게 칸 ── */
 .body-info {
     padding: 0 calc(20 * var(--px));
 }
 
 .body-info .guide {
     color: var(--body-placeholder);
-    font-size: calc(18 * var(--px));   /* H4/regular */
-    font-weight: var(--h4-regular-weight);
-    line-height: var(--h4-regular-line-height);
-}
-
-/* 범위를 벗어난 값을 넣으면 안내 문구 자리에 알림을 띄움 */
-.body-info .guide.warn {
-    color: var(--state-warn);
+    font-size: calc(12 * var(--px));   /* Caption-md/regular */
+    font-weight: var(--caption-md-regular-weight);
+    line-height: calc(14 * var(--px));   /* 시안 글 상자 14 */
 }
 
 .body-fields {
     display: flex;
-    gap: calc(40 * var(--px));
-    margin-top: calc(5 * var(--px));
+    gap: calc(15 * var(--px));
+    margin-top: calc(6 * var(--px));
 }
 
+/* 칸 하나: 이름 + 고른 값 + 갈매기표 (시안처럼 칸 어디를 눌러도 목록이 열림 — fitting-room.js) */
 .body-fields .field {
     display: flex;
     gap: calc(10 * var(--px));
     color: var(--body-default);
-    font-size: calc(24 * var(--px));   /* H2/line/medium */
-    font-weight: var(--h2-line-medium-weight);
-    line-height: var(--h2-line-medium-line-height);
-}
-
-/* 성별: 고른 쪽만 본문 색 + 밑줄, 안 고른 쪽은 안내 문구 색 */
-.field.sex label {
-    position: relative;
-    color: var(--body-placeholder);
+    font-size: calc(17 * var(--px));   /* Body-lg/regular */
+    font-weight: var(--body-lg-regular-weight);
+    line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
     cursor: pointer;
 }
 
-.field.sex input {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
+.body-fields .field.sex {
+    gap: calc(7 * var(--px));
 }
 
-.field.sex input:checked + span {
-    color: var(--body-default);
-    text-decoration: underline;
-    text-decoration-thickness: 2px;
-    text-underline-offset: calc(6 * var(--px));
+/* 칸 이름 글 상자: 시안 폭 30 · 15 · 44 (브라우저는 글자를 1~2px 좁게 재서 그대로 두면 뒤 칸들이 왼쪽으로 밀림) */
+.field.sex .label {
+    min-width: calc(30 * var(--px));
 }
 
-.field.sex input:focus-visible + span {
-    outline: 2px solid var(--button-stroke-focus);
-    outline-offset: 2px;
+.field.height .label {
+    min-width: calc(15 * var(--px));
 }
 
-/* 키 · 몸무게 칸: 시안처럼 "( - )", 값을 넣으면 "( 175cm )" */
-.field .value::before {
-    content: "( ";
-    white-space: pre;
+.field.weight .label {
+    min-width: calc(44 * var(--px));
 }
 
-.field .value::after {
-    content: " )";
-    white-space: pre;
-}
-
-.field .value input {
-    width: 3ch;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: inherit;
-    text-align: center;
-    appearance: textfield;   /* 숫자 칸 위아래 화살표 숨김 (키보드 위아래 화살표로 1씩 바꾸기는 그대로) */
-}
-
-.field .value input::-webkit-inner-spin-button,
-.field .value input::-webkit-outer-spin-button {
-    margin: 0;
-    appearance: none;
-}
-
-.field .value input::placeholder {
-    color: inherit;   /* 시안 "( - )"는 본문 색 */
-    opacity: 1;
-}
-
-.field .value input:placeholder-shown + .unit {
+/* 아직 고르지 않은 칸은 값 자리를 비워 두지 않음 */
+.field .selected:empty {
     display: none;
 }
 
-/* 넣은 글자 수만큼 칸 폭이 맞춰짐, 못 하는 브라우저는 빈칸일 때만 좁힘 */
-@supports (field-sizing: content) {
-    .field .value input {
-        width: auto;
-        min-width: 1ch;
-        field-sizing: content;
-    }
+.select {
+    position: relative;
 }
 
-@supports not (field-sizing: content) {
-    .field .value input:placeholder-shown {
-        width: 1ch;
-    }
+/* 갈매기표 칸: 성별 30 · 키 62 · 몸무게 50 (시안 폭 그대로, 갈매기표 15×6 · 굵기 1.5는 가운데) */
+.select .toggle {
+    display: block;
+    width: calc(30 * var(--px));
+    height: calc(20 * var(--px));
+    border: 0;
+    background: url(../images/icons/chevron-down.svg) no-repeat center / calc(17 * var(--px)) auto;
+    cursor: pointer;
 }
 
-/* ── 마네킹 700×700 (시안 y 80) + 옷 목록 ── */
+.field.height .toggle {
+    width: calc(62 * var(--px));
+}
+
+.field.weight .toggle {
+    width: calc(50 * var(--px));
+}
+
+/* 목록: 갈매기표 칸 바로 아래, 흰 바탕 + 회색 테두리 1, 줄 높이 20 (키 · 몸무게는 Caption-md/medium) */
+.select-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;   /* 아래 마네킹 칸 위에 뜨게 (몸 정보 줄 전체에 z-index를 주면 창 오른쪽 위 닫기 버튼까지 덮음) */
+    min-width: 100%;
+    border: 1px solid var(--border-default);
+    background: var(--surface-white);
+    font-size: calc(12 * var(--px));   /* Caption-md/medium */
+    font-weight: var(--caption-md-medium-weight);
+    line-height: calc(14 * var(--px));   /* 시안 글 상자 14 */
+    white-space: nowrap;
+}
+
+.select-list .option {
+    display: block;
+    width: 100%;
+    height: calc(20 * var(--px));
+    padding: 0 calc(4 * var(--px));
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* 마우스를 올린 줄 · 고른 줄: 옅은 회색 바탕 (시안에 상태가 없어 사이즈 칸 기본색으로) */
+.select-list .option:hover,
+.select-list .option[aria-pressed="true"] {
+    background: var(--surface-subtle);
+}
+
+.select-list .option:focus-visible {
+    outline-offset: -2px;   /* 테두리 칸 밖으로 삐져나오지 않게 안쪽에 그림 */
+}
+
+/* '성별을 먼저 골라 주세요' · '키를 먼저 골라 주세요' (시안 안쪽 여백 3 · 8) */
+.select-list .hint {
+    padding: calc(3 * var(--px)) calc(8 * var(--px));
+}
+
+/* 성별 목록: 위아래 2 · 줄 사이 5, 글자는 칸 이름과 같은 Body-lg/regular */
+.field.sex .select-list {
+    padding: calc(2 * var(--px)) 0;
+    font-size: calc(17 * var(--px));   /* Body-lg/regular */
+    font-weight: var(--body-lg-regular-weight);
+    line-height: calc(20 * var(--px));
+}
+
+.field.sex .select-list li + li {
+    margin-top: calc(5 * var(--px));
+}
+
+/* 성별 줄: 시안 폭 42 (글자 상자 30 + 양옆 6) */
+.field.sex .option {
+    min-width: calc(42 * var(--px));
+    padding: 0 calc(6 * var(--px));
+}
+
+/* 키 목록: 시안 줄 폭 62에 글자 가운데, 옆 여백 없음 */
+.field.height .option {
+    min-width: calc(62 * var(--px));
+    padding: 0;
+}
+
+/* 몸무게 목록: 시안 줄 폭 58 (글자가 긴 95~100kg 줄만 위 기본 여백 4로 조금 넓어짐) */
+.field.weight .option {
+    min-width: calc(58 * var(--px));
+}
+
+/* ── 마네킹 칸 700×840 (시안 y 60): 회색 바탕 가운데에 마네킹 사진 전체 ── */
 .fitting-viewer {
-    margin-top: calc(8 * var(--px));   /* 시안 y 80: 자동 레이아웃 간격 20이 창 높이 900에 눌려 있음 */
+    position: relative;
+    height: calc(840 * var(--px));
+    margin-top: calc(10 * var(--px));   /* 시안 y 60 = 창 위 여백 10 + 몸 정보 40 + 10 */
 }
 
 .mannequin-box {
     position: relative;
-    height: calc(700 * var(--px));
-    overflow: hidden;
-    background: linear-gradient(#ddd8d8, #eeeae9);   /* 시안 사진의 스튜디오 배경색 (위 → 아래, 토큰 없음) */
+    height: 100%;
+    background: var(--gray-300);
 }
 
+/* 사진 683×1024(2:3)을 칸 높이에 맞춰 가운데 (560×840), 바뀔 땐 새 사진이 위에 겹쳐 0.3s 등속으로 뜸 (fitting-room.js가 .active를 붙임) */
 .mannequin-box .mannequin {
-    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity .3s linear;
 }
 
-/* ── 사이즈: 마네킹 오른쪽 위, 옷 목록에서 고른 옷의 S · M · L · XL (칸 모양은 상품 상세 시안 .size-chip) ──
-   부위별 판정 줄이 들어가서 시안 폭 145보다 넓힘 (마네킹 사진 옆 빈자리 안) */
+.mannequin-box .mannequin.active {
+    opacity: 1;
+}
+
+/* ── 옷 칸: 마네킹 왼쪽(x 20 · y 245)에 70×80 칸 4개 (사이 10) ──
+   접힌 칸은 입은 색 하나만 보이고, 펼치면(.active) 오른쪽으로 230(70 + 10 + 70 + 10 + 70)까지 늘어나며 색 3개가 보임
+   폭과 줄 위치가 함께 0.3s 등속으로 움직여서 입은 색은 늘어나는 칸의 오른쪽 끝에 붙어 따라감 */
+.side-items {
+    position: absolute;
+    top: calc(245 * var(--px));
+    left: calc(20 * var(--px));
+}
+
+.side-item {
+    width: calc(70 * var(--px));
+    overflow: hidden;
+    transition: width .3s linear;
+}
+
+.side-item + .side-item {
+    margin-top: calc(10 * var(--px));
+}
+
+.side-item.active {
+    width: calc(230 * var(--px));
+}
+
+/* --index: 입은 색의 순서 (fitting-room.js) → 접힌 칸에서는 그 색이 칸 안에 오게 줄을 왼쪽으로 밂 */
+.side-options {
+    display: flex;
+    gap: calc(10 * var(--px));
+    width: calc(230 * var(--px));
+    translate: calc(var(--index, 0) * -80 * var(--px)) 0;
+    transition: translate .3s linear;
+}
+
+.side-item.active .side-options {
+    translate: 0;
+}
+
+.side-option {
+    display: block;
+    width: calc(70 * var(--px));
+    height: calc(80 * var(--px));
+    padding: calc(5 * var(--px));
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+/* 접힌 칸의 다른 색: 다 접힌 뒤 숨김 → Tab · 스크린리더에는 입은 색만 (펼칠 땐 바로 보임) */
+.side-item:not(.active) .side-option[aria-pressed="false"] {
+    visibility: hidden;
+    transition: visibility 0s linear .3s;
+}
+
+.side-option:focus-visible {
+    outline-offset: -3px;   /* 칸 밖은 잘려서 안쪽에 그림 */
+}
+
+/* 옷 사진 2:3 → 높이 70에 맞춰 가운데 (시안 46.67×70) */
+.side-option img {
+    display: block;
+    width: calc(140 / 3 * var(--px));
+    height: calc(70 * var(--px));
+    margin: 0 auto;
+}
+
+/* ── 사이즈 160×260: 마네킹 칸 오른쪽 위(x 520 · y 20), 흰 바탕 · 안쪽 여백 5 ── */
 .size-panel {
     position: absolute;
     top: calc(20 * var(--px));
     right: calc(20 * var(--px));
-    width: calc(230 * var(--px));
-    padding: calc(15 * var(--px));
-    background: color-mix(in srgb, var(--surface-white) 85%, transparent);
-    color: var(--body-default);
-    font-size: calc(16 * var(--px));   /* Body/medium 크기 */
+    width: calc(160 * var(--px));
+    padding: calc(5 * var(--px));
+    background: var(--surface-white);
 }
 
-.size-title .name {
-    font-weight: 600;
+.size-title {
+    color: var(--gray-900);
+    font-size: calc(13 * var(--px));   /* Caption-lg/line/regular */
+    font-weight: var(--caption-lg-line-regular-weight);
+    line-height: calc(20 * var(--px));   /* 시안 글 상자 20 (150%) */
 }
 
-.size-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: calc(10 * var(--px)) calc(15 * var(--px));
+/* 칸 25×25 네 개를 폭 150 양끝에 맞춤 (사이 약 16.7) — 상품 상세 창 .size-list와 이름이 같아서 사이즈 칸 안으로 한정 */
+.size-panel .size-list {
+    display: flex;
+    justify-content: space-between;
     margin-top: calc(10 * var(--px));
 }
 
-.size-list .size {
-    position: relative;
+.size-panel .size {
     display: block;
-    width: 100%;
-    height: calc(44 * var(--px));
+    width: calc(25 * var(--px));
+    height: calc(25 * var(--px));
+    padding: 0;
     border: 0;
-    border-radius: calc(10 * var(--px));
     background: var(--surface-subtle);
     color: var(--body-default);
-    font-size: calc(20 * var(--px));   /* H3/regular */
-    font-weight: var(--h3-regular-weight);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));
     cursor: pointer;
+    transition: background-color .3s linear, color .3s linear;   /* 시안 DISSOLVE 0.3s 등속 */
 }
 
-/* 이 상품에 없는 사이즈 */
-.size-list .size:disabled {
-    color: var(--body-placeholder);
+/* 고른 사이즈 (다시 눌러도 그대로) */
+.size-panel .size[aria-pressed="true"] {
+    background: var(--button-fill-select);
+    color: var(--on-color-text);
     cursor: default;
 }
 
-/* 마네킹에 입힌 사이즈 */
-.size-list .size[aria-pressed="true"] {
-    background: var(--button-fill-select);
-    color: var(--on-color-text);
+/* 실측 그림 143×160 (images/fitting/size-guide-*.svg), 바뀔 땐 새 그림을 옛 그림 위에 겹쳐 0.3s 등속으로 띄움 (.active는 fitting-room.js)
+   상품 상세 창 글줄 .size-guide와 이름이 같아서 사이즈 칸 안으로 한정 */
+.size-panel .size-guide {
+    display: block;
+    width: calc(143 * var(--px));
+    height: calc(160 * var(--px));
+    margin: calc(5 * var(--px)) auto 0;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity .3s linear;
 }
 
-/* 체형에 맞는 사이즈: 칸 위에 보라 '추천' 꼬리표 */
-.size-list .size.reco::after {
-    content: "추천";
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0 calc(5 * var(--px));
-    border-radius: calc(10 * var(--px));
-    background: var(--color-primary);
-    color: var(--on-color-text);
-    font-size: calc(11 * var(--px));   /* Caption/small 크기 */
-    font-weight: 600;
-    line-height: calc(18 * var(--px));
-    translate: 30% -50%;
+.size-panel .size-guide.active {
+    opacity: 1;
 }
 
-.size-fit {
-    margin-top: calc(12 * var(--px));
-    font-weight: 600;
+.size-panel .size-guide + .size-guide {
+    margin-top: calc(-160 * var(--px));
 }
 
-/* 고른 사이즈가 체형에 맞으면 보라색 */
-.size-fit.fit {
-    color: var(--color-primary);
-}
-
-/* 부위별 판정: 부위 | 여유(옷 − 몸) | 등급, 등급마다 색 (작음 빨강 · 타이트 금색 · 딱 맞음 보라 · 여유 청록 · 큼 파랑) */
-.size-parts {
-    display: grid;
-    grid-template-columns: auto auto 1fr;
-    gap: calc(2 * var(--px)) calc(8 * var(--px));
-    margin-top: calc(6 * var(--px));
-    font-size: calc(13 * var(--px));   /* Caption/large 크기 */
-}
-
-.size-parts li {
-    display: contents;
-}
-
-.size-parts .part {
-    color: var(--body-description);
-}
-
-.size-parts .value {
-    font-variant-numeric: tabular-nums;
-    text-align: right;
-}
-
-.size-parts .grade {
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.size-parts [data-grade="0"] .grade { color: var(--red-600); }
-.size-parts [data-grade="1"] .grade { color: var(--gold-700); }
-.size-parts [data-grade="2"] .grade { color: var(--color-primary); }
-.size-parts [data-grade="3"] .grade { color: var(--teal-700); }
-.size-parts [data-grade="4"] .grade { color: var(--blue-700); }
-
-/* 오차 안이라 두 등급 사이: 점선 밑줄 */
-.size-parts .border .grade {
-    text-decoration: underline dotted;
-    text-underline-offset: calc(3 * var(--px));
-}
-
-/* 밑단 위치: 부위 다음 칸부터 끝까지 */
-.size-parts .hem .value {
-    grid-column: 2 / -1;
-    text-align: left;
-}
-
-.size-basis {
-    margin-top: calc(6 * var(--px));
-    color: var(--body-default);
-    font-size: calc(13 * var(--px));   /* Caption/large 크기 */
-    font-weight: 600;
-    word-break: keep-all;
-}
-
-/* 정확도 · 실측표 · '추정' (판정이 단정이 아님을 늘 보여 줌) */
+/* 총장 ±2cm: 실측 그림 왼쪽 아래 빈자리에 겹침 (시안 x 10 · y 205) */
 .size-note {
-    margin-top: calc(2 * var(--px));
-    color: var(--body-description);
-    font-size: calc(11 * var(--px));   /* Caption/small 크기 */
-    word-break: keep-all;
-}
-
-.take-off {
-    margin-top: calc(10 * var(--px));
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--body-link);
-    font-size: calc(14 * var(--px));   /* Body/x-small 크기 */
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-/* 사이즈가 없는 옷(신발 · 가방)은 칸 · 착용감을 숨김 */
-.size-panel.free .size-list,
-.size-panel.free .size-fit {
-    display: none;
-}
-
-/* ── 정확도 높이기: 마네킹 왼쪽 아래(발 옆 빈자리), 버튼을 누르면 위로 펼쳐짐 ── */
-.accuracy-panel {
     position: absolute;
-    left: calc(20 * var(--px));
-    bottom: calc(20 * var(--px));
-    width: calc(200 * var(--px));
-    padding: calc(10 * var(--px)) calc(12 * var(--px));
-    background: color-mix(in srgb, var(--surface-white) 85%, transparent);
-    color: var(--body-default);
-    font-size: calc(13 * var(--px));   /* Caption/large 크기 */
-}
-
-.accuracy-toggle {
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--body-link);
-    font-size: calc(14 * var(--px));   /* Body/x-small 크기 */
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-.accuracy-toggle .level {
-    color: var(--color-primary);
-    font-weight: 600;
-}
-
-.accuracy-form[hidden] {
-    display: none;
-}
-
-.accuracy-form fieldset {
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(6 * var(--px)) calc(12 * var(--px));
-    margin-top: calc(10 * var(--px));
-    padding: 0;
-    border: 0;
-}
-
-.accuracy-form legend {
-    width: 100%;
-    margin-bottom: calc(4 * var(--px));
-    padding: 0;
+    top: calc(205 * var(--px));
+    left: calc(10 * var(--px));
     color: var(--body-description);
+    font-size: calc(10 * var(--px));   /* Caption-xsm/regular */
+    font-weight: var(--caption-xsm-regular-weight);
+    line-height: calc(15 * var(--px));   /* 시안 글 상자 15 */
 }
 
-.accuracy-form label {
-    display: flex;
-    align-items: center;
-    gap: calc(4 * var(--px));
-}
-
-.accuracy-form select,
-.accuracy-form input {
-    height: calc(28 * var(--px));
-    padding: 0 calc(4 * var(--px));
-    border: 1px solid var(--border-default);
-    border-radius: calc(6 * var(--px));
-    background: var(--surface-white);
-    color: var(--body-default);
-    font-size: calc(13 * var(--px));
-}
-
-.accuracy-form input {
-    width: calc(52 * var(--px));
-    font-variant-numeric: tabular-nums;
-    appearance: textfield;
-}
-
-.accuracy-form input::-webkit-inner-spin-button,
-.accuracy-form input::-webkit-outer-spin-button {
-    margin: 0;
-    appearance: none;
-}
-
-/* 범위 밖 값(치는 중 포함)은 판정에 쓰지 않고 칸을 빨갛게 */
-.accuracy-form input.warn {
-    border-color: var(--state-warn);
-    color: var(--state-warn);
-}
-
-.accuracy-form .privacy {
-    margin-top: calc(8 * var(--px));
-    color: var(--body-description);
-    font-size: calc(11 * var(--px));   /* Caption/small 크기 */
-    word-break: keep-all;
-}
-
-/* ── 옷 목록: 100×100 칸 8개, 창 폭(700)을 넘는 칸은 가로로 넘겨 봄 (휠 · 끌기 · 키보드) ── */
-.item-list {
+/* 장바구니 담기 · 바로구매 하기 70×20 (사이 10) — 상품 상세 창 버튼(200×44)과 이름이 같아서 크기 · 글자를 여기서 다시 잡음 */
+.size-actions {
     display: flex;
     gap: calc(10 * var(--px));
     margin-top: calc(10 * var(--px));
-    overflow-x: auto;
-    scrollbar-width: none;   /* 시안에 스크롤 막대가 없음, 7번째 칸이 반쯤 보여서 더 있는 걸 알 수 있음 */
 }
 
-.item-list::-webkit-scrollbar {
-    display: none;
-}
-
-.item-list li {
-    flex: none;
-}
-
-/* 옷 칸 100×100: 회색 바탕에 옷 사진 80×80 (화면 시안은 모서리 각짐) */
-.fitting-item {
-    position: relative;
-    display: block;
-    width: calc(100 * var(--px));
-    height: calc(100 * var(--px));
-    padding: calc(10 * var(--px));
+.size-actions .btn-cart,
+.size-actions .btn-buy {
+    width: calc(70 * var(--px));
+    height: calc(20 * var(--px));
+    padding: 0;
     border: 0;
-    background: var(--state-disabled);
-    cursor: pointer;
+    box-shadow: inset 0 0 0 .5px var(--button-stroke-focus);   /* 시안 선 0.5 — border .5px는 1배 화면에서 1px로 올려 그려져 굵어 보임, 그림자는 반 픽셀을 옅게 그림 */
+    font-size: calc(10 * var(--px));   /* Caption-xsm/regular */
+    font-weight: var(--caption-xsm-regular-weight);
+    line-height: calc(12 * var(--px));
 }
 
-/* 입고 있는 옷: 안쪽 보라 선 2 (시안 선택 상태) */
-.fitting-item[aria-pressed="true"] {
-    box-shadow: inset 0 0 0 2px var(--color-primary);
-}
-
-/* 사이즈를 보고 있는 옷: 보라 선 안쪽에 연보라 한 겹 더 */
-.fitting-item.active {
-    box-shadow: inset 0 0 0 2px var(--color-primary), inset 0 0 0 5px var(--color-secondary);
-}
-
-.item-list .fitting-item:focus-visible {
-    outline-offset: -3px;   /* 목록이 가로로 넘쳐 잘려서 안쪽에 그림 */
-}
-
-.fitting-item img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-/* 칸 왼쪽 위 갈래 이름, 오른쪽 아래 '추천 M' */
-.fitting-item .slot {
-    position: absolute;
-    top: calc(5 * var(--px));
-    left: calc(7 * var(--px));
-    color: var(--body-description);
-    font-size: calc(11 * var(--px));   /* Caption/small 크기 */
-}
-
-.fitting-item .reco:not(:empty) {
-    position: absolute;
-    right: calc(5 * var(--px));
-    bottom: calc(5 * var(--px));
-    padding: 0 calc(6 * var(--px));
-    border-radius: calc(10 * var(--px));
-    background: var(--color-primary);
-    color: var(--on-color-text);
-    font-size: calc(11 * var(--px));
-    font-weight: 600;
-    line-height: calc(18 * var(--px));
-}
-
-/* ── 닫기 60×60: 창 오른쪽 위 ── */
+/* ── 닫기 50×50: 창 오른쪽 위 (상품 상세 창은 60×60 — 아래 .product-detail .btn-close) ── */
 .btn-close {
     position: absolute;
     top: 0;
     right: 0;
-    width: calc(60 * var(--px));
-    height: calc(60 * var(--px));
+    width: calc(50 * var(--px));
+    height: calc(50 * var(--px));
     background: var(--surface-white) url(../images/icons/close.svg) no-repeat center / calc(33.75 * var(--px)) auto;   /* 선 30×30 + 굵기 3.75 */
     font-size: 0;
 }
@@ -2000,7 +1890,7 @@ footer hr {
     line-height: var(--body-md-line-regular-line-height);
 }
 
-/* 사이즈 목록은 피팅룸 사이즈 칸(.size-list, 두 줄 grid)과 이름이 같아서 창 안에서 가로 한 줄로 다시 잡음 */
+/* 사이즈 목록은 피팅룸 사이즈 칸(.size-panel .size-list)과 이름이 같아서 창 안 것만 따로 잡음 */
 .color-list,
 .product-detail .size-list {
     display: flex;
@@ -2239,8 +2129,10 @@ footer hr {
     -webkit-box-orient: vertical;
 }
 
-/* ── 닫기 60×60: 창 오른쪽 위 (모양은 피팅룸 .btn-close, 여기서는 button이라 기본 테두리만 지움) ── */
+/* ── 닫기 60×60: 창 오른쪽 위 (모양은 피팅룸 .btn-close, 크기만 시안 60으로 · 여기서는 button이라 기본 테두리를 지움) ── */
 .product-detail .btn-close {
+    width: calc(60 * var(--px));
+    height: calc(60 * var(--px));
     border: 0;
     cursor: pointer;
 }
