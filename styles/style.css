@@ -1365,7 +1365,8 @@ footer hr {
 /* ══════════ 피팅룸 (fitting-room.html) ══════════
    - 수정 시안 231:1372: 어두운 배경(dim) 가운데에 700×900 창. 화면이 1920×1080보다 작으면 폭 · 높이 중 더 모자란 쪽 비율로 줄어듦
    - 위 60: 안내 문구 + 성별 · 키 · 몸무게 칸(누르면 아래로 목록) / 아래 700×840: 회색 바탕에 마네킹 + 왼쪽 옷 칸 + 오른쪽 위 사이즈 칸
-   - 옷 칸 펼침 · 마네킹 사진 · 실측 그림 바뀜은 모두 0.3s 등속 (시안 SMART_ANIMATE · DISSOLVE), 맥 '동작 줄이기'여도 그대로 (주인님 지정) */
+   - 옷 칸 펼침 · 마네킹 사진 · 실측 그림 바뀜은 모두 0.3s 등속 (시안 SMART_ANIMATE · DISSOLVE), 맥 '동작 줄이기'여도 그대로 (주인님 지정)
+   - 상품 상세 창의 '피팅룸으로 이동'은 이 페이지를 창 안 iframe으로 띄움 (.embed — 아래 .fitting-page.embed, 밀려 나오는 움직임은 상세 창 쪽 .fitting-popup) */
 
 .fitting-page {
     --px: min(1px, 100vw / 1920, 100dvh / 1080);   /* 창 높이 900 + 위아래 90이 화면 높이를 넘지 않게 */
@@ -1377,6 +1378,19 @@ footer hr {
     min-height: 100dvh;
     padding: calc(90 * var(--px)) 0;   /* 시안 상품 상세 창과 같은 위아래 90 */
     background: var(--surface-dark);   /* 시안 dim #454545 */
+}
+
+/* 상품 상세 창 안에 띄울 때 (fitting-room.html?embed=1 → fitting-room.js가 .embed를 붙임): iframe이 곧 700×900 창 → dim · 위아래 여백 없이 창이 iframe을 꽉 채움 */
+.fitting-page.embed {
+    --px: min(100vw / 700, 100dvh / 900);   /* iframe 폭 = 700 × 상세 창 --px → 시안 1px이 상세 창과 같은 크기 */
+    overflow: hidden;   /* iframe 크기 반올림으로 반 픽셀 넘쳐도 스크롤 막대가 생기지 않게 (body의 overflow는 화면에 걸림) */
+}
+
+.fitting-page.embed .dim {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    background: none;
 }
 
 .fitting-room {
@@ -1732,8 +1746,9 @@ footer hr {
 
 /* ══════════ 상품 상세 창 (women-coat.html) ══════════
    - 시안 146:889: 어두운 배경(dim) 가운데 1750×900 창 = 사진 갤러리 1100 + 상품 정보 600 (사이 50)
-   - 피팅룸처럼 화면이 1920×1080보다 작으면 폭 · 높이 중 더 모자란 쪽 비율로 줄어듦 (dim 배경 · 가운데 정렬은 피팅룸 .dim을 같이 씀)
-   - 여자 롱코트 01 카드(#detail-long-coat-01)를 누르면 열림: 여닫기 · 사진 고르기는 main.js, JS가 없으면 :target으로만 열림 (닫기는 뒤로 가기)
+   - dim은 반투명이라 뒤의 여자 코트 페이지가 어둡게 비침 → 다른 페이지가 아니라 페이지 위에 띄운 창 (주인님 지정)
+   - 피팅룸처럼 화면이 1920×1080보다 작으면 폭 · 높이 중 더 모자란 쪽 비율로 줄어듦 (가운데 정렬은 피팅룸 .dim을 같이 씀)
+   - 여자 롱코트 01 카드(#detail-long-coat-01)를 누르면 열림: 여닫기 · 사진 고르기 · 피팅룸은 main.js, JS가 없으면 :target으로만 열림 (닫기는 뒤로 가기)
    - 여닫기는 0.3s 등속 페이드만 (주인님 맥 '동작 줄이기' — 위치 · 크기는 움직이지 않고 투명도만) */
 
 .detail-dim {
@@ -1744,6 +1759,7 @@ footer hr {
     bottom: 0;
     left: 0;
     z-index: 200;   /* 고정 헤더(100) 위 */
+    background: color-mix(in srgb, var(--surface-dark) 80%, transparent);   /* 시안 dim #454545를 80%로 → 시안처럼 어둡지만 뒤 페이지가 비쳐 보임 (피팅룸 페이지의 .dim은 불투명 그대로) */
     opacity: 0;
     visibility: hidden;
     transition: opacity .3s linear, visibility 0s linear .3s;   /* 닫을 땐 다 흐려진 뒤 숨김 → 닫힌 창에는 포커스가 들어가지 않음 */
@@ -2135,4 +2151,41 @@ footer hr {
     height: calc(60 * var(--px));
     border: 0;
     cursor: pointer;
+}
+
+/* ── 피팅룸 700×900: '피팅룸으로 이동'을 누르면 창 오른쪽(x 1050 · y 0)에 겹쳐 뜸 ──
+   - 시안 프로토타입 146:942 → 231:1372: 오버레이 · 수동 위치 · MOVE_IN(오른쪽 끝에서 왼쪽으로) · 0.3s 등속, 뒤를 더 어둡게 하지 않고 바깥을 눌러도 닫히지 않음
+   - 창 밖으로 나간 부분은 clip-path로 잘라 창 오른쪽 끝에서 나오는 것처럼 보임 (밀기 translate와 같은 0.3s 등속이라 자른 선이 늘 창 끝에 붙어 있음)
+   - 주인님 맥 '동작 줄이기'가 켜져 있어도 밀려 나오고 들어가는 움직임은 그대로 (주인님 지정, 튕김 없이 등속)
+   - 내용은 iframe(fitting-room.html?embed=1, main.js가 처음 열 때 넣음) → 피팅룸 칸이 준비되기 전에는 흰 창만 밀려 나오고 내용은 준비된 뒤 보임 (.ready, 사진은 그 뒤에 받아지는 대로) */
+.fitting-popup {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(700 * var(--px));
+    height: calc(900 * var(--px));
+    background: var(--surface-white);
+    translate: 100% 0;
+    clip-path: inset(0 100% 0 0);
+    visibility: hidden;
+    transition: translate .3s linear, clip-path .3s linear, visibility 0s linear .3s;   /* 닫을 땐 다 나간 뒤 숨김 */
+}
+
+.fitting-popup.active {
+    translate: 0 0;
+    clip-path: inset(0);
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.fitting-frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* 받는 동안 피팅룸 페이지의 기본 모습(어두운 dim 가운데 작은 창)이 잠깐 보이지 않게 (.embed가 붙은 뒤 fitting-room.js가 준비됐다고 알리면 .ready) */
+.fitting-frame:not(.ready) {
+    visibility: hidden;
 }

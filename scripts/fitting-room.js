@@ -7,7 +7,19 @@
    - 지금 조합에서 한 벌만 바꾼 8장을 미리 받아 둬서 바로 바뀜
    - 사진 · 실측 그림은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
    - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
+   - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄움 → 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, Tab은 피팅룸 안에서만 돎
    - 예전 숫자 판정(상품 실측표 data/fitting-items.json · 정확도 칸 · 부위별 여유)과 아래 옷 목록은 수정 시안에서 빠져서 지움 (JSON 파일은 남겨 둠) */
+
+/* ── 상품 상세 창 안에 띄울 때 (fitting-room.html?embed=1) ── */
+// 주소에 embed가 있어도 iframe 안이 아니면(주소를 바로 열면) 그냥 피팅룸 페이지
+const EMBED = new URLSearchParams(location.search).has('embed') && window.parent !== window;
+if (EMBED) document.body.classList.add('embed');   // dim · 위아래 여백 없이 창이 iframe을 꽉 채움 (style.css)
+
+// 상세 창에 피팅룸을 닫으라고 알림 → 상세 창이 오른쪽으로 내보내고 '피팅룸으로 이동'에 포커스 (같은 사이트 창에만 보냄, 받는 쪽도 보낸 곳을 확인 — main.js)
+// byKey: 키보드(Esc · 닫기에서 Enter)로 닫았는지 → 상세 창이 포커스 테두리를 그릴지 정함 (브라우저는 문서마다 마지막 입력을 따로 기억해서 iframe 안 키보드를 상세 창이 모름)
+function closeEmbed(byKey) {
+    parent.postMessage({ type: 'menkhet-fitting-close', byKey }, location.origin);
+}
 
 /* ── 키 · 몸무게 구간 (주인님 표) ── */
 const STEP = 5;   // 구간 폭 (cm · kg)
@@ -318,10 +330,32 @@ document.addEventListener('focusin', (e) => {
     if (openItem && !openItem.contains(e.target)) closeRow(false);
 });
 
+// 상세 창 안에서는 상세 창 쪽을 누르면(포커스가 iframe 밖으로 나가면) 닫음 — 바깥 누르기가 이 페이지에 오지 않아서
+if (EMBED) {
+    addEventListener('blur', () => {
+        closeList(false);
+        closeRow(false);
+    });
+}
+
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
+        if (EMBED && !openName && !openItem) closeEmbed(true);   // 열린 목록 · 옷 칸부터 닫고, 다 닫혀 있으면 피팅룸을 닫음
         closeList(true);
         closeRow(true);
+        return;
+    }
+    // 상세 창 안에서는 Tab이 피팅룸 안에서만 돎 (뒤 상세 창은 inert라 iframe 밖으로 나가면 브라우저 주소창으로 감): 닫기 → 성별, Shift+Tab은 반대
+    if (EMBED && e.key === 'Tab') {
+        const first = fields.sex.toggle;
+        const last = document.querySelector('.btn-close');
+        if (e.shiftKey && (document.activeElement === first || document.activeElement === document.body)) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
         return;
     }
     if (!openName || (e.key !== 'ArrowDown' && e.key !== 'ArrowUp')) return;
@@ -335,12 +369,21 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* ══════════ 닫기: 같은 사이트에서 들어왔으면 그 페이지로 돌아감 ══════════ */
-// 새 탭으로 열었으면(⌘-클릭) 돌아갈 기록이 없어서 링크대로 메인으로
+// 새 탭으로 열었으면(⌘-클릭) 돌아갈 기록이 없어서 링크대로 메인으로, 상세 창 안에서는 페이지를 떠나지 않고 상세 창에 알림
 document.querySelector('.btn-close').addEventListener('click', (e) => {
+    if (EMBED) {
+        e.preventDefault();
+        closeEmbed(e.detail === 0);   // 키보드 Enter로 누른 클릭은 detail 0
+        return;
+    }
     if (!document.referrer || new URL(document.referrer).origin !== location.origin || history.length < 2) return;
     e.preventDefault();
     history.back();
 });
+
+// 상세 창 안에서는 칸 · 버튼이 다 준비됐다고 알림 → 상세 창이 사진을 다 받기(load) 전에 내용을 보여 주고 포커스를 옮김 (느린 첫 열기에서 포커스가 창 밖에 머물지 않게)
+// defer 스크립트라 HTML은 다 읽은 뒤, 메시지는 이 파일의 이벤트를 다 건 다음에 도착함
+if (EMBED) parent.postMessage({ type: 'menkhet-fitting-ready' }, location.origin);
 
 // 다 그린 뒤 한가할 때: 한 벌만 바꾼 마네킹 사진 8장 · 나머지 실측 그림 3장
 addEventListener('load', () => whenIdle(() => {
