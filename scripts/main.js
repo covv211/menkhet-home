@@ -440,7 +440,7 @@ if (detail) {
         });
     });
 
-    // 리뷰 목록은 마우스 휠로도 가로로 넘김 (스크롤 막대를 숨겨서 휠만으로는 셋째 카드 뒤를 볼 수 없음, 피팅룸 옷 목록과 같게)
+    // 리뷰 목록은 마우스 휠로도 가로로 넘김 (스크롤 막대를 숨겨서 휠만으로는 셋째 카드 뒤를 볼 수 없음)
     const reviewList = detail.querySelector('.review-list');
 
     reviewList.addEventListener('wheel', (e) => {

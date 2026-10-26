@@ -170,7 +170,7 @@ header {
     font-weight: var(--placeholder-medium-regular-weight);
     line-height: var(--placeholder-medium-regular-line-height);
     letter-spacing: var(--placeholder-medium-regular-letter-spacing);
-    white-space: nowrap;   /* '이벤트'·'악세서리'는 시안에서도 오른쪽 여백을 넘어 한 줄로 둠 */
+    white-space: nowrap;   /* '이벤트'·'액세서리'는 시안에서도 오른쪽 여백을 넘어 한 줄로 둠 */
 }
 
 .sub .menu {
@@ -180,7 +180,7 @@ header {
     cursor: pointer;
 }
 
-/* 2차 목록 안의 여닫는 버튼(코트 · 신발 · 악세서리)도 2 · 3차 링크와 같은 안쪽 여백 */
+/* 2차 목록 안의 여닫는 버튼(코트 · 신발 · 액세서리)도 2 · 3차 링크와 같은 안쪽 여백 */
 .sub .drop a,
 .sub .drop .menu {
     padding: calc(10 * var(--px)) 0 calc(10 * var(--px)) calc(30 * var(--px));
@@ -1714,7 +1714,7 @@ footer hr {
     line-height: calc(15 * var(--px));   /* 시안 글 상자 15 */
 }
 
-/* 장바구니 담기 · 바로구매 하기 70×20 (사이 10) — 상품 상세 창 버튼(200×44)과 이름이 같아서 크기 · 글자를 여기서 다시 잡음 */
+/* 장바구니 담기 · 바로 구매하기 70×20 (사이 10) — 상품 상세 창 버튼(200×44)과 이름이 같아서 크기 · 글자를 여기서 다시 잡음 */
 .size-actions {
     display: flex;
     gap: calc(10 * var(--px));
@@ -1967,7 +1967,7 @@ footer hr {
     line-height: calc(17 * var(--px));   /* 시안 글 상자 17 (normal은 16으로 그려져 아래가 1 올라감) */
 }
 
-/* ── 장바구니 담기 · 바로구매 하기 (200×44, 사이 15) + 장바구니 수 ── */
+/* ── 장바구니 담기 · 바로 구매하기 (200×44, 사이 15) + 장바구니 수 ── */
 .product-actions {
     margin-top: calc(40 * var(--px));
 }

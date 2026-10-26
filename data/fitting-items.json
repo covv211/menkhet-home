@@ -1,9 +1,9 @@
 {
     "_설명": [
-        "피팅룸 상품 실측표 (fitting-room.js가 읽음). 키는 fitting-room.html 옷 칸의 data-item과 같음",
+        "피팅룸 상품 실측표 — 지금은 어느 페이지도 읽지 않음 (2026-10-26 피팅룸 수정 시안에서 숫자 판정 · 아래 옷 목록이 빠져서 예전 판정 기록용으로 보관). 예전에는 fitting-room.js가 읽었고 키는 옷 칸의 data-item과 같았음",
         "치수는 cm. chest · waist · hip · thigh · hem = 평평하게 놓고 잰 단면(한쪽 폭), shoulder = 어깨너비, length = 총장(상의는 옆 목점, 바지는 허리 윗단부터), sleeve = 소매, rise = 밑위",
         "category: outer · top · bottom / stretch: none(없음) · some(약간, 밴딩 포함) · good(좋음) / fit: slim · regular · over / shoulder: set(일반) · drop · raglan / inner: 아우터 안에 옷을 껴입는지",
-        "colors: 3D 옷에 입힐 상품 대표색 (메시 이름별, 새 3D 모델만 씀)",
+        "colors: 예전 3D 옷에 입히던 상품 대표색 (메시 이름별, 3D 피팅룸은 2026-10-25에 뺌)",
         "charts: 성별 마네킹마다 실측표 (실제 상품은 한 상품에 실측표 하나 — 지금은 여자 · 남자 마네킹 둘 다 입혀 보려고 두 벌)",
         "sample: true = 지금 숫자는 KS 사이즈 범위로 만든 예시 → 실제 상품 실측표가 생기면 바꾸고 false로"
     ],

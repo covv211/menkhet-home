@@ -111,9 +111,9 @@
     --layout-th-huge-width: 492px;
     --layout-th-huge-height: 762px;
 
-    /* header (Figma 변수 이름 그대로, heigth 철자 포함) */
+    /* header (Figma 변수 이름 그대로) */
     --header-icon-size: 24px;
-    --header-heigth: 8px;
+    --header-height: 8px;
     --header-visible-pc: true;
     --header-visible-tab: true;
     --header-visible-pc-tab-m: true;
@@ -247,7 +247,7 @@
     --layout-th-large-width: 668px;
     --layout-th-large-height: 401px;
     --layout-th-large-gap: 12px;
-    --header-heigth: 4px;
+    --header-height: 4px;
     --header-visible-pc: false;
 }
 
@@ -280,7 +280,7 @@
     --layout-th-large-height: 192px;
     --layout-th-large-gap: 0px;
     --header-icon-size: 20px;
-    --header-heigth: 0px;
+    --header-height: 0px;
     --header-visible-pc: false;
     --header-visible-tab: false;
     --header-visible-m: true;

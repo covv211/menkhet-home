@@ -7,7 +7,7 @@
      · 여자 · 키 · 몸무게를 다 골랐고 조합 사진이 없는 체형 → 그 체형의 코디 없는 기본 마네킹 정면(images/fitting/body/women/<키>/<몸무게>.webp, 흰 티 · 회색 레깅스)
        옷 · 사이즈를 골라도 사진은 그대로, 고른 건 기억해 뒀다가 조합 사진 체형으로 돌아오면 입힘
      · 그 밖(고르기 전 · 일부만 고름 · 남자 · 여자 165~170cm · 65~70kg) → 조합 사진 체형(지금은 여자 165~170cm · 65~70kg뿐)
-       셔츠 하늘색 · 바지 검정 · 로퍼 검정이면 고른 사이즈의 코트 사진(outfit/…/size/coat-<색>_<사이즈>.webp, 3색 × 4사이즈), 아니면 체형마다 4종 × 3색 = 81가지 조합 사진(코트 M) 중 고른 색의 사진
+       셔츠 하늘색 · 바지 검정 · 로퍼 검정이면 고른 사이즈의 코트 사진(outfit/…/size/coat-<색>_<사이즈>.webp, 3색 × 4사이즈), 아니면 체형마다 4종 각 3색(3 × 3 × 3 × 3) = 81가지 조합 사진(코트 M) 중 고른 색의 사진
    - 지금 사진에서 옷 한 벌 · 사이즈 하나만 바꾼 사진을, 키를 고르면 그 키의 몸무게별 기본 마네킹을 미리 받아 둬서 바로 바뀜
    - 사진 · 실측 그림은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
    - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
@@ -393,7 +393,7 @@ document.addEventListener('click', (e) => {
     if (openItem && !openItem.contains(e.target)) closeRow(false);
 });
 
-// Tab으로 칸 밖에 포커스가 가면 닫음 (Safari는 버튼을 눌러도 포커스가 옮지 않아서 focusout 대신 focusin으로 봄)
+// Tab으로 칸 밖에 포커스가 가면 닫음 (Safari는 버튼을 눌러도 포커스가 옮겨 가지 않아서 focusout 대신 focusin으로 봄)
 document.addEventListener('focusin', (e) => {
     if (openName && !fields[openName].field.contains(e.target)) closeList(false);
     if (openItem && !openItem.contains(e.target)) closeRow(false);
