@@ -2,9 +2,13 @@
    - fitting-room.html 전용 (main.js는 헤더가 있는 페이지용이라 따로 둠)
    - 수정 시안 231:1372: 위에서 성별 · 키 · 몸무게를 고르고, 왼쪽 옷 칸에서 코트 · 셔츠 · 바지 · 로퍼 색을 골라 마네킹에 입혀 봄
    - 키 · 몸무게 구간은 주인님 표(시안 232:1695 여자 기준 · 232:2147 남자 기준) → 성별을 바꾸면 키 · 몸무게를, 키를 바꾸면 몸무게를 비움
-   - 고른 몸 정보는 칸 이름 옆에 보여 주고, 그 체형의 조합 사진이 있으면 마네킹을 그 체형으로 바꿈 (저장하거나 보내지 않음)
-   - 마네킹은 체형마다 4종 × 3색 = 81가지 조합 사진(images/fitting/outfit/<성별>/<키>/<몸무게>) 중 고른 색의 사진 → 지금은 여자 165~170cm · 65~70kg만 있어서 고르기 전과 다른 체형도 이 사진으로 보여 줌
-   - 지금 조합에서 한 벌만 바꾼 8장을 미리 받아 둬서 바로 바뀜
+   - 고른 몸 정보는 칸 이름 옆에 보여 주고, 그 체형의 사진(조합 사진 · 기본 마네킹)이 있으면 마네킹을 그 체형으로 바꿈 (저장하거나 보내지 않음)
+   - 마네킹 사진은 mannequinPhoto() 한 곳에서 정함
+     · 여자 · 키 · 몸무게를 다 골랐고 조합 사진이 없는 체형 → 그 체형의 코디 없는 기본 마네킹 정면(images/fitting/body/women/<키>/<몸무게>.webp, 흰 티 · 회색 레깅스)
+       옷 · 사이즈를 골라도 사진은 그대로, 고른 건 기억해 뒀다가 조합 사진 체형으로 돌아오면 입힘
+     · 그 밖(고르기 전 · 일부만 고름 · 남자 · 여자 165~170cm · 65~70kg) → 조합 사진 체형(지금은 여자 165~170cm · 65~70kg뿐)
+       셔츠 하늘색 · 바지 검정 · 로퍼 검정이면 고른 사이즈의 코트 사진(outfit/…/size/coat-<색>_<사이즈>.webp, 3색 × 4사이즈), 아니면 체형마다 4종 × 3색 = 81가지 조합 사진(코트 M) 중 고른 색의 사진
+   - 지금 사진에서 옷 한 벌 · 사이즈 하나만 바꾼 사진을, 키를 고르면 그 키의 몸무게별 기본 마네킹을 미리 받아 둬서 바로 바뀜
    - 사진 · 실측 그림은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
    - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
    - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄움 → 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, Tab은 피팅룸 안에서만 돎
@@ -64,6 +68,7 @@ function imageSlot(first) {
     let wanted = first.getAttribute('src');
 
     return (src, alt) => {
+        if (src === wanted) return;   // 이미 띄웠거나 받는 중인 사진 → 그대로 (기본 마네킹일 때 옷 · 사이즈를 골라도 다시 뜨지 않게)
         wanted = src;
         const next = top.cloneNode();
         next.classList.remove('active');
@@ -208,30 +213,84 @@ let openItem = null;   // 펼친 옷 칸
 
 // 체형별 조합 사진 폴더 (images/fitting/outfit/<성별>/<키>/<몸무게>) → 지금은 주인님이 만든 여자 165~170cm · 65~70kg 81장뿐, 다른 체형은 사진이 생기면 여기에 더함
 const OUTFIT_BODIES = ['women/165-170cm/65-70kg'];
-const DEFAULT_BODY = OUTFIT_BODIES[0];   // 고르기 전이나 사진이 아직 없는 체형은 이 체형으로 보여 줌
+const DEFAULT_BODY = OUTFIT_BODIES[0];   // 고르기 전 · 일부만 고름 · 기본 마네킹 사진도 없는 몸(남자)은 이 체형으로 보여 줌
 const BODY_DIR = { female: 'women', male: 'men' };
-let wornBody = DEFAULT_BODY;   // 지금 마네킹 사진의 체형 폴더
+// 코디 없는 기본 마네킹 정면이 있는 성별 (images/fitting/body/<성별>/<키>/<몸무게>.webp) → 여자 표 25체형 중 조합 사진 체형을 뺀 24장, 남자는 사진이 생기면 더함
+const PLAIN_SEXES = ['female'];
+// 코트 사이즈 사진이 있는 체형 (images/fitting/outfit/<체형>/size/coat-<색>_<사이즈>.webp, 주인님 코트 3색 × 4사이즈 12장)
+const SIZE_BODIES = ['women/165-170cm/65-70kg'];
+const SIZE_OUTFIT = { shirt: 'skyblue', pants: 'black', loafers: 'black' };   // 사이즈 사진 12장은 셔츠 · 바지 · 로퍼가 이 색으로 고정 → 이 차림일 때만 사이즈 사진을 씀
 
-// 고른 성별 · 키 · 몸무게 → 사진 폴더 (셋 다 골랐고 그 체형 사진이 있을 때만, 아니면 기본 체형)
-function bodyDir() {
+// 성별 · 키 · 몸무게 → 체형 이름 ('female', '160~165', '50~55' → 'women/160-165cm/50-55kg')
+const bodyName = (sex, height, weight) => `${BODY_DIR[sex]}/${height.replace('~', '-')}cm/${weight.replace('~', '-')}kg`;
+const plainSrc = (body) => `images/fitting/body/${body}.webp`;
+
+// 고른 성별 · 키 · 몸무게 → 체형 이름 (셋 다 골랐을 때만, 아니면 null)
+function chosenBody() {
     const { sex, height, weight } = chosen;
-    if (!sex || !height || !weight) return DEFAULT_BODY;
-    const dir = `${BODY_DIR[sex]}/${height.replace('~', '-')}cm/${weight.replace('~', '-')}kg`;
-    return OUTFIT_BODIES.includes(dir) ? dir : DEFAULT_BODY;
+    return sex && height && weight ? bodyName(sex, height, weight) : null;
+}
+
+// 조합 사진을 입힐 체형 폴더: 고른 체형의 조합 사진이 있으면 그 체형, 아니면 기본 체형
+function bodyDir() {
+    const body = chosenBody();
+    return OUTFIT_BODIES.includes(body) ? body : DEFAULT_BODY;
+}
+
+// 기본 마네킹으로 보여 줄 체형: 셋 다 골랐고 그 체형의 조합 사진은 없지만 기본 마네킹은 있을 때만, 아니면 null
+function plainBody() {
+    const body = chosenBody();
+    return body && !OUTFIT_BODIES.includes(body) && PLAIN_SEXES.includes(chosen.sex) ? body : null;
 }
 
 // 조합 → 사진 주소 (images/fitting/outfit/women/165-170cm/65-70kg/coat-black_shirt-skyblue_pants-black_loafers-black.webp)
-function outfitSrc(colors, body = wornBody) {
+function outfitSrc(colors, body = bodyDir()) {
     return `images/fitting/outfit/${body}/${sideItems.map((item) => `${item.dataset.part}-${colors[item.dataset.part]}`).join('_')}.webp`;
 }
 
-// 지금 조합에서 한 벌만 다른 색으로 바꾼 사진 8장 → 옷 칸에서 무엇을 골라도 바로 바뀜
+// 조합 · 사이즈 → 코트 사이즈 사진 주소 (…/65-70kg/size/coat-black_m.webp), 사이즈 사진 차림 · 체형이 아니면 null
+function sizeSrc(colors, size, body = bodyDir()) {
+    const fixed = SIZE_BODIES.includes(body) && Object.keys(SIZE_OUTFIT).every((part) => colors[part] === SIZE_OUTFIT[part]);
+    return fixed ? `images/fitting/outfit/${body}/size/coat-${colors.coat}_${size}.webp` : null;
+}
+
+// 마네킹 사진을 정하는 곳 → { src, alt } (지금 고른 옷 · 사이즈, 미리 받을 때는 하나만 바꿔 본 옷 · 사이즈)
+//   1. 기본 마네킹 체형 → 그 체형 사진 (옷 · 사이즈와 상관없음)
+//   2. 그 밖에는 조합 사진 체형: 사이즈 사진 차림이면 고른 사이즈의 코트 사진(M도 사이즈 사진 → S · M · L · XL이 같은 묶음 안에서 바뀜), 아니면 코트 M 조합 사진
+function mannequinPhoto(colors = outfit, size = wornSize) {
+    const plain = plainBody();
+    if (plain) return { src: plainSrc(plain), alt: `${fields.sex.selected.textContent} ${chosen.height}cm · ${chosen.weight}kg 마네킹 (코디 사진 준비 중)` };
+    const sized = sizeSrc(colors, size);
+    const names = sideItems.map((item) => {
+        const part = item.dataset.part;
+        const name = item.querySelector(`.side-option[data-color="${colors[part]}"] img`).alt;
+        return part === 'coat' && sized ? `${name} ${size.toUpperCase()} 사이즈` : name;   // '코트 검정 M 사이즈'
+    });
+    return { src: sized || outfitSrc(colors), alt: `${names.join(', ')} 차림의 마네킹` };
+}
+
+// 지금에서 하나만 바꾼 사진 → 옷 칸 · 사이즈에서 무엇을 골라도 바로 바뀜
+// 한 벌만 다른 색으로 바꾼 8장 + 사이즈 사진 차림이면 지금 코트 색의 다른 사이즈 3장 (기본 마네킹일 때는 옷 · 사이즈를 골라도 그대로라 받지 않음)
 function preloadNeighbors() {
+    if (plainBody()) return;
     sideItems.forEach((item) => {
         const part = item.dataset.part;
         item.querySelectorAll('.side-option').forEach((button) => {
-            if (button.dataset.color !== outfit[part]) preload(outfitSrc({ ...outfit, [part]: button.dataset.color }));
+            if (button.dataset.color !== outfit[part]) preload(mannequinPhoto({ ...outfit, [part]: button.dataset.color }).src);
         });
+    });
+    sizeChips.forEach((chip) => {
+        if (chip.dataset.size !== wornSize) preload(mannequinPhoto(outfit, chip.dataset.size).src);   // 조합 사진 차림이면 지금 사진과 같은 주소라 다시 받지 않음
+    });
+}
+
+// 여자 키까지 골랐으면 그 키의 몸무게 구간마다 기본 마네킹 → 몸무게를 고르면 바로 바뀜 (조합 사진 체형은 빼고 3~5장)
+function preloadBodies() {
+    const { sex, height } = chosen;
+    if (!height || !PLAIN_SEXES.includes(sex)) return;
+    ranges(WEIGHT_RANGE[sex][height]).forEach((weight) => {
+        const body = bodyName(sex, height, weight);
+        if (!OUTFIT_BODIES.includes(body)) preload(plainSrc(body));
     });
 }
 
@@ -244,19 +303,17 @@ function wear(item, option) {
     dress();
 }
 
-// 지금 체형 · 조합의 사진으로 마네킹을 바꾸고, 다음에 고를 만한 사진을 미리 받아 둠
+// 지금 몸 · 옷 · 사이즈의 사진으로 마네킹을 바꾸고(같은 사진이면 그대로), 다음에 고를 만한 사진을 미리 받아 둠
 function dress() {
-    const names = sideItems.map((each) => each.querySelector('.side-option[aria-pressed="true"] img').alt);
-    dressMannequin(outfitSrc(outfit), `${names.join(', ')} 차림의 마네킹`);
+    const { src, alt } = mannequinPhoto();
+    dressMannequin(src, alt);
     whenIdle(preloadNeighbors);
 }
 
-// 성별 · 키 · 몸무게를 바꿨을 때 사진 폴더가 달라지면 같은 조합을 그 체형으로 다시 입힘
+// 성별 · 키 · 몸무게를 바꾸면 그 몸의 사진으로 다시 입힘 (기본 마네킹 ↔ 조합 사진 체형, 사진이 같으면 그대로) + 고를 만한 몸무게의 기본 마네킹을 받아 둠
 function changeBody() {
-    const body = bodyDir();
-    if (body === wornBody) return;
-    wornBody = body;
     dress();
+    whenIdle(preloadBodies);
 }
 
 // 칸을 여닫는 건 입은 색 버튼 하나 → aria-expanded는 그 버튼에만 (다른 두 색은 고르기만 하는 버튼)
@@ -305,15 +362,19 @@ const SIZE_GUIDE_ALT = {   // 실측 그림 대체 글 (그림 속 치수 그대
     xl: 'XL(88) 실측: 어깨 42.5cm, 가슴단면 58cm, 허리단면 54cm, 총장 66.5cm, 소매길이 61cm, 소매통 19.5cm',
 };
 const sizeChips = [...document.querySelectorAll('.size-panel .size')];
+let wornSize = sizeChips.find((chip) => chip.getAttribute('aria-pressed') === 'true').dataset.size;   // 고른 사이즈, 처음 값은 HTML의 aria-pressed="true"(M)
 const showSizeGuide = imageSlot(document.querySelector('.size-guide'));
 const guideSrc = (size) => `images/fitting/size-guide-${size}.svg`;
 
 // 고른 칸만 진하게, 실측 그림은 0.3s 등속으로 바뀜 (고른 칸을 다시 누르면 그대로)
+// 마네킹도 다시 입힘 → 사이즈 사진 차림이면 코트가 그 사이즈로, 아니면 사진이 그대로라 실측 그림만 바뀜
 sizeChips.forEach((chip) => {
     chip.addEventListener('click', () => {
         if (chip.getAttribute('aria-pressed') === 'true') return;
         sizeChips.forEach((button) => button.setAttribute('aria-pressed', String(button === chip)));
-        showSizeGuide(guideSrc(chip.dataset.size), SIZE_GUIDE_ALT[chip.dataset.size]);
+        wornSize = chip.dataset.size;
+        showSizeGuide(guideSrc(wornSize), SIZE_GUIDE_ALT[wornSize]);
+        dress();
     });
 });
 
@@ -385,7 +446,7 @@ document.querySelector('.btn-close').addEventListener('click', (e) => {
 // defer 스크립트라 HTML은 다 읽은 뒤, 메시지는 이 파일의 이벤트를 다 건 다음에 도착함
 if (EMBED) parent.postMessage({ type: 'menkhet-fitting-ready' }, location.origin);
 
-// 다 그린 뒤 한가할 때: 한 벌만 바꾼 마네킹 사진 8장 · 나머지 실측 그림 3장
+// 다 그린 뒤 한가할 때: 한 벌 · 사이즈 하나만 바꾼 마네킹 사진 11장 · 나머지 실측 그림 3장
 addEventListener('load', () => whenIdle(() => {
     preloadNeighbors();
     sizeChips.forEach((chip) => preload(guideSrc(chip.dataset.size)));
