@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>피팅룸 | MENKHET</title>
+    <link rel="stylesheet" href="styles/default.css">
+    <link rel="stylesheet" href="styles/token.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="scripts/fitting-room.js" defer></script>
+</head>
+
+<body class="fitting-page">
+    <!-- 시안 dim(1920×1080) 위에 피팅룸 창(146:1029, 700×900)이 뜬 화면 -->
+    <main class="dim">
+        <h1 class="blind">MENKHET 피팅룸</h1>
+
+        <section class="fitting-room" aria-labelledby="fitting-room-title">
+            <h2 class="blind" id="fitting-room-title">피팅룸</h2>
+
+            <!-- 몸 정보: 넣는 즉시 추천 사이즈 · 부위별 판정이 바뀜 (fitting-room.js) · 값은 이 화면에서만 쓰고 저장하거나 보내지 않음 -->
+            <form class="body-info" id="body-info" novalidate>
+                <p class="guide" id="body-guide" aria-live="polite">본인의 키와 몸 무게를 넣어 주세요.</p>
+                <div class="body-fields">
+                    <div class="field sex" role="radiogroup" aria-labelledby="sex-label">
+                        <span class="label" id="sex-label">성별</span>
+                        <label><input type="radio" name="sex" value="female" checked><span>여자</span></label>
+                        <label><input type="radio" name="sex" value="male"><span>남자</span></label>
+                    </div>
+                    <div class="field height">
+                        <label class="label" for="height">키</label>
+                        <span class="value"><input type="number" id="height" name="height" min="140" max="200" step="1" inputmode="numeric" placeholder="-" aria-describedby="body-guide"><span class="unit">cm</span></span>
+                    </div>
+                    <div class="field weight">
+                        <label class="label" for="weight">몸무게</label>
+                        <span class="value"><input type="number" id="weight" name="weight" min="35" max="130" step="1" inputmode="numeric" placeholder="-" aria-describedby="body-guide"><span class="unit">kg</span></span>
+                    </div>
+                </div>
+            </form>
+
+            <div class="fitting-viewer">
+                <!-- 마네킹: 시안 사진 (재킷을 입으면 재킷 룩, 아니면 니트 룩 — fitting-room.js가 바꿈) -->
+                <div class="mannequin-box">
+                    <img class="mannequin" src="images/fitting/mannequin-jacket.webp" alt="오버사이즈 스웨이드 가죽 봄버 재킷을 입은 마네킹" width="700" height="700">
+
+                    <!-- 사이즈: 옷 목록에서 고른 옷의 사이즈, 상품 실측표로 판정한 추천 사이즈에 '추천' 표시
+                         부위별 여유(옷 − 몸 둘레)와 등급 · 밑단 위치를 보여 줌 (내용은 fitting-room.js가 채움) · 다른 사이즈를 고르면 그 사이즈로 판정 -->
+                    <div class="size-panel" aria-labelledby="size-title">
+                        <p class="size-title" id="size-title"><span class="name">봄버 재킷</span> 사이즈</p>
+                        <ul class="size-list">
+                            <li><button type="button" class="size" data-size="S" aria-pressed="false">S</button></li>
+                            <li><button type="button" class="size" data-size="M" aria-pressed="false">M</button></li>
+                            <li><button type="button" class="size" data-size="L" aria-pressed="false">L</button></li>
+                            <li><button type="button" class="size" data-size="XL" aria-pressed="false">XL</button></li>
+                        </ul>
+                        <p class="size-fit" aria-live="polite"></p>
+                        <ul class="size-parts"></ul>
+                        <p class="size-basis"></p>
+                        <p class="size-note"></p>
+                        <button type="button" class="take-off">벗기</button>
+                    </div>
+
+                    <!-- 정확도 높이기: 평소 입는 사이즈 · 줄자로 잰 둘레 (넣는 즉시 추천이 바뀜) · 시안에 없는 칸 -->
+                    <div class="accuracy-panel">
+                        <button type="button" class="accuracy-toggle" aria-expanded="false" aria-controls="accuracy-form">정확도 <strong class="level">낮음</strong> · 치수 더 넣기</button>
+                        <form class="accuracy-form" id="accuracy-form" novalidate hidden>
+                            <fieldset class="usual">
+                                <legend>평소 입는 사이즈</legend>
+                                <label>상의 <select name="usualTop"><option value="">-</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></label>
+                                <label>하의 <select name="usualBottom"><option value="">-</option><option>S</option><option>M</option><option>L</option><option>XL</option></select></label>
+                            </fieldset>
+                            <fieldset class="tape">
+                                <legend>줄자로 잰 둘레 (cm)</legend>
+                                <label>가슴 <input type="number" name="chest" min="60" max="150" step="0.5" inputmode="decimal" autocomplete="off" placeholder="-"></label>
+                                <label>허리 <input type="number" name="waist" min="50" max="150" step="0.5" inputmode="decimal" autocomplete="off" placeholder="-"></label>
+                                <label>엉덩이 <input type="number" name="hip" min="70" max="160" step="0.5" inputmode="decimal" autocomplete="off" placeholder="-"></label>
+                            </fieldset>
+                            <p class="privacy">넣은 값은 이 화면에서만 계산하고, 저장하거나 보내지 않아요.</p>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- 입혀 볼 옷: 아우터 · 상의 · 하의 · 신발 · 가방에서 하나씩 골라 조합 (같은 칸 옷을 고르면 바뀜)
+                     셔츠 · 티셔츠 · 스니커즈 · 토트백은 임시 추천 상품 (상품 정보가 정해지면 이름 · 사진 교체, 지금 사진은 3D 모델 렌더) -->
+                <ul class="item-list">
+                    <li><button type="button" class="fitting-item" data-item="jacket" aria-pressed="false"><img src="images/fitting/item-jacket.webp" alt="오버사이즈 스웨이드 가죽 봄버 재킷" width="80" height="80"><span class="slot">아우터</span><span class="reco"></span></button></li>
+                    <li><button type="button" class="fitting-item" data-item="coat" aria-pressed="false"><img src="images/women-coat/long-coat/long-coat-04.webp" alt="여자 롱코트" width="80" height="80"><span class="slot">아우터</span><span class="reco"></span></button></li>
+                    <li><button type="button" class="fitting-item" data-item="knit" aria-pressed="false"><img src="images/fitting/item-knit.webp" alt="차콜 브이넥 니트셔츠 레이어드" width="80" height="80"><span class="slot">상의</span><span class="reco"></span></button></li>
+                    <li><button type="button" class="fitting-item" data-item="shirt" aria-pressed="false"><img src="images/fitting/item-shirt.webp" alt="화이트 셔츠" width="80" height="80"><span class="slot">상의</span><span class="reco"></span></button></li>
+                    <li><button type="button" class="fitting-item" data-item="tee" aria-pressed="false"><img src="images/fitting/item-tee.webp" alt="화이트 티셔츠" width="80" height="80"><span class="slot">상의</span><span class="reco"></span></button></li>
+                    <li><button type="button" class="fitting-item" data-item="pants" aria-pressed="false"><img src="images/fitting/item-pants.webp" alt="차콜 와이드 팬츠" width="80" height="80"><span class="slot">하의</span><span class="reco"></span></button></li>
+                    <li><button type="button" class="fitting-item" data-item="shoes" aria-pressed="false"><img src="images/fitting/item-shoes.webp" alt="화이트 스니커즈" width="80" height="80"><span class="slot">신발</span></button></li>
+                    <li><button type="button" class="fitting-item" data-item="bag" aria-pressed="false"><img src="images/fitting/item-bag.webp" alt="블랙 토트백" width="80" height="80"><span class="slot">가방</span></button></li>
+                </ul>
+            </div>
+
+            <!-- 닫기: 들어온 페이지(상품 상세)로 돌아감, 바로 열었으면 메인으로 -->
+            <a class="btn-close" href="./">피팅룸 닫기</a>
+        </section>
+    </main>
+</body>
+
+</html>

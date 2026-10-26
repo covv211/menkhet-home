@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>여자 코트 | MENKHET</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 히어로 글꼴: 나라 영문명·리본·쪽 번호(Bodoni Moda), 나라별 고유 표기(Noto · Amiri) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Noto+Sans+Devanagari:wght@600&family=Noto+Serif+JP:wght@600&family=Noto+Serif+KR:wght@600&family=Noto+Serif+SC:wght@600&family=Noto+Serif:wght@600&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css" integrity="sha384-IFb872aCXZQb6BKRUHmGn0YHKnFl4ylZjkgVRRyMTEQ5bjo/H6xFUiLJm6opOO66" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/default.css">
+    <link rel="stylesheet" href="styles/token.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js" integrity="sha384-JiF4eFN9V3I2Fry7TzFM3XKdq0P3abiVxpOeHjGz4cwvas+uNg6pFWVmuD6MKXqG" crossorigin="anonymous" defer></script>
+    <script src="scripts/main.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1 class="logo"><a href="./"><img src="images/logo.svg" alt="MENKHET" width="367" height="100"></a></h1>
+
+        <div class="gnb">
+            <!-- 전체 메뉴: 햄버거 → 1차 메뉴 → 2차 메뉴 → 3차 메뉴(코트·신발·악세서리) (main.js가 열고 닫음) -->
+            <nav class="sub" aria-label="전체 메뉴">
+                <button type="button" class="big-menu" aria-expanded="false" aria-controls="all-menu">전체 메뉴</button>
+                <ul id="all-menu">
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-new"><span>NEW</span></button>
+                        <ul class="drop new" id="drop-new">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-new-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-new-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-new-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-new-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-new-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-new-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-best"><span>BEST</span></button>
+                        <ul class="drop best" id="drop-best">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-best-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-best-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-best-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-best-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-best-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-best-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-women"><span>여자</span></button>
+                        <ul class="drop women" id="drop-women">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-women-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-women-coat">
+                                    <li><a href="women-coat.html#long-coat"><span>롱코트</span></a></li>
+                                    <li><a href="women-coat.html#trench"><span>트렌치</span></a></li>
+                                    <li><a href="women-coat.html#half-coat"><span>하프코트</span></a></li>
+                                    <li><a href="women-coat.html#cape"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-women-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-women-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-women-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-women-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                            <li><a href="#"><span>스커트</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-men"><span>남자</span></button>
+                        <ul class="drop men" id="drop-men">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-men-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-men-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-men-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-men-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-men-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-men-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>수트</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-lookbook"><span>룩북</span></button>
+                        <ul class="drop lookbook" id="drop-lookbook">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-lookbook-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-lookbook-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-lookbook-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-lookbook-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-lookbook-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-lookbook-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-event"><span>이벤트</span></button>
+                        <ul class="drop event" id="drop-event">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-event-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-event-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-event-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-event-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-event-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-event-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 검색 결과 페이지가 정해지면 action 연결 (지금은 main.js가 제출을 막음) -->
+            <form id="search" role="search">
+                <button type="submit">검색</button>
+                <input type="search" name="keyword" placeholder="검색어를 입력하세요" aria-label="검색어">
+            </form>
+        </div>
+
+        <ul class="user-menu">
+            <li><a class="go-login" href="#">로그인</a></li>
+            <li><a class="go-mypage" href="#">마이페이지</a></li>
+            <li><a class="go-wish" href="#">위시리스트</a></li>
+            <li><a class="go-cart" href="#">장바구니</a></li>
+        </ul>
+    </header>
+
+    <!-- 여자 코트: 헤더 전체 메뉴 > 여자 > 코트의 롱코트 · 트렌치 · 하프코트 · 케이프가 아래 섹션 id로 연결됨 -->
+    <!-- 카드: a(사진 · 상품 정보) + .product-util(장바구니 · 위시, 링크 안에 링크를 넣지 않으려고 카드 링크 밖에 두고 할인가 줄 오른쪽에 겹침) -->
+    <main class="women-coat">
+        <!-- 여자 롱코트: 상품 10개 (Swiper, 설정은 main.js) -->
+        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·위시 수·상품 링크는 실제 데이터 필요 -->
+        <section class="inner coat-section" id="long-coat">
+            <div class="title">
+                <h2 class="section-title">MENKHET 여자 롱코트</h2>
+            </div>
+            <div class="coat-swiper">
+                <div class="swiper coat-slider">
+                    <ul class="swiper-wrapper product-list">
+                        <!-- 01: 누르면 상품 상세 창(#detail-long-coat-01, 맨 아래)이 열림 -->
+                        <li class="swiper-slide product-item">
+                            <a href="#detail-long-coat-01" aria-haspopup="dialog">
+                                <img src="images/women-coat/long-coat/long-coat-01.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-02.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-03.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-04.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-05.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-06.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-07.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-08.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-09.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/long-coat/long-coat-10.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="swiper-button-prev" aria-label="이전 상품"></button>
+                <button type="button" class="swiper-button-next" aria-label="다음 상품"></button>
+            </div>
+        </section>
+
+        <!-- 여자 케이프: 상품 10개 (Swiper, 설정은 main.js) -->
+        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·위시 수·상품 링크는 실제 데이터 필요 -->
+        <section class="inner coat-section" id="cape">
+            <div class="title">
+                <h2 class="section-title">MENKHET 여자 케이프</h2>
+            </div>
+            <div class="coat-swiper">
+                <div class="swiper coat-slider">
+                    <ul class="swiper-wrapper product-list">
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-01.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-02.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-03.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-04.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-05.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-06.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-07.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-08.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-09.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/cape/cape-10.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="swiper-button-prev" aria-label="이전 상품"></button>
+                <button type="button" class="swiper-button-next" aria-label="다음 상품"></button>
+            </div>
+        </section>
+
+        <!-- 여자 트렌치: 상품 10개 (Swiper, 설정은 main.js) -->
+        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·위시 수·상품 링크는 실제 데이터 필요 -->
+        <section class="inner coat-section" id="trench">
+            <div class="title">
+                <h2 class="section-title">MENKHET 여자 트렌치</h2>
+            </div>
+            <div class="coat-swiper">
+                <div class="swiper coat-slider">
+                    <ul class="swiper-wrapper product-list">
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-01.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-02.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-03.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-04.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-05.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-06.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-07.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-08.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-09.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/trench/trench-10.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="swiper-button-prev" aria-label="이전 상품"></button>
+                <button type="button" class="swiper-button-next" aria-label="다음 상품"></button>
+            </div>
+        </section>
+
+        <!-- 여자 하프코트: 상품 10개 (Swiper, 설정은 main.js) -->
+        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·위시 수·상품 링크는 실제 데이터 필요 -->
+        <section class="inner coat-section" id="half-coat">
+            <div class="title">
+                <h2 class="section-title">MENKHET 여자 하프코트</h2>
+            </div>
+            <div class="coat-swiper">
+                <div class="swiper coat-slider">
+                    <ul class="swiper-wrapper product-list">
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-01.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-02.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-03.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-04.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-05.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-06.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-07.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-08.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-09.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#">
+                                <img src="images/women-coat/half-coat/half-coat-10.webp" alt="" width="666" height="999">
+                                <div class="product-info">
+                                    <p class="name">여자 롱코트</p>
+                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                                    <del class="origin-price">120,000원</del>
+                                    <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                                </div>
+                            </a>
+                            <div class="product-util">
+                                <a class="go-cart" href="#">장바구니</a>
+                                <a class="go-wish" href="#">위시리스트</a>
+                                <span class="count">1,010</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="swiper-button-prev" aria-label="이전 상품"></button>
+                <button type="button" class="swiper-button-next" aria-label="다음 상품"></button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 상품 상세 창: 시안 146:889 — 어두운 배경(dim) 가운데 1750×900 창, 여자 롱코트 01 카드를 누르면 열림 (여닫기 · 사진 고르기는 main.js)
+         내용은 롱코트 01 (주인님 결정): 시안 봄버 재킷 자리에 카드의 상품명 · 할인가, 컬러 두 칸은 검정 · 아이보리 -->
+    <!-- content-required: 사이즈 · 모델 착용 정보 · 장바구니 수 · 리뷰(닉네임 · 평점 · 글, 8개 모두 시안 문구)는 실제 데이터 필요 -->
+    <!-- 해시 id는 창(.product-detail)에 둠: 주소로 열 때 브라우저가 창에 바로 포커스를 줌 (배경 dim에 두면 포커스가 풀림) -->
+    <div class="dim detail-dim">
+        <div class="product-detail" id="detail-long-coat-01" role="dialog" aria-modal="true" aria-labelledby="detail-long-coat-01-title" tabindex="-1">
+            <!-- 사진: 세로로 이어진 사진을 창 안에서 위아래로 넘겨 봄 (키보드는 사진 칸에 포커스 후 화살표), 왼쪽 썸네일 · 컬러 칸을 누르면 그 사진으로 -->
+            <div class="detail-gallery">
+                <div class="gallery-track" tabindex="0" role="region" aria-label="상품 사진">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-black.webp" alt="여자 롱코트 검정" width="1024" height="1536" data-color="black">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-ivory.webp" alt="여자 롱코트 아이보리" width="1024" height="1536" data-color="ivory">
+                </div>
+                <ul class="gallery-thumbs">
+                    <li><button type="button" class="gallery-thumb" data-color="black" aria-current="true"><img src="images/women-coat/long-coat/detail/long-coat-01-black.webp" alt="검정 사진" width="1024" height="1536"></button></li>
+                    <li><button type="button" class="gallery-thumb" data-color="ivory" aria-current="false"><img src="images/women-coat/long-coat/detail/long-coat-01-ivory.webp" alt="아이보리 사진" width="1024" height="1536"></button></li>
+                </ul>
+            </div>
+
+            <div class="detail-info">
+                <div class="product-summary">
+                    <div class="product-head">
+                        <h2 class="title" id="detail-long-coat-01-title">여자 롱코트</h2>
+                        <p class="price-box"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                    </div>
+
+                    <!-- 옵션: 컬러는 고르면 그 사진으로 이동, 사이즈는 하나만 고름 -->
+                    <div class="product-options">
+                        <div class="option-color" role="group" aria-labelledby="detail-color-label">
+                            <span class="option-label" id="detail-color-label">컬러</span>
+                            <ul class="color-list">
+                                <li><button type="button" class="color-chip black" data-color="black" aria-pressed="true">검정</button></li>
+                                <li><button type="button" class="color-chip ivory" data-color="ivory" aria-pressed="false">아이보리</button></li>
+                            </ul>
+                        </div>
+                        <div class="option-size" role="group" aria-labelledby="detail-size-label">
+                            <span class="option-label" id="detail-size-label">사이즈</span>
+                            <ul class="size-list">
+                                <li><button type="button" class="size-chip" aria-pressed="false">S</button></li>
+                                <li><button type="button" class="size-chip" aria-pressed="false">M</button></li>
+                                <li><button type="button" class="size-chip" aria-pressed="false">L</button></li>
+                                <li><button type="button" class="size-chip" aria-pressed="false">XL</button></li>
+                            </ul>
+                            <p class="size-guide">모델 키(172cm) 몸무게 (55kg) 기준 사이즈 M 착용</p>
+                        </div>
+                    </div>
+
+                    <!-- 장바구니 담기 · 바로구매는 장바구니 · 주문 페이지가 정해지면 연결 (지금은 동작 없음) -->
+                    <div class="product-actions">
+                        <div class="btn-group">
+                            <button type="button" class="btn-cart">장바구니 담기</button>
+                            <button type="button" class="btn-buy">바로구매 하기</button>
+                        </div>
+                        <p class="cart-status"><span class="like-count">1,005</span> 장바구니에 담겨 있어요</p>
+                    </div>
+
+                    <a class="btn-fitting-room" href="fitting-room.html"><span class="label">피팅룸으로 이동</span><i class="chevron" aria-hidden="true"></i></a>
+                </div>
+
+                <!-- 리뷰: 카드 180 폭이 가로로 이어지고 창 폭을 넘는 카드는 옆으로 넘겨 봄 · 리뷰 쓰기는 쓰기 페이지가 정해지면 연결 -->
+                <!-- asset-required: 리뷰어 프로필 사진 (지금은 회색 원) -->
+                <div class="review">
+                    <h3 class="blind">리뷰</h3>
+                    <p class="review-title"><span>리뷰 쓰기</span><i class="chevron" aria-hidden="true"></i></p>
+                    <ul class="review-list" tabindex="0" aria-label="리뷰 목록">
+                        <li class="review-card">
+                            <div class="review-head">
+                                <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
+                                <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                            </div>
+                            <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
+                        </li>
+                        <li class="review-card">
+                            <div class="review-head">
+                                <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
+                                <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                            </div>
+                            <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
+                        </li>
+                        <li class="review-card">
+                            <div class="review-head">
+                                <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
+                                <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                            </div>
+                            <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
+                        </li>
+                        <li class="review-card">
+                            <div class="review-head">
+                                <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
+                                <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                            </div>
+                            <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
+                        </li>
+                        <li class="review-card">
+                            <div class="review-head">
+                                <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
+                                <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                            </div>
+                            <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
+                        </li>
+                        <li class="review-card">
+                            <div class="review-head">
+                                <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
+                                <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                            </div>
+                            <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
+                        </li>
+                        <li class="review-card">
+                            <div class="review-head">
+                                <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
+                                <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                            </div>
+                            <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
+                        </li>
+                        <li class="review-card">
+                            <div class="review-head">
+                                <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
+                                <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
+                            </div>
+                            <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 닫기: 시안에 없어 더함 (피팅룸 닫기와 같은 모양) · Esc · 창 밖 어두운 곳을 눌러도 닫힘 -->
+            <button type="button" class="btn-close">상품 상세 닫기</button>
+        </div>
+    </div>
+</body>
+
+</html>

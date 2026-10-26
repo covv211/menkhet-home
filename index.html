@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MENKHET</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 히어로 글꼴: 나라 영문명·리본·쪽 번호(Bodoni Moda), 나라별 고유 표기(Noto · Amiri) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Noto+Sans+Devanagari:wght@600&family=Noto+Serif+JP:wght@600&family=Noto+Serif+KR:wght@600&family=Noto+Serif+SC:wght@600&family=Noto+Serif:wght@600&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css" integrity="sha384-IFb872aCXZQb6BKRUHmGn0YHKnFl4ylZjkgVRRyMTEQ5bjo/H6xFUiLJm6opOO66" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles/default.css">
+    <link rel="stylesheet" href="styles/token.css">
+    <link rel="stylesheet" href="styles/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js" integrity="sha384-JiF4eFN9V3I2Fry7TzFM3XKdq0P3abiVxpOeHjGz4cwvas+uNg6pFWVmuD6MKXqG" crossorigin="anonymous" defer></script>
+    <script src="scripts/main.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <h1 class="logo"><a href="./"><img src="images/logo.svg" alt="MENKHET" width="367" height="100"></a></h1>
+
+        <div class="gnb">
+            <!-- 전체 메뉴: 햄버거 → 1차 메뉴 → 2차 메뉴 → 3차 메뉴(코트·신발·악세서리) (main.js가 열고 닫음) -->
+            <nav class="sub" aria-label="전체 메뉴">
+                <button type="button" class="big-menu" aria-expanded="false" aria-controls="all-menu">전체 메뉴</button>
+                <ul id="all-menu">
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-new"><span>NEW</span></button>
+                        <ul class="drop new" id="drop-new">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-new-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-new-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-new-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-new-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-new-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-new-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-best"><span>BEST</span></button>
+                        <ul class="drop best" id="drop-best">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-best-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-best-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-best-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-best-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-best-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-best-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-women"><span>여자</span></button>
+                        <ul class="drop women" id="drop-women">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-women-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-women-coat">
+                                    <li><a href="women-coat.html#long-coat"><span>롱코트</span></a></li>
+                                    <li><a href="women-coat.html#trench"><span>트렌치</span></a></li>
+                                    <li><a href="women-coat.html#half-coat"><span>하프코트</span></a></li>
+                                    <li><a href="women-coat.html#cape"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-women-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-women-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-women-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-women-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                            <li><a href="#"><span>스커트</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-men"><span>남자</span></button>
+                        <ul class="drop men" id="drop-men">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-men-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-men-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-men-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-men-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-men-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-men-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>수트</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-lookbook"><span>룩북</span></button>
+                        <ul class="drop lookbook" id="drop-lookbook">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-lookbook-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-lookbook-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-lookbook-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-lookbook-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-lookbook-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-lookbook-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <button type="button" class="menu" aria-expanded="false" aria-controls="drop-event"><span>이벤트</span></button>
+                        <ul class="drop event" id="drop-event">
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-event-coat"><span>코트</span></button>
+                                <ul class="drop coat" id="drop-event-coat">
+                                    <li><a href="#"><span>롱코트</span></a></li>
+                                    <li><a href="#"><span>트렌치</span></a></li>
+                                    <li><a href="#"><span>하프코트</span></a></li>
+                                    <li><a href="#"><span>케이프</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>셔츠</span></a></li>
+                            <li><a href="#"><span>바지</span></a></li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-event-shoes"><span>신발</span></button>
+                                <ul class="drop shoes" id="drop-event-shoes">
+                                    <li><a href="#"><span>부츠</span></a></li>
+                                    <li><a href="#"><span>로퍼</span></a></li>
+                                    <li><a href="#"><span>스니커즈</span></a></li>
+                                    <li><a href="#"><span>샌들</span></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <button type="button" class="menu" aria-expanded="false" aria-controls="drop-event-acc"><span>악세서리</span></button>
+                                <ul class="drop acc" id="drop-event-acc">
+                                    <li><a href="#"><span>벨트</span></a></li>
+                                    <li><a href="#"><span>스카프</span></a></li>
+                                    <li><a href="#"><span>모자</span></a></li>
+                                    <li><a href="#"><span>주얼리</span></a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#"><span>가방</span></a></li>
+                            <li><a href="#"><span>재킷</span></a></li>
+                            <li><a href="#"><span>니트</span></a></li>
+                            <li><a href="#"><span>드레스</span></a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- 검색 결과 페이지가 정해지면 action 연결 (지금은 main.js가 제출을 막음) -->
+            <form id="search" role="search">
+                <button type="submit">검색</button>
+                <input type="search" name="keyword" placeholder="검색어를 입력하세요" aria-label="검색어">
+            </form>
+        </div>
+
+        <ul class="user-menu">
+            <li><a class="go-login" href="#">로그인</a></li>
+            <li><a class="go-mypage" href="#">마이페이지</a></li>
+            <li><a class="go-wish" href="#">위시리스트</a></li>
+            <li><a class="go-cart" href="#">장바구니</a></li>
+        </ul>
+    </header>
+
+    <main>
+        <!-- 히어로: 나라별 런웨이 룩 13장 (Swiper, 설정은 main.js) -->
+        <section class="hero">
+            <div class="hero-swiper">
+                <div class="swiper hero-slider">
+                    <ul class="swiper-wrapper">
+                        <li class="swiper-slide slide-01">
+                            <h2 class="cover-title">KOREA</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 01     ✦     KOREA     ✦     MENKHET WORLD RUNWAY     ✦     No. 01     ✦     KOREA     ✦     MENKHET WORLD RUNWAY     ✦     No. 01     ✦     KOREA     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/south_korea_male_pose_02.webp" alt="대한민국 룩을 입은 남성 모델" width="1024" height="1514" fetchpriority="high">
+                            <img class="model-w" src="images/hero/south_korea_female_pose_02.webp" alt="대한민국 룩을 입은 여성 모델" width="1011" height="1511" fetchpriority="high">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="ko">대한민국</p>
+                                <p class="desc">‘대한민국’ 붓글씨를 새긴 검정 랩코트와 상아색 로브,<br>태극의 빨강·파랑 새틴이 런웨이를 가릅니다.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-02">
+                            <h2 class="cover-title">VIETNAM</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 02     ✦     VIETNAM     ✦     MENKHET WORLD RUNWAY     ✦     No. 02     ✦     VIETNAM     ✦     MENKHET WORLD RUNWAY     ✦     No. 02     ✦     VIETNAM     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/vietnam_male_pose_02.webp" alt="베트남 룩을 입은 남성 모델" width="641" height="1522" decoding="async">
+                            <img class="model-w" src="images/hero/vietnam_female_pose_01.webp" alt="베트남 룩을 입은 여성 모델" width="832" height="1511" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="vi">Việt Nam</p>
+                                <p class="desc">금빛 별 버클과 붓글씨 레터링,<br>붉은 볼륨 소매와 노랑 새틴이 빛나는 베트남 룩.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-03">
+                            <h2 class="cover-title">JAPAN</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 03     ✦     JAPAN     ✦     MENKHET WORLD RUNWAY     ✦     No. 03     ✦     JAPAN     ✦     MENKHET WORLD RUNWAY     ✦     No. 03     ✦     JAPAN     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/japan_male_pose_03.webp" alt="일본 룩을 입은 남성 모델" width="610" height="1523" decoding="async">
+                            <img class="model-w" src="images/hero/japan_female_pose_01.webp" alt="일본 룩을 입은 여성 모델" width="965" height="1497" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="ja">日本</p>
+                                <p class="desc">먹글씨를 새긴 흰 플리츠와 붉은 해를 그린 새틴 망토,<br>빨강 러플 소매의 블랙 점프수트.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-04">
+                            <h2 class="cover-title">AUSTRALIA</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 04     ✦     AUSTRALIA     ✦     MENKHET WORLD RUNWAY     ✦     No. 04     ✦     AUSTRALIA     ✦     MENKHET WORLD RUNWAY     ✦     No. 04     ✦     AUSTRALIA     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/australia_male_pose_01.webp" alt="호주 룩을 입은 남성 모델" width="744" height="1536" decoding="async">
+                            <img class="model-w" src="images/hero/australia_female_pose_02.webp" alt="호주 룩을 입은 여성 모델" width="939" height="1528" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="en">Australia</p>
+                                <p class="desc">남십자성 별을 단 흰 코트와 네이비 점프수트,<br>붉은 새틴 드레이프가 흐르는 호주 룩.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-05">
+                            <h2 class="cover-title">USA</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 05     ✦     USA     ✦     MENKHET WORLD RUNWAY     ✦     No. 05     ✦     USA     ✦     MENKHET WORLD RUNWAY     ✦     No. 05     ✦     USA     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/usa_male_pose_02.webp" alt="미국 룩을 입은 남성 모델" width="667" height="1523" decoding="async">
+                            <img class="model-w" src="images/hero/usa_female_pose_02.webp" alt="미국 룩을 입은 여성 모델" width="1009" height="1504" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="en">U.S.A.</p>
+                                <p class="desc">별을 단 네이비 재킷과 레터링 벨트,<br>빨강·흰 러플이 겹겹이 흐르는 드레스.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-06">
+                            <h2 class="cover-title">CANADA</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 06     ✦     CANADA     ✦     MENKHET WORLD RUNWAY     ✦     No. 06     ✦     CANADA     ✦     MENKHET WORLD RUNWAY     ✦     No. 06     ✦     CANADA     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/canada_male_pose_03.webp" alt="캐나다 룩을 입은 남성 모델" width="941" height="1520" decoding="async">
+                            <img class="model-w" src="images/hero/canada_female_pose_02.webp" alt="캐나다 룩을 입은 여성 모델" width="1005" height="1521" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="en">Canada</p>
+                                <p class="desc">붉은 새틴 코트와 흰 사선 띠,<br>흰 챙 모자와 층층이 쌓인 붉은 러플.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-07">
+                            <h2 class="cover-title">INDIA</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 07     ✦     INDIA     ✦     MENKHET WORLD RUNWAY     ✦     No. 07     ✦     INDIA     ✦     MENKHET WORLD RUNWAY     ✦     No. 07     ✦     INDIA     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/india_male_pose_02.webp" alt="인도 룩을 입은 남성 모델" width="608" height="1490" decoding="async">
+                            <img class="model-w" src="images/hero/india_female_pose_02.webp" alt="인도 룩을 입은 여성 모델" width="999" height="1526" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="hi">भारत</p>
+                                <p class="desc">금사 덩굴 자수의 그린 재킷과<br>사프란·그린 새틴이 흐르는 인도 룩.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-08">
+                            <h2 class="cover-title">RUSSIA</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 08     ✦     RUSSIA     ✦     MENKHET WORLD RUNWAY     ✦     No. 08     ✦     RUSSIA     ✦     MENKHET WORLD RUNWAY     ✦     No. 08     ✦     RUSSIA     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/russia_male_pose_01.webp" alt="러시아 룩을 입은 남성 모델" width="751" height="1486" decoding="async">
+                            <img class="model-w" src="images/hero/russia_female_pose_02.webp" alt="러시아 룩을 입은 여성 모델" width="940" height="1513" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="ru">Россия</p>
+                                <p class="desc">레터링을 새긴 화이트 재킷과 블루 점프수트,<br>붉은 새틴 망토를 두른 러시아 룩.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-09">
+                            <h2 class="cover-title">SWEDEN</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 09     ✦     SWEDEN     ✦     MENKHET WORLD RUNWAY     ✦     No. 09     ✦     SWEDEN     ✦     MENKHET WORLD RUNWAY     ✦     No. 09     ✦     SWEDEN     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/sweden_male_pose_02.webp" alt="스웨덴 룩을 입은 남성 모델" width="534" height="1511" decoding="async">
+                            <img class="model-w" src="images/hero/sweden_female_pose_02.webp" alt="스웨덴 룩을 입은 여성 모델" width="1023" height="1504" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="sv">Sverige</p>
+                                <p class="desc">노랑 십자 띠를 두른 로열블루 재킷과<br>노랑 새틴 트레인이 흐르는 스웨덴 룩.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-10">
+                            <h2 class="cover-title">GERMANY</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 10     ✦     GERMANY     ✦     MENKHET WORLD RUNWAY     ✦     No. 10     ✦     GERMANY     ✦     MENKHET WORLD RUNWAY     ✦     No. 10     ✦     GERMANY     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/germany_male_pose_03.webp" alt="독일 룩을 입은 남성 모델" width="838" height="1517" decoding="async">
+                            <img class="model-w" src="images/hero/germany_female_pose_02.webp" alt="독일 룩을 입은 여성 모델" width="1000" height="1518" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="de">Deutschland</p>
+                                <p class="desc">노랑 띠를 세운 블랙 롱코트와 빨강 새틴 망토,<br>금빛 러플이 흐르는 레드 플리츠 드레스.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-11">
+                            <h2 class="cover-title">EGYPT</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 11     ✦     EGYPT     ✦     MENKHET WORLD RUNWAY     ✦     No. 11     ✦     EGYPT     ✦     MENKHET WORLD RUNWAY     ✦     No. 11     ✦     EGYPT     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/egypt_male_pose_01.webp" alt="이집트 룩을 입은 남성 모델" width="754" height="1510" decoding="async">
+                            <img class="model-w" src="images/hero/egypt_female_pose_03.webp" alt="이집트 룩을 입은 여성 모델" width="1002" height="1465" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="ar" dir="rtl">مصر</p>
+                                <p class="desc">금빛 아랍어 레터링의 상아색 원숄더 드레스와<br>금장 라펠 크롭 재킷, 빨강 새틴 망토.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-12">
+                            <h2 class="cover-title">CHINA</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 12     ✦     CHINA     ✦     MENKHET WORLD RUNWAY     ✦     No. 12     ✦     CHINA     ✦     MENKHET WORLD RUNWAY     ✦     No. 12     ✦     CHINA     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/china_male_pose_01.webp" alt="중국 룩을 입은 남성 모델" width="568" height="1510" decoding="async">
+                            <img class="model-w" src="images/hero/china_female_pose_01.webp" alt="중국 룩을 입은 여성 모델" width="892" height="1488" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="zh-CN">中国</p>
+                                <p class="desc">매듭단추를 단 빨강 치파오 상의와 검정 레이어드 스커트,<br>금빛 붓글씨가 흐르는 블랙 차이나칼라 코트.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                        <li class="swiper-slide slide-13">
+                            <h2 class="cover-title">NORTH KOREA</h2>
+                            <div class="ribbon" aria-hidden="true">
+                                <p class="ribbon-text">MENKHET WORLD RUNWAY     ✦     No. 13     ✦     NORTH KOREA     ✦     MENKHET WORLD RUNWAY     ✦     No. 13     ✦     NORTH KOREA     ✦     MENKHET WORLD RUNWAY     ✦     No. 13     ✦     NORTH KOREA     ✦     </p>
+                            </div>
+                            <img class="model-m" src="images/hero/north_korea_male_pose_03.webp" alt="조선 룩을 입은 남성 모델" width="897" height="1465" decoding="async">
+                            <img class="model-w" src="images/hero/north_korea_female_pose_03.webp" alt="조선 룩을 입은 여성 모델" width="1018" height="1477" decoding="async">
+                            <i class="sparkles" aria-hidden="true"><i class="spark-01"></i><i class="spark-02"></i><i class="spark-03"></i><i class="spark-04"></i><i class="spark-05"></i><i class="spark-06"></i></i>
+                            <div class="cover-lines">
+                                <p class="native" lang="ko">조선</p>
+                                <p class="desc">은빛 고리 단추와 별 버클을 단 흰 제복 드레스,<br>빨강 새틴 망토를 두른 네이비 롱코트.</p>
+                                <a class="go-collection" href="#"><span>컬렉션 보기</span><i class="arrow" aria-hidden="true"></i></a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="swiper-button-prev" aria-label="이전 룩"></button>
+                <button type="button" class="swiper-button-next" aria-label="다음 룩"></button>
+                <!-- 쪽 번호 01 / 13 (Swiper가 채움) -->
+                <p class="swiper-pagination"></p>
+            </div>
+        </section>
+
+        <!-- 랭킹: 상품 13개, 한 화면에 5개 (Swiper, 설정은 main.js) -->
+        <section class="inner ranking">
+            <div class="title">
+                <h2 class="section-title">MENKHET 랭킹</h2>
+            </div>
+            <div class="ranking-swiper">
+                <div class="swiper ranking-slider">
+                    <!-- 상품 상세 페이지가 정해지면 href 연결 (상품명·가격은 시안에 없어서 넣지 않음) -->
+                    <ul class="swiper-wrapper product-list">
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/south-korea-women-robe.webp" alt="한국 여성 로브" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/south-korea-men-long-coat.webp" alt="한국 남성 롱코트" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/germany-women-pleated-skirt.webp" alt="독일 여성 플리츠스커트" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/germany-men-long-coat.webp" alt="독일 남성 롱코트" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/south-korea-men-pants.webp" alt="한국 남성 바지" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/germany-women-jacket.webp" alt="독일 여성 재킷" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/south-korea-men-turtleneck.webp" alt="한국 남성 터틀넥" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/usa-men-cropped-jacket.webp" alt="미국 남성 크롭재킷" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/south-korea-women-wide-pants.webp" alt="한국 여성 와이드바지" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/usa-women-ruffle-ball-skirt.webp" alt="미국 여성 러플볼스커트" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/germany-men-pants.webp" alt="독일 남성 바지" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/usa-men-white-wide-pants.webp" alt="미국 남성 흰와이드팬츠" width="620" height="806" decoding="async"></a>
+                        </li>
+                        <li class="swiper-slide product-item">
+                            <a href="#"><img src="images/ranking/usa-women-one-shoulder-bodice.webp" alt="미국 여성 원숄더보디스" width="620" height="806" decoding="async"></a>
+                        </li>
+                    </ul>
+                </div>
+                <button type="button" class="swiper-button-prev" aria-label="이전 상품"></button>
+                <button type="button" class="swiper-button-next" aria-label="다음 상품"></button>
+            </div>
+        </section>
+
+        <!-- 나라별 룩: 국기 배경 · 모델 · 아이템 카드 3장 (Swiper, 설정은 main.js) -->
+        <section class="country-look">
+            <div class="title">
+                <h2 class="section-title">MENKHET</h2>
+                <!-- content-required: 섹션 설명 문구 (시안의 더미 텍스트를 그대로 둠) -->
+                <p class="section-desc">더미 텍스트 (필요한 내용 입력)</p>
+            </div>
+            <div class="look-swiper">
+                <div class="swiper look-slider">
+                    <ul class="swiper-wrapper look-list">
+                        <li class="swiper-slide look-item korea">
+                            <div class="look-bg"></div>
+                            <div class="look-text">
+                                <h3 class="look-title">대한민국</h3>
+                                <p class="look-desc">‘대한민국’ 붓글씨를 새긴 검정 랩코트와 상아색 로브,<br>태극의 빨강·파랑 새틴이 런웨이를 가릅니다.</p>
+                                <a class="btn-more" href="#"><span>자세히 보기</span><i class="chevron" aria-hidden="true"></i></a>
+                            </div>
+                            <img class="look-model" src="images/country-look/korea-female-pose-01.webp" alt="대한민국 룩을 입은 여성 모델" width="1024" height="1536" loading="lazy" decoding="async">
+                            <div class="item-card card-02"><img class="item-thumb" src="images/country-look/korea-ankle-boots.webp" alt="검정 앵클부츠" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-03"><img class="item-thumb" src="images/country-look/korea-triple-belt.webp" alt="검정 3단 벨트" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-04"><img class="item-thumb" src="images/country-look/korea-shoulder-caps.webp" alt="검정 어깨 캡" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-05"><img class="item-thumb" src="images/country-look/korea-wide-pants.webp" alt="상아색 와이드 바지" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-06"><img class="item-thumb" src="images/country-look/korea-shoulder-strap.webp" alt="검정 어깨끈" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-07"><img class="item-thumb" src="images/country-look/korea-robe.webp" alt="‘대한민국’ 붓글씨를 새긴 상아색 로브" width="300" height="390" loading="lazy" decoding="async"></div>
+                        </li>
+                        <li class="swiper-slide look-item germany">
+                            <div class="look-bg"></div>
+                            <div class="look-text">
+                                <h3 class="look-title" lang="de">Deutschland</h3>
+                                <p class="look-desc">노랑 띠를 세운 블랙 롱코트와 빨강 새틴 망토,<br>금빛 러플이 흐르는 레드 플리츠 드레스.</p>
+                                <a class="btn-more" href="#"><span>자세히 보기</span><i class="chevron" aria-hidden="true"></i></a>
+                            </div>
+                            <img class="look-model" src="images/country-look/germany-male-pose-03.webp" alt="독일 룩을 입은 남성 모델" width="1024" height="1536" loading="lazy" decoding="async">
+                            <div class="item-card card-02"><img class="item-thumb" src="images/country-look/germany-trousers.webp" alt="회색 슬랙스" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-03"><img class="item-thumb" src="images/country-look/germany-long-coat.webp" alt="‘DEUTSCHLAND’ 노랑 띠를 단 검정 롱코트" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-04"><img class="item-thumb" src="images/country-look/germany-boots.webp" alt="검정 에나멜 부츠" width="300" height="390" loading="lazy" decoding="async"></div>
+                        </li>
+                        <li class="swiper-slide look-item usa">
+                            <div class="look-bg"></div>
+                            <div class="look-text">
+                                <h3 class="look-title" lang="en">U.S.A.</h3>
+                                <p class="look-desc">별을 단 네이비 재킷과 레터링 벨트,<br>빨강·흰 러플이 겹겹이 흐르는 드레스.</p>
+                                <a class="btn-more" href="#"><span>자세히 보기</span><i class="chevron" aria-hidden="true"></i></a>
+                            </div>
+                            <img class="look-model" src="images/country-look/usa-female-pose-03.webp" alt="미국 룩을 입은 여성 모델" width="1024" height="1536" loading="lazy" decoding="async">
+                            <div class="item-card card-01"><img class="item-thumb" src="images/country-look/usa-waist-belt.webp" alt="네이비 새틴 허리 벨트" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-02"><img class="item-thumb" src="images/country-look/usa-star-top.webp" alt="별을 단 네이비 원숄더 상의" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-03"><img class="item-thumb" src="images/country-look/usa-hat.webp" alt="빨강 리본을 단 네이비 모자" width="300" height="390" loading="lazy" decoding="async"></div>
+                            <div class="item-card card-04"><img class="item-thumb" src="images/country-look/usa-ruffle-skirt.webp" alt="‘USA’ 레터링 빨강·흰 러플 스커트" width="300" height="390" loading="lazy" decoding="async"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 프로모션: 상품 누끼 13장씩 두 줄, 줄 밖으로 넘친 장은 잘리고 왼쪽으로 계속 흐름 (복제·재생은 main.js, 움직임은 style.css) -->
+        <section class="inner promotion">
+            <div class="title">
+                <h2 class="section-title">MENKHET 프로모션</h2>
+            </div>
+            <div class="promotion-list">
+                <ul class="promotion-row">
+                    <li class="promotion-item"><img src="images/promotion/south-korea-female-robe.webp" alt="한국 여성 로브" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/south-korea-male-long-coat.webp" alt="한국 남성 롱코트" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/germany-female-pleated-skirt.webp" alt="독일 여성 플리츠스커트" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/germany-male-long-coat.webp" alt="독일 남성 롱코트" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/south-korea-male-pants.webp" alt="한국 남성 바지" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/germany-female-jacket.webp" alt="독일 여성 재킷" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/south-korea-male-turtleneck.webp" alt="한국 남성 터틀넥" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/usa-male-cropped-jacket.webp" alt="미국 남성 크롭재킷" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/south-korea-female-wide-pants.webp" alt="한국 여성 와이드바지" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/usa-female-ruffle-ball-skirt.webp" alt="미국 여성 러플볼스커트" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/germany-male-pants.webp" alt="독일 남성 바지" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/usa-male-white-wide-pants.webp" alt="미국 남성 흰 와이드팬츠" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/usa-female-one-shoulder-bodice.webp" alt="미국 여성 원숄더 보디스" width="360" height="468" decoding="async"></li>
+                </ul>
+                <ul class="promotion-row">
+                    <li class="promotion-item"><img src="images/promotion/south-korea-male-long-coat.webp" alt="한국 남성 롱코트" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/germany-female-pleated-skirt.webp" alt="독일 여성 플리츠스커트" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/germany-male-long-coat.webp" alt="독일 남성 롱코트" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/south-korea-male-pants.webp" alt="한국 남성 바지" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/south-korea-female-robe.webp" alt="한국 여성 로브" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/germany-female-jacket.webp" alt="독일 여성 재킷" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/usa-female-one-shoulder-bodice.webp" alt="미국 여성 원숄더 보디스" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/usa-male-cropped-jacket.webp" alt="미국 남성 크롭재킷" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/south-korea-female-wide-pants.webp" alt="한국 여성 와이드바지" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/usa-female-ruffle-ball-skirt.webp" alt="미국 여성 러플볼스커트" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/south-korea-male-turtleneck.webp" alt="한국 남성 터틀넥" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/usa-male-white-wide-pants.webp" alt="미국 남성 흰 와이드팬츠" width="360" height="468" decoding="async"></li>
+                    <li class="promotion-item"><img src="images/promotion/germany-male-pants.webp" alt="독일 남성 바지" width="360" height="468" decoding="async"></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 서비스 바로가기: 이용약관 · 회사소개 · 고객센터 · 매장안내 카드 4장 (목적지가 정해지면 href 연결) -->
+        <section class="inner service-links" aria-label="서비스 바로가기">
+            <a class="service-card" href="#">
+                <img src="images/service/terms.webp" alt="" width="860" height="1290" loading="lazy" decoding="async">
+                <div class="card-dim"></div>
+                <div class="card-text">
+                    <strong class="card-title">이용약관</strong>
+                    <span class="btn-go"><span>바로가기</span><i class="chevron" aria-hidden="true"></i></span>
+                </div>
+            </a>
+            <a class="service-card" href="#">
+                <img src="images/service/about.webp" alt="" width="860" height="1290" loading="lazy" decoding="async">
+                <div class="card-dim"></div>
+                <div class="card-text">
+                    <strong class="card-title">회사소개</strong>
+                    <span class="btn-go"><span>바로가기</span><i class="chevron" aria-hidden="true"></i></span>
+                </div>
+            </a>
+            <a class="service-card" href="#">
+                <img src="images/service/cs.webp" alt="" width="860" height="1290" loading="lazy" decoding="async">
+                <div class="card-dim"></div>
+                <div class="card-text">
+                    <strong class="card-title">고객센터</strong>
+                    <span class="btn-go"><span>바로가기</span><i class="chevron" aria-hidden="true"></i></span>
+                </div>
+            </a>
+            <a class="service-card" href="#">
+                <img src="images/service/store.webp" alt="" width="860" height="1290" loading="lazy" decoding="async">
+                <div class="card-dim"></div>
+                <div class="card-text">
+                    <strong class="card-title">매장안내</strong>
+                    <span class="btn-go"><span>바로가기</span><i class="chevron" aria-hidden="true"></i></span>
+                </div>
+            </a>
+        </section>
+    </main>
+
+    <!-- 푸터: 로고 · 약관 메뉴 · 사업자 정보 · 고객센터 · SNS -->
+    <footer>
+        <div class="inner">
+            <div class="footer-top">
+                <div class="footer-logo"><a href="./"><img src="images/logo-footer.svg" alt="MENKHET" width="247" height="40"></a></div>
+                <ul class="footer-menu">
+                    <li><a href="#">회사소개</a></li>
+                    <li><a href="#">이용약관</a></li>
+                    <li><a class="go-privacy" href="#">개인정보처리방침</a></li>
+                    <li><a href="#">고객센터</a></li>
+                    <li><a href="#">매장안내</a></li>
+                    <li><a href="#">제휴문의</a></li>
+                </ul>
+            </div>
+            <hr>
+            <div class="footer-main">
+                <!-- content-required: 대표 · 사업자등록번호 · 통신판매업신고 · 주소 · 이메일 · 개인정보보호책임자는 시안의 자리표시(000) 그대로 -->
+                <address class="footer-info">
+                    <p>상호 (주)멘케트 MENKHET  |  대표 000  |  사업자등록번호 000-00-00000</p>
+                    <p>통신판매업신고 제0000-서울00-0000호  |  주소 서울특별시 00구 00로 00</p>
+                    <p>이메일 help@menkhet.example  |  개인정보보호책임자 000</p>
+                </address>
+                <!-- content-required: 고객센터 번호(1588-0000)는 시안의 자리표시 -->
+                <div class="footer-cs">
+                    <p class="title">고객센터</p>
+                    <strong class="tel">1588-0000</strong>
+                    <p>평일 10:00 – 17:00 (점심 12:00 – 13:00)</p>
+                    <p>주말 · 공휴일 휴무</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p class="copyright">© 2026 MENKHET. All rights reserved.</p>
+                <ul class="footer-sns">
+                    <li><a class="sns-youtube" href="#"><i class="icon-youtube" aria-hidden="true"></i>유튜브</a></li>
+                    <li><a class="sns-instagram" href="#"><i class="icon-instagram" aria-hidden="true"></i>인스타그램</a></li>
+                    <li><a class="sns-facebook" href="#"><i class="icon-facebook" aria-hidden="true"></i>페이스북</a></li>
+                    <li><a class="sns-x" href="#"><i class="icon-x" aria-hidden="true"></i>X(트위터)</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

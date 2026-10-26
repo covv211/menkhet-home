@@ -1,0 +1,28 @@
+# 맥 · 작업 찌꺼기
+.DS_Store
+
+# 사이트에서 안 쓰는 작업 폴더 (이 맥에만 둠)
+3d/
+models/
+model/
+시안/
+ChatGPT*.png
+
+# 아직 사이트에서 안 쓰는 이미지 (상품 원본 PNG · 모델 원본 · 나라별 포즈 원본)
+images/남자/
+images/여자/
+images/model/
+images/disign/
+images/australia/
+images/canada/
+images/china/
+images/egypt/
+images/germany/
+images/india/
+images/japan/
+images/north_korea/
+images/russia/
+images/south_korea/
+images/sweden/
+images/usa/
+images/vietnam/

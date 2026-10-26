@@ -1,0 +1,123 @@
+{
+    "_설명": [
+        "피팅룸 상품 실측표 (fitting-room.js가 읽음). 키는 fitting-room.html 옷 칸의 data-item과 같음",
+        "치수는 cm. chest · waist · hip · thigh · hem = 평평하게 놓고 잰 단면(한쪽 폭), shoulder = 어깨너비, length = 총장(상의는 옆 목점, 바지는 허리 윗단부터), sleeve = 소매, rise = 밑위",
+        "category: outer · top · bottom / stretch: none(없음) · some(약간, 밴딩 포함) · good(좋음) / fit: slim · regular · over / shoulder: set(일반) · drop · raglan / inner: 아우터 안에 옷을 껴입는지",
+        "colors: 3D 옷에 입힐 상품 대표색 (메시 이름별, 새 3D 모델만 씀)",
+        "charts: 성별 마네킹마다 실측표 (실제 상품은 한 상품에 실측표 하나 — 지금은 여자 · 남자 마네킹 둘 다 입혀 보려고 두 벌)",
+        "sample: true = 지금 숫자는 KS 사이즈 범위로 만든 예시 → 실제 상품 실측표가 생기면 바꾸고 false로"
+    ],
+    "sample": true,
+    "items": {
+        "coat": {
+            "category": "outer", "stretch": "none", "fit": "regular", "shoulder": "set", "inner": true,
+            "colors": { "coat": "#e8e0cf" },
+            "charts": {
+                "female": {
+                    "S":  { "shoulder": 39.5, "chest": 44.5, "length": 108, "sleeve": 58 },
+                    "M":  { "shoulder": 41,   "chest": 49,   "length": 110, "sleeve": 59 },
+                    "L":  { "shoulder": 42.5, "chest": 53,   "length": 112, "sleeve": 60 },
+                    "XL": { "shoulder": 44,   "chest": 58,   "length": 114, "sleeve": 61 }
+                },
+                "male": {
+                    "S":  { "shoulder": 43.5, "chest": 47,   "length": 112, "sleeve": 62 },
+                    "M":  { "shoulder": 45,   "chest": 51,   "length": 114, "sleeve": 63 },
+                    "L":  { "shoulder": 46.5, "chest": 55,   "length": 116, "sleeve": 64 },
+                    "XL": { "shoulder": 48,   "chest": 58.5, "length": 118, "sleeve": 65 }
+                }
+            }
+        },
+        "jacket": {
+            "category": "outer", "stretch": "none", "fit": "over", "shoulder": "drop", "inner": true,
+            "colors": { "jacket": "#5a4434" },
+            "charts": {
+                "female": {
+                    "S":  { "shoulder": 48, "chest": 49, "length": 56, "sleeve": 57 },
+                    "M":  { "shoulder": 50, "chest": 53, "length": 58, "sleeve": 58 },
+                    "L":  { "shoulder": 52, "chest": 57, "length": 60, "sleeve": 59 },
+                    "XL": { "shoulder": 54, "chest": 62, "length": 62, "sleeve": 60 }
+                },
+                "male": {
+                    "S":  { "shoulder": 50, "chest": 51,   "length": 62, "sleeve": 60 },
+                    "M":  { "shoulder": 52, "chest": 55,   "length": 64, "sleeve": 61 },
+                    "L":  { "shoulder": 54, "chest": 59,   "length": 66, "sleeve": 62 },
+                    "XL": { "shoulder": 56, "chest": 62.5, "length": 68, "sleeve": 63 }
+                }
+            }
+        },
+        "knit": {
+            "category": "top", "stretch": "some", "fit": "regular", "shoulder": "set", "inner": false,
+            "colors": { "knit": "#3c3c3e", "knitshirt": "#f2f1ec" },
+            "charts": {
+                "female": {
+                    "S":  { "shoulder": 37.5, "chest": 42, "length": 60, "sleeve": 57 },
+                    "M":  { "shoulder": 39,   "chest": 46, "length": 62, "sleeve": 58 },
+                    "L":  { "shoulder": 40.5, "chest": 50, "length": 64, "sleeve": 59 },
+                    "XL": { "shoulder": 42,   "chest": 55, "length": 66, "sleeve": 60 }
+                },
+                "male": {
+                    "S":  { "shoulder": 41.5,   "chest": 44, "length": 66, "sleeve": 61 },
+                    "M":  { "shoulder": 43, "chest": 48, "length": 68, "sleeve": 62 },
+                    "L":  { "shoulder": 44.5,   "chest": 52, "length": 70, "sleeve": 63 },
+                    "XL": { "shoulder": 46, "chest": 56, "length": 72, "sleeve": 64 }
+                }
+            }
+        },
+        "shirt": {
+            "category": "top", "stretch": "none", "fit": "regular", "shoulder": "set", "inner": false,
+            "colors": { "shirt": "#f4f3ef" },
+            "charts": {
+                "female": {
+                    "S":  { "shoulder": 37.5, "chest": 42.5, "length": 64, "sleeve": 58 },
+                    "M":  { "shoulder": 39,   "chest": 46.5, "length": 66, "sleeve": 59 },
+                    "L":  { "shoulder": 40.5, "chest": 50.5, "length": 68, "sleeve": 60 },
+                    "XL": { "shoulder": 42,   "chest": 55.5, "length": 70, "sleeve": 61 }
+                },
+                "male": {
+                    "S":  { "shoulder": 41.5,   "chest": 44, "length": 72, "sleeve": 61 },
+                    "M":  { "shoulder": 43, "chest": 48, "length": 74, "sleeve": 62 },
+                    "L":  { "shoulder": 44.5,   "chest": 52, "length": 76, "sleeve": 63 },
+                    "XL": { "shoulder": 46, "chest": 56, "length": 78, "sleeve": 64 }
+                }
+            }
+        },
+        "tee": {
+            "category": "top", "stretch": "some", "fit": "regular", "shoulder": "set", "inner": false,
+            "colors": { "tee": "#f6f6f3" },
+            "charts": {
+                "female": {
+                    "S":  { "shoulder": 38,   "chest": 42, "length": 60, "sleeve": 19 },
+                    "M":  { "shoulder": 39.5, "chest": 46, "length": 62, "sleeve": 20 },
+                    "L":  { "shoulder": 41,   "chest": 50, "length": 64, "sleeve": 21 },
+                    "XL": { "shoulder": 42.5, "chest": 55, "length": 66, "sleeve": 22 }
+                },
+                "male": {
+                    "S":  { "shoulder": 42.5,   "chest": 44, "length": 68, "sleeve": 20 },
+                    "M":  { "shoulder": 44, "chest": 48, "length": 70, "sleeve": 21 },
+                    "L":  { "shoulder": 45.5,   "chest": 52, "length": 72, "sleeve": 22 },
+                    "XL": { "shoulder": 47, "chest": 56, "length": 74, "sleeve": 23 }
+                }
+            }
+        },
+        "pants": {
+            "category": "bottom", "stretch": "some", "fit": "over", "shoulder": "set", "inner": false,
+            "colors": { "pants": "#3a3a3d" },
+            "charts": {
+                "female": {
+                    "S":  { "waist": 34.5, "hip": 51,   "thigh": 33,   "rise": 30, "length": 94,  "hem": 26 },
+                    "M":  { "waist": 36.7, "hip": 53,   "thigh": 34.5, "rise": 31, "length": 96,  "hem": 27 },
+                    "L":  { "waist": 39,   "hip": 55,   "thigh": 36,   "rise": 32, "length": 98,  "hem": 28 },
+                    "XL": { "waist": 41.5, "hip": 57.5, "thigh": 37.5, "rise": 33, "length": 100, "hem": 29 }
+                },
+                "male": {
+                    "S":  { "waist": 34.3, "hip": 52,   "thigh": 35,   "rise": 31, "length": 104, "hem": 27 },
+                    "M":  { "waist": 39.3, "hip": 54.5, "thigh": 36.5, "rise": 32, "length": 105, "hem": 28 },
+                    "L":  { "waist": 44.3, "hip": 57,   "thigh": 38,   "rise": 33, "length": 106, "hem": 29 },
+                    "XL": { "waist": 49,   "hip": 59.5, "thigh": 39.5, "rise": 34, "length": 107, "hem": 30 }
+                }
+            }
+        },
+        "shoes": { "category": null, "colors": { "shoes": "#f5f5f2" } },
+        "bag": { "category": null, "colors": { "bag": "#1f1f22" } }
+    }
+}

@@ -1,0 +1,2246 @@
+/* ══════════ MENKHET 메인 ══════════
+   - Figma PC(1920) 기준. --px = 시안의 1px이 화면에서 차지하는 크기
+   - 헤더: 1920보다 넓으면 시안 크기 그대로, 좁으면 같은 비율로 줄어듦 (1440에서도 검색창과 로고가 겹치지 않게)
+   - 히어로: 화면 폭에 맞춰 1920:1080 비율로 늘고 줄어듦
+   - 랭킹 ~ 푸터와 여자 코트 페이지(women-coat.html)는 헤더와 같은 --px: 1920 이상은 시안 크기로 가운데, 좁으면 같은 비율로 줄어듦
+   - 비율로 줄이는 글자 크기는 토큰(px)을 바로 곱할 수 없어 숫자로 적고 옆에 토큰 이름을 남김
+   - 맥 '동작 줄이기'가 켜져 있어도 메뉴 펼침 · 슬라이드 · 흐름은 그대로 움직임 (주인님 지정)
+   - Swiper 넘김은 모두 등속(linear)이 기본 (주인님 지정) */
+
+:root {
+    --px: min(1px, 100vw / 1920);
+    scroll-padding-top: calc(120 * var(--px));   /* 고정 헤더(110) 밑으로 섹션 이동: #cape 등으로 갈 때 섹션 위끝이 시안처럼 y 120에 옴 */
+}
+
+body {
+    letter-spacing: -0.38px;   /* Text Styles 공통 자간 */
+    color: var(--body-default);
+    background: var(--surface-white);   /* 시안 PC 프레임 배경 (누끼 사진 뒤가 흰색이어야 시안과 같음) */
+}
+
+/* Swiper 넘김은 모두 등속 (히어로 · 랭킹 · 나라별 룩 · 여자 코트, 주인님 지정) */
+.swiper {
+    --swiper-wrapper-transition-timing-function: linear;
+}
+
+/* ══════════ 헤더 ══════════ */
+/* 스크롤해도 화면 위에 고정 (주인님 지정) */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: calc(110 * var(--px));
+    border-bottom: 1px solid var(--gray-300);
+    background: var(--surface-white);
+}
+
+.logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+}
+
+.logo a,
+.logo img {
+    display: block;
+}
+
+.logo img {
+    width: calc(367 * var(--px));
+    height: auto;
+}
+
+.gnb {
+    display: flex;
+    align-items: center;
+}
+
+/* ── 전체 메뉴 (.sub) ── */
+.sub {
+    position: relative;
+}
+
+.big-menu {
+    display: block;
+    width: calc(170 * var(--px));
+    height: calc(80 * var(--px));
+    border: 0;
+    background: var(--icon-white) url(../images/icons/menu.svg) no-repeat calc(60 * var(--px)) center / calc(70 * var(--px)) auto;
+    font-size: 0;
+    cursor: pointer;
+}
+
+/* 1차 메뉴는 햄버거 바로 아래, 2·3차 메뉴는 바로 윗단계 목록 오른쪽에 그 목록의 위끝을 맞춰 붙음
+   (li에 position을 주지 않아 누른 항목이 아니라 목록 위끝이 기준 — 시안도 2·3차 목록 모두 윗단계 목록 위끝에 맞춤) */
+.sub > ul {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: calc(170 * var(--px));
+}
+
+.sub .drop {
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: calc(170 * var(--px));
+}
+
+/* 누르면 0.3s 등속으로 펼쳐지고, 닫을 땐 거꾸로 접힘 (주인님 지정): 1차 목록은 위에서 아래로, 2 · 3차 목록은 왼쪽에서 오른쪽으로
+   - 목록(ul)째 자르면 오른쪽에 붙은 다음 단계 목록까지 잘려서, 목록 안 칸(버튼 · 링크)마다 잘라서 펼침
+   - 자르는 범위를 칸 위아래로 1px씩 넓힘: 칸 높이가 60.5처럼 소수라 칸 경계에서 딱 자르면 칸 사이에 가는 틈이 보임
+   - visibility는 접히는 0.3s가 끝난 뒤 바뀌어 닫힌 메뉴엔 포커스가 들어가지 않게 */
+.sub > ul,
+.sub .drop {
+    visibility: hidden;
+    transition: visibility .3s linear;
+}
+
+.sub.active > ul,
+.sub li.active > .drop {
+    visibility: visible;
+}
+
+/* ── 1차: 칸마다 0.3s를 칸 수로 나눠 위 칸부터 차례로 펼침 → 목록 전체가 0.3s 동안 같은 속도로 내려옴 (접을 땐 아래 칸부터) ── */
+.sub > ul {
+    --n: 6;   /* 1차 칸 수 */
+}
+
+.sub > ul > li:nth-child(2) {
+    --i: 1;
+}
+
+.sub > ul > li:nth-child(3) {
+    --i: 2;
+}
+
+.sub > ul > li:nth-child(4) {
+    --i: 3;
+}
+
+.sub > ul > li:nth-child(5) {
+    --i: 4;
+}
+
+.sub > ul > li:nth-child(6) {
+    --i: 5;
+}
+
+.sub > ul > li > .menu {
+    clip-path: inset(-1px 0 100% 0);
+    transition: clip-path calc(.3s / var(--n)) linear calc((var(--n) - 1 - var(--i, 0)) * .3s / var(--n));
+}
+
+.sub.active > ul > li > .menu {
+    clip-path: inset(-1px 0);
+    transition-delay: calc(var(--i, 0) * .3s / var(--n));
+}
+
+/* ── 2 · 3차: 칸이 모두 같이 왼쪽에서 오른쪽으로 ── */
+.sub .drop > li > .menu,
+.sub .drop > li > a {
+    clip-path: inset(-1px 100% -1px 0);
+    transition: clip-path .3s linear;
+}
+
+.sub li.active > .drop > li > .menu,
+.sub li.active > .drop > li > a {
+    clip-path: inset(-1px 0);
+}
+
+/* 칸 밖은 잘리므로 키보드 포커스 테두리는 칸 안쪽에 그림 */
+.sub .menu:focus-visible,
+.sub .drop a:focus-visible {
+    outline-offset: -3px;
+}
+
+.sub .menu,
+.sub .drop a {
+    display: block;
+    width: 100%;
+    background: var(--icon-white);
+    color: var(--gray-800);
+    font-size: calc(34 * var(--px));   /* placeholder/medium/regular */
+    font-weight: var(--placeholder-medium-regular-weight);
+    line-height: var(--placeholder-medium-regular-line-height);
+    letter-spacing: var(--placeholder-medium-regular-letter-spacing);
+    white-space: nowrap;   /* '이벤트'·'악세서리'는 시안에서도 오른쪽 여백을 넘어 한 줄로 둠 */
+}
+
+.sub .menu {
+    padding: calc(10 * var(--px)) calc(40 * var(--px)) calc(10 * var(--px)) calc(60 * var(--px));
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* 2차 목록 안의 여닫는 버튼(코트 · 신발 · 악세서리)도 2 · 3차 링크와 같은 안쪽 여백 */
+.sub .drop a,
+.sub .drop .menu {
+    padding: calc(10 * var(--px)) 0 calc(10 * var(--px)) calc(30 * var(--px));
+}
+
+/* 메뉴 글자에 마우스를 올리면 2px 밑줄이 왼쪽부터 0.3s 등속으로 그어짐 (키보드 포커스도 같게, 동작 줄이기여도 그대로) */
+.sub .menu span,
+.sub .drop a span {
+    position: relative;
+}
+
+.sub .menu span::after,
+.sub .drop a span::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: currentColor;
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale .3s linear;
+}
+
+.sub .menu:hover span::after,
+.sub .menu:focus-visible span::after,
+.sub .drop a:hover span::after,
+.sub .drop a:focus-visible span::after {
+    scale: 1 1;
+}
+
+/* ── 검색 ── */
+#search {
+    display: flex;
+    align-items: center;
+    gap: calc(10 * var(--px));
+    width: calc(500 * var(--px));
+    padding: calc(15 * var(--px)) calc(20 * var(--px)) calc(15 * var(--px)) calc(10 * var(--px));
+    background: var(--surface-white);
+}
+
+#search button {
+    width: calc(50 * var(--px));
+    height: calc(50 * var(--px));
+    border: 0;
+    background: url(../images/icons/search.svg) no-repeat center / contain;
+    font-size: 0;
+    cursor: pointer;
+}
+
+#search input {
+    width: calc(410 * var(--px));
+    height: calc(50 * var(--px));
+    border: 0;
+    background: none;
+    color: var(--body-default);
+    font-size: calc(34 * var(--px));   /* placeholder/medium/regular */
+    font-weight: var(--placeholder-medium-regular-weight);
+    letter-spacing: var(--placeholder-medium-regular-letter-spacing);
+    appearance: none;
+}
+
+#search input::placeholder {
+    color: var(--body-placeholder);
+}
+
+/* ── 사용자 메뉴 ── */
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: calc(20 * var(--px));   /* scale/20 */
+    padding-right: calc(60 * var(--px));
+}
+
+.user-menu a {
+    display: block;
+}
+
+.user-menu .go-login {
+    padding: calc(7 * var(--px)) calc(10 * var(--px));
+    color: var(--body-link);
+    font-size: calc(30 * var(--px));   /* H1/medium (title/h1) */
+    font-weight: var(--h1-medium-weight);
+    line-height: var(--h1-medium-line-height);
+}
+
+.user-menu .go-mypage,
+.user-menu .go-wish,
+.user-menu .go-cart {
+    width: calc(50 * var(--px));
+    height: calc(50 * var(--px));
+    background: no-repeat center / contain;
+    font-size: 0;
+}
+
+.user-menu .go-mypage {
+    background-image: url(../images/icons/user.svg);
+}
+
+.user-menu .go-wish {
+    background-image: url(../images/icons/heart.svg);
+}
+
+.user-menu .go-cart {
+    background-image: url(../images/icons/bag.svg);
+}
+
+/* ══════════ 히어로 ══════════ */
+.hero {
+    container-type: inline-size;
+    aspect-ratio: 1920 / 1080;
+    overflow: hidden;
+    background: var(--gray-1200);
+}
+
+.hero-swiper {
+    --px: calc(100cqw / 1920);   /* 히어로는 1920보다 넓어져도 같은 비율로 커짐 */
+    position: relative;
+    height: 100%;
+}
+
+.hero-slider {
+    height: 100%;
+}
+
+.hero-slider .swiper-slide {
+    overflow: hidden;
+    background: linear-gradient(180deg, #16140f 0%, #0a0908 55%, var(--gray-1200) 100%);
+}
+
+/* ── 배경에 녹인 나라 영문명: 가운데(y 500) 기준, 나라마다 1796px 폭에 맞춘 크기 ── */
+.hero .cover-title {
+    position: absolute;
+    top: calc(500 * var(--px));
+    left: 0;
+    right: 0;
+    translate: 0 -50%;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--gray-0) 18%, transparent) 0%, color-mix(in srgb, var(--gray-0) 9%, transparent) 55%, color-mix(in srgb, var(--gray-0) 3%, transparent) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-family: "Bodoni Moda", "Times New Roman", serif;
+    font-size: calc(var(--size) * var(--px));
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -.01em;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.slide-01 .cover-title {
+    --size: 533;
+}
+
+.slide-02 .cover-title {
+    --size: 395;
+}
+
+.slide-03 .cover-title {
+    --size: 583;
+}
+
+.slide-04 .cover-title {
+    --size: 319;
+}
+
+.slide-05 .cover-title,
+.slide-07 .cover-title {
+    --size: 620;
+}
+
+.slide-06 .cover-title {
+    --size: 422;
+}
+
+.slide-08 .cover-title {
+    --size: 511;
+}
+
+.slide-09 .cover-title {
+    --size: 441;
+}
+
+.slide-10 .cover-title {
+    --size: 365;
+}
+
+.slide-11 .cover-title,
+.slide-12 .cover-title {
+    --size: 563;
+}
+
+.slide-13 .cover-title {
+    --size: 254;
+}
+
+/* ── 금빛 리본: 왼쪽 아래에서 오른쪽 위로 4° 기울어짐, 모델 뒤에 깔림 ── */
+.hero .ribbon {
+    position: absolute;
+    top: calc(905 * var(--px));
+    left: calc(-260 * var(--px));
+    width: calc(2500 * var(--px));
+    height: calc(56 * var(--px));
+    overflow: hidden;
+    transform-origin: 0 0;
+    rotate: -4deg;
+    background: linear-gradient(180deg, var(--gold-600) 0%, var(--gold-200) 35%, var(--gold-100) 50%, var(--gold-300) 70%, var(--gold-600) 100%);
+    box-shadow: 0 calc(12 * var(--px)) calc(26 * var(--px)) color-mix(in srgb, var(--gray-1200) 45%, transparent);
+}
+
+.hero .ribbon-text {
+    padding-left: calc(30 * var(--px));
+    color: var(--gray-1200);
+    font-family: "Bodoni Moda", "Times New Roman", serif;
+    font-size: calc(22 * var(--px));
+    font-style: italic;
+    line-height: calc(56 * var(--px));
+    letter-spacing: .1em;
+    white-space: pre;
+}
+
+/* ── 모델: 남자(뒤) · 여자(앞), 아래끝 y 1060, 가로 가운데 x 1501 · 1140.5 ── */
+.hero .model-m,
+.hero .model-w {
+    position: absolute;
+    bottom: calc(20 * var(--px));
+    width: auto;
+    translate: -50% 0;
+    filter: drop-shadow(0 calc(30 * var(--px)) calc(60 * var(--px)) color-mix(in srgb, var(--gray-1200) var(--shadow, 45%), transparent));
+}
+
+.hero .model-m {
+    left: calc(1501 * var(--px));
+    height: calc(880 * var(--px));
+}
+
+.hero .model-w {
+    left: calc(1140.5 * var(--px));
+    height: calc(850 * var(--px));
+}
+
+.slide-03,
+.slide-06 {
+    --shadow: 18%;   /* 일본 · 캐나다는 그림자가 옅음 */
+}
+
+/* ── 반짝이: 모든 장에서 같은 자리, 빛 번짐은 크기의 0.6배 ── */
+.hero .sparkles i {
+    position: absolute;
+    top: calc(var(--y) * var(--px));
+    left: calc(var(--x) * var(--px));
+    width: calc(var(--s) * var(--px));
+    aspect-ratio: 1;
+    background: url(../images/icons/sparkle.svg) no-repeat center / contain;
+    filter: drop-shadow(0 0 calc(var(--s) * .6 * var(--px)) color-mix(in srgb, var(--gold-200) 90%, transparent));
+}
+
+.hero .spark-01 {
+    --x: 760;
+    --y: 170;
+    --s: 40;
+}
+
+.hero .spark-02 {
+    --x: 1180;
+    --y: 140;
+    --s: 28;
+}
+
+.hero .spark-03 {
+    --x: 1800;
+    --y: 420;
+    --s: 22;
+}
+
+.hero .spark-04 {
+    --x: 900;
+    --y: 520;
+    --s: 16;
+}
+
+.hero .spark-05 {
+    --x: 300;
+    --y: 470;
+    --s: 14;
+}
+
+.hero .spark-06 {
+    --x: 1650;
+    --y: 760;
+    --s: 18;
+}
+
+/* ── 나라 이름 · 설명 · 컬렉션 버튼 ── */
+.hero .cover-lines {
+    position: absolute;
+    top: calc(600 * var(--px));
+    left: calc(260 * var(--px));
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: calc(18 * var(--px));
+    width: calc(560 * var(--px));
+}
+
+.hero .native {
+    color: var(--gray-0);
+    font-family: "Noto Serif", serif;
+    font-size: calc(58 * var(--px));
+    font-weight: 600;
+    line-height: calc(80 * var(--px));
+    letter-spacing: 0;
+}
+
+.hero .native:lang(ko) {
+    font-family: "Noto Serif KR", serif;
+}
+
+.hero .native:lang(ja) {
+    font-family: "Noto Serif JP", serif;
+}
+
+.hero .native:lang(zh) {
+    font-family: "Noto Serif SC", serif;
+}
+
+.hero .native:lang(hi) {
+    font-family: "Noto Sans Devanagari", sans-serif;
+}
+
+.hero .native:lang(ar) {
+    font-family: "Amiri", serif;
+    font-weight: 700;
+}
+
+.slide-01 .native,
+.slide-03 .native {
+    font-size: calc(64 * var(--px));
+}
+
+.hero .desc {
+    color: color-mix(in srgb, var(--gray-0) 78%, transparent);
+    font-size: calc(17 * var(--px));   /* body/large */
+    line-height: calc(28 * var(--px));
+    letter-spacing: -.01em;
+}
+
+.hero .go-collection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: calc(12 * var(--px));
+    width: calc(200 * var(--px));
+    height: calc(52 * var(--px));
+    border: 1px solid var(--gold-300);
+    border-radius: calc(26 * var(--px));
+    color: var(--gray-0);
+    font-size: calc(15 * var(--px));   /* body/small */
+    font-weight: 500;
+    letter-spacing: .04em;
+}
+
+.hero .go-collection .arrow {
+    width: calc(18 * var(--px));
+    height: calc(10 * var(--px));
+    background: url(../images/icons/arrow-wh.svg) no-repeat center / contain;
+}
+
+/* ── 이전 · 다음 버튼 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용) ── */
+.hero .swiper-button-prev,
+.hero .swiper-button-next {
+    top: calc(455 * var(--px));
+    width: calc(170 * var(--px));
+    height: calc(170 * var(--px));
+    margin-top: 0;
+    border: 0;
+    border-radius: 50%;
+    background: no-repeat center / calc(71 * var(--px)) auto;
+    opacity: .2;
+}
+
+.hero .swiper-button-prev {
+    left: calc(60 * var(--px));
+    background-image: url(../images/icons/chevron-left.svg);
+}
+
+.hero .swiper-button-next {
+    right: calc(60 * var(--px));
+    background-image: url(../images/icons/chevron-right.svg);
+}
+
+.hero .swiper-button-prev::after,
+.hero .swiper-button-next::after {
+    display: none;
+}
+
+/* ── 쪽 번호 01 / 13 ── */
+.hero .swiper-pagination {
+    top: calc(858 * var(--px));
+    bottom: auto;
+    left: calc(260 * var(--px));
+    width: calc(124 * var(--px));
+    height: calc(40 * var(--px));
+    border: 1px solid color-mix(in srgb, var(--gray-0) 45%, transparent);
+    border-radius: calc(20 * var(--px));
+    background: color-mix(in srgb, var(--gray-1200) 32%, transparent);
+    backdrop-filter: blur(calc(10 * var(--px)));
+    -webkit-backdrop-filter: blur(calc(10 * var(--px)));
+    color: var(--gray-0);
+    font-family: "Bodoni Moda", "Times New Roman", serif;
+    font-size: calc(18 * var(--px));
+    font-style: italic;
+    line-height: calc(38 * var(--px));
+    letter-spacing: .04em;
+}
+
+.hero .swiper-pagination .total {
+    color: color-mix(in srgb, var(--gray-0) 60%, transparent);
+}
+
+/* ══════════ 공통: 콘텐츠 폭 · 섹션 제목 ══════════ */
+/* 시안 콘텐츠 x 60 ~ 1860 (랭킹은 1620으로 따로 좁힘) */
+.inner {
+    max-width: calc(1800 * var(--px));
+    margin-inline: auto;
+}
+
+/* 시안에 글자가 없는 제목: 화면에는 안 보이고 스크린리더만 읽음 */
+.blind {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* 랭킹 · 나라별 룩 · 프로모션 · 여자 코트가 같은 제목 묶음: 가운데 정렬, 아래 내용과 40 */
+section > .title {
+    margin-bottom: calc(40 * var(--px));
+    text-align: center;
+}
+
+.section-title {
+    color: var(--on-color-description);
+    font-size: calc(64 * var(--px));   /* Text Style 없음 (Pretendard Bold 64 · 자간 10) */
+    font-weight: 700;
+    line-height: normal;   /* 시안 행간 Auto */
+    letter-spacing: calc(10 * var(--px));
+}
+
+/* ══════════ 랭킹 ══════════ */
+/* 시안 y 1080~1696: 위아래 50, 제목과 목록 사이 40, 콘텐츠 폭 1620(x 150~1770) 가운데 */
+.ranking {
+    max-width: calc(1620 * var(--px));
+    padding: calc(50 * var(--px)) 0;
+}
+
+/* ── 상품 목록: 한 화면에 5개 (308 × 400, 사이 20은 main.js의 spaceBetween) ── */
+.ranking-swiper {
+    position: relative;
+}
+
+.ranking .product-item {
+    height: auto;   /* Swiper 기본 height: 100% 대신 이미지 비율로 높이를 정함 */
+    background: var(--gray-250);
+}
+
+.ranking .product-item a {
+    display: block;
+}
+
+/* Swiper가 목록 밖을 잘라서 포커스 링이 가려지지 않게 안쪽으로 그림 */
+.ranking .product-item a:focus-visible {
+    outline-offset: -2px;
+}
+
+.ranking .product-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 308 / 400;
+    object-fit: cover;   /* Figma 채우기(FILL): 원본 2000×2600을 308×400 칸에 꽉 차게 */
+}
+
+/* ── 이전 · 다음 버튼 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용) ── */
+.ranking .swiper-button-prev,
+.ranking .swiper-button-next {
+    top: calc(146 * var(--px));   /* 목록 높이 400의 가운데 */
+    width: calc(51 * var(--px));
+    height: calc(108 * var(--px));
+    margin-top: 0;
+    border: 0;
+    border-radius: calc(100 * var(--px));
+    background: no-repeat center / contain;
+    opacity: .8;
+}
+
+.ranking .swiper-button-prev {
+    left: calc(20 * var(--px));
+    background-image: url(../images/icons/chevron-ranking-left.svg);
+}
+
+.ranking .swiper-button-next {
+    right: calc(20 * var(--px));
+    background-image: url(../images/icons/chevron-ranking-right.svg);
+}
+
+.ranking .swiper-button-prev::after,
+.ranking .swiper-button-next::after {
+    display: none;
+}
+
+/* ══════════ 나라별 룩 ══════════ */
+/* 위아래 50, 제목 묶음과 슬라이드 사이 40 (시안 세로 Auto Layout 50 · 40 · 50) */
+.country-look {
+    padding: calc(50 * var(--px)) 0;
+}
+
+/* ── 제목 아래 설명 ── */
+.country-look .section-desc {
+    margin-top: calc(15 * var(--px));
+    color: var(--on-color-description);
+    font-size: calc(30 * var(--px));   /* H1/line/medium */
+    font-weight: var(--h1-line-medium-weight);
+    line-height: var(--h1-line-medium-line-height);
+    letter-spacing: var(--h1-line-medium-letter-spacing);
+}
+
+/* ── 슬라이드 한 장: 1920 시안을 화면 가운데에 두고, 국기 배경만 화면 끝까지 늘어남 ── */
+.country-look .look-item {
+    --x0: calc(50% - 960 * var(--px));   /* 시안 x 0 자리 (1920보다 넓은 화면에서도 가운데 정렬) */
+    position: relative;
+    height: calc(700 * var(--px));
+}
+
+/* 국기를 화면 폭에 꽉 채우고 10%로 옅게 깔아 둠 (시안의 이미지 채우기 FILL = cover) */
+.country-look .look-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: no-repeat center / cover;
+    opacity: .1;
+}
+
+.country-look .korea .look-bg {
+    background-image: url(../images/country-look/korea-flag.webp);
+}
+
+.country-look .germany .look-bg {
+    background-image: url(../images/country-look/germany-flag.webp);
+}
+
+.country-look .usa .look-bg {
+    background-image: url(../images/country-look/usa-flag.webp);
+}
+
+/* ── 모델: x 1152.67, 466.67×700 (원본 2:3 그대로) ── */
+.country-look .look-model {
+    position: absolute;
+    top: 0;
+    left: calc(var(--x0) + 1152.67 * var(--px));
+    width: calc(466.67 * var(--px));
+    height: calc(700 * var(--px));
+}
+
+/* ── 나라 이름 · 설명 · 자세히 보기: x 300 · y 455, 사이 간격 20 ── */
+.country-look .look-text {
+    position: absolute;
+    top: calc(455 * var(--px));
+    left: calc(var(--x0) + 300 * var(--px));
+    width: calc(600 * var(--px));
+    color: var(--on-color-description);
+}
+
+.country-look .look-title {
+    font-size: calc(40 * var(--px));   /* H1 big/medium */
+    font-weight: var(--h1-big-medium-weight);
+    line-height: var(--h1-big-medium-line-height);
+    letter-spacing: var(--h1-big-medium-letter-spacing);
+}
+
+.country-look .look-desc,
+.country-look .btn-more {
+    margin-top: calc(20 * var(--px));
+    font-size: calc(30 * var(--px));   /* H1/line/medium */
+    font-weight: var(--h1-line-medium-weight);
+    line-height: var(--h1-line-medium-line-height);
+    letter-spacing: var(--h1-line-medium-letter-spacing);
+}
+
+.country-look .look-desc {
+    white-space: nowrap;   /* 대한민국 첫 줄이 600 폭에 꼭 맞아서 글꼴 차이로 세 줄이 되지 않게 (줄바꿈은 <br>로만) */
+}
+
+.country-look .btn-more {
+    display: flex;
+    align-items: center;
+    gap: calc(15 * var(--px));
+    width: fit-content;
+}
+
+.country-look .btn-more .chevron {
+    width: calc(16 * var(--px));
+    height: calc(22 * var(--px));
+    background: url(../images/icons/chevron-small.svg) no-repeat center / contain;
+    opacity: .8;
+}
+
+/* ── 아이템 카드: 흰 여백 7 + 회색 칸 115×150, 자리(--x · --y)와 기울기(--r)는 카드마다 다름 ── */
+/* 좌표는 돌리기 전 129×164 상자의 왼쪽 위, 기울기는 상자 가운데를 축으로 돌림 */
+.country-look .item-card {
+    position: absolute;
+    top: calc(var(--y) * var(--px));
+    left: calc(var(--x0) + var(--x) * var(--px));
+    padding: calc(7 * var(--px));
+    background: var(--surface-white);
+    rotate: var(--r, 0deg);
+}
+
+.country-look .item-thumb {
+    display: block;
+    width: calc(115 * var(--px));
+    height: calc(150 * var(--px));
+    background: var(--gray-250);
+    object-fit: cover;
+}
+
+/* 대한민국 */
+.country-look .korea .card-02 {
+    --x: 371;
+    --y: 72;
+}
+
+.country-look .korea .card-03 {
+    --x: 525.6;
+    --y: 233.2;
+    --r: -10.28deg;
+}
+
+.country-look .korea .card-04 {
+    --x: 617;
+    --y: 24;
+}
+
+.country-look .korea .card-05 {
+    --x: 739;
+    --y: 240;
+}
+
+.country-look .korea .card-06 {
+    --x: 844.2;
+    --y: 51.3;
+    --r: 17deg;
+}
+
+.country-look .korea .card-07 {
+    --x: 958.8;
+    --y: 222.6;
+    --r: .56deg;
+}
+
+/* 독일 */
+.country-look .germany .card-02 {
+    --x: 535.6;
+    --y: 267.5;
+    --r: -17.39deg;
+}
+
+.country-look .germany .card-03 {
+    --x: 752;
+    --y: 61;
+}
+
+.country-look .germany .card-04 {
+    --x: 895.9;
+    --y: 240.1;
+    --r: 16.76deg;
+}
+
+/* 미국 */
+.country-look .usa .card-01 {
+    --x: 303.4;
+    --y: 219.7;
+    --r: -19.23deg;
+}
+
+.country-look .usa .card-02 {
+    --x: 474.8;
+    --y: 45.9;
+    --r: 19.6deg;
+}
+
+.country-look .usa .card-03 {
+    --x: 621.4;
+    --y: 229.4;
+    --r: -17.25deg;
+}
+
+.country-look .usa .card-04 {
+    --x: 770.2;
+    --y: 39.6;
+    --r: 10.76deg;
+}
+
+/* ══════════ 프로모션 ══════════ */
+.promotion {
+    padding: calc(50 * var(--px)) 0;
+}
+
+/* ── 상품 두 줄: 줄 폭 1800 밖으로 넘친 장은 잘림 (시안 ul.promotion-row의 clip을 목록에서 한 번에) ── */
+.promotion-list {
+    overflow: hidden;
+}
+
+.promotion-row {
+    display: flex;
+    justify-content: center;   /* 흐르기 전: 13장을 줄 가운데에 두고 양끝 2장씩 잘림 (시안 그대로) */
+}
+
+.promotion-row + .promotion-row {
+    margin-top: calc(50 * var(--px));
+}
+
+.promotion-item {
+    flex: none;   /* 13장(2600)이 줄(1800)보다 길어도 줄어들지 않게 */
+    width: calc(180 * var(--px));
+    margin-inline: calc(10 * var(--px));   /* 시안 간격 20을 양쪽 10씩 → 한 장이 차지하는 폭 200, 복제를 붙이면 원래 한 벌이 트랙의 정확히 절반 */
+    background: var(--gray-250);
+}
+
+.promotion-item img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ── 흐름: main.js가 13장을 복제해 뒤에 붙이고, 화면에 보일 때만 .active를 붙임 ── */
+/* 한 벌(시안 2600px)을 52s에 → 시안 기준 초당 50px, 두 줄이 같은 방향·같은 속도라 세로 칸이 시안처럼 맞음 */
+/* 동작 줄이기여도 흐름은 그대로 (주인님 지정) */
+.promotion-row.active {
+    width: max-content;
+    animation: promotion-flow 52s linear infinite;
+}
+
+/* 흐르지 않을 땐 복제를 빼서 시안과 같은 13장 모습 → 화면에 들어와 흐르기 시작하는 순간과 같은 자리라 튀지 않음 */
+.promotion-row:not(.active) > [aria-hidden="true"] {
+    display: none;
+}
+
+/* 마우스를 올리거나 안에 포커스가 있으면 두 줄 함께 멈춤 (한 줄만 멈추면 세로 칸이 어긋남) */
+.promotion-list:hover .promotion-row,
+.promotion-list:focus-within .promotion-row {
+    animation-play-state: paused;
+}
+
+/* 시작 = 원래 한 벌(트랙의 50%)을 줄 가운데에 둔 자리 = 흐르기 전 모습, 끝 = 한 벌만큼 왼쪽 → 복제가 시작 자리에 와서 이음매가 안 보임 */
+@keyframes promotion-flow {
+    from {
+        translate: calc((1800 * var(--px) - 50%) / 2) 0;
+    }
+
+    to {
+        translate: calc((1800 * var(--px) - 50%) / 2 - 50%) 0;
+    }
+}
+
+/* ══════════ 서비스 바로가기 ══════════ */
+/* 카드 4장(430×645, 간격 26)을 가운데 정렬 → 1920에서 x 61~1859, 위아래 여백 50 */
+.service-links {
+    display: flex;
+    justify-content: center;
+    gap: calc(26 * var(--px));
+    padding: calc(50 * var(--px)) 0;
+}
+
+.service-card {
+    position: relative;
+    display: block;
+    width: calc(430 * var(--px));
+    height: calc(645 * var(--px));
+}
+
+/* 모델 사진은 배경이 투명한 누끼 → 뒤에 비치는 흰색은 페이지 배경(시안 PC 프레임 surface/white) */
+.service-card img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* Figma FILL, 원본도 2:3이라 잘리는 곳 없음 */
+}
+
+/* ── 아래쪽 어둡게: 55%까지 투명 → 100%에서 gray/1100 ── */
+/* Figma는 투명 흰색과 gray/1100을 알파를 곱하지 않고 섞어 중간이 회색으로 밝음 → 브라우저도 같게 중간 정지점 3개를 넣음 (흰 배경에서 Figma 렌더 240 · 198 · 153과 맞춤) */
+.service-card .card-dim {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 55%, rgba(198, 198, 198, .25) 66.25%, rgba(141, 141, 141, .5) 77.5%, rgba(83, 83, 83, .75) 88.75%, var(--gray-1100) 100%);
+}
+
+/* ── 제목 · 바로가기: 250 폭을 카드 가로 가운데에, 아래끝에서 55 위 ── */
+.service-card .card-text {
+    position: absolute;
+    right: 0;
+    bottom: calc(55 * var(--px));
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(15 * var(--px));
+    width: calc(250 * var(--px));
+    margin-inline: auto;
+    color: var(--on-color-text);
+}
+
+.service-card .card-title {
+    font-size: calc(64 * var(--px));   /* 텍스트 스타일 없음 (Pretendard Medium 64 / 130%) */
+    font-weight: 500;
+    line-height: 130%;
+}
+
+.service-card .btn-go {
+    display: flex;
+    align-items: center;
+    gap: calc(15 * var(--px));
+    font-size: calc(30 * var(--px));   /* H1/line/medium (title/h1) */
+    font-weight: var(--h1-line-medium-weight);
+    line-height: var(--h1-line-medium-line-height);
+    letter-spacing: var(--h1-line-medium-letter-spacing);
+}
+
+.service-card .chevron {
+    width: calc(16 * var(--px));
+    height: calc(22 * var(--px));
+    background: url(../images/icons/chevron-small-wh.svg) no-repeat center / contain;
+    opacity: .8;
+}
+
+/* ══════════ 푸터 ══════════ */
+/* 배경은 화면 끝까지, 내용은 x 60 ~ 1860 (1800) 안에서 위아래 4줄: 로고·메뉴 / 선 / 사업자 정보·고객센터 / 저작권·SNS */
+footer {
+    padding: calc(72 * var(--px)) 0 calc(64 * var(--px));
+    border-top: 1px solid var(--border-default);
+    background: var(--brand-linen);
+}
+
+/* ── 로고 · 약관 메뉴 ── */
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-logo a,
+.footer-logo img {
+    display: block;
+}
+
+.footer-logo img {
+    width: calc(247 * var(--px));
+    height: auto;
+}
+
+.footer-menu {
+    display: flex;
+    gap: calc(28 * var(--px));
+}
+
+.footer-menu a {
+    color: var(--gray-700);
+    font-size: calc(15 * var(--px));   /* Body-sm/medium (body/small) */
+    font-weight: var(--body-sm-medium-weight);
+    line-height: var(--body-sm-medium-line-height);
+}
+
+.footer-menu .go-privacy {
+    color: var(--gray-1100);
+    font-weight: var(--body-sm-bold-weight);   /* Body-sm/bold: 개인정보처리방침만 굵게 */
+}
+
+footer hr {
+    height: 1px;
+    margin: calc(32 * var(--px)) 0;
+    border: 0;
+    background: var(--icon-dimmed);
+}
+
+/* ── 사업자 정보 · 고객센터 ── */
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.footer-info {
+    font-style: normal;   /* address 기본 기울임 끔 */
+}
+
+.footer-info p,
+.footer-cs p {
+    color: var(--gray-700);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular (body/x-small) */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: var(--body-xsm-regular-line-height);
+}
+
+.footer-info p {
+    white-space: pre-wrap;   /* 시안의 '  |  ' 두 칸 띄어쓰기를 그대로 보이게 */
+}
+
+.footer-info p + p,
+.footer-cs > * + * {
+    margin-top: calc(8 * var(--px));
+}
+
+.footer-cs {
+    text-align: right;
+}
+
+.footer-cs .title {
+    color: var(--gray-1000);
+    font-size: calc(16 * var(--px));   /* Body-md/semibold (body/medium) */
+    font-weight: var(--body-md-semibold-weight);
+    line-height: var(--body-md-semibold-line-height);
+}
+
+.footer-cs .tel {
+    display: block;
+    color: var(--brand-blue);
+    font-size: calc(30 * var(--px));   /* H1/bold (title/h1) */
+    font-weight: var(--h1-bold-weight);
+    line-height: var(--h1-bold-line-height);
+}
+
+/* ── 저작권 · SNS ── */
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: calc(32 * var(--px));
+}
+
+.footer-bottom .copyright {
+    color: var(--gray-600);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular (caption/large) */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: var(--caption-lg-regular-line-height);
+}
+
+.footer-sns {
+    display: flex;
+    gap: calc(12 * var(--px));
+}
+
+/* 파란 원 안에 흰 아이콘, 이름은 글자를 숨겨 남김 */
+.footer-sns a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: calc(44 * var(--px));
+    height: calc(44 * var(--px));
+    border-radius: 50%;
+    background: var(--brand-blue);
+    font-size: 0;
+}
+
+.footer-sns i {
+    width: calc(20 * var(--px));
+    height: calc(20 * var(--px));
+    background: no-repeat center / contain;
+}
+
+.footer-sns .icon-youtube {
+    background-image: url(../images/icons/sns-youtube.svg);
+}
+
+.footer-sns .icon-instagram {
+    background-image: url(../images/icons/sns-instagram.svg);
+}
+
+.footer-sns .icon-facebook {
+    background-image: url(../images/icons/sns-facebook.svg);
+}
+
+.footer-sns .icon-x {
+    background-image: url(../images/icons/sns-x.svg);
+}
+
+/* ══════════ 여자 코트 (women-coat.html) ══════════
+   - 시안 146:2227: 헤더는 메인과 같이 화면 위에 고정(높이 110), 본문은 120 아래에서 시작 → 첫 제목 y 170
+   - 섹션 4개(롱코트 · 케이프 · 트렌치 · 하프코트)는 모양이 같아 클래스 하나로 묶음 (시안 이름 .women's-long-coat-swiper는 ' 때문에 클래스로 못 써서 역할 이름으로 바꿈)
+   - 카드에 마우스를 올리면 1.1배로 커짐 (시안 hover 변형 440×715, Smart animate linear 0.3s) */
+
+.women-coat {
+    padding: calc(120 * var(--px)) 0 calc(80 * var(--px));   /* 아래 80 = 프레임 끝(4164) - 마지막 섹션 끝(4084), 자동 레이아웃 값 100은 고정 높이에 잘려 있음 */
+    background: var(--surface-white);
+}
+
+/* ── 섹션: 제목 + 상품 슬라이더 (높이 991) ── */
+.coat-section {
+    padding: calc(50 * var(--px)) 0;   /* 폭 1800(슬라이더 x 60~1860)은 공통 .inner */
+}
+
+/* ── 슬라이더: 1800 상자가 카드를 자르고, 카드 4장 폭(1690)의 Swiper는 overflow를 풀어 양옆에 다음 카드가 25씩 보이게 ── */
+.coat-swiper {
+    position: relative;
+    overflow: hidden;
+    padding: calc(62.5 * var(--px)) 0;   /* 위아래 여백 = 1.1배 커진 카드(715)와 그림자가 잘리지 않을 자리 */
+}
+
+.coat-slider {
+    width: calc(1690 * var(--px));   /* 카드 400 × 4 + 간격 30 × 3 (간격은 main.js) */
+    overflow: visible;
+}
+
+/* ── 상품 카드 400×650: 사진 333×500 + 정보 150 ── */
+.coat-section .product-item {
+    height: calc(650 * var(--px));
+    overflow: hidden;
+    background: var(--gray-250);   /* 사진 양옆 회색 */
+    box-shadow: 0 0 calc(6 * var(--px)) rgba(0, 0, 0, .1);   /* 시안 drop shadow 0 0 6, 검정 10% */
+    transition: scale .3s linear;
+}
+
+.coat-section .product-item:hover,
+.coat-section .product-item:focus-within {
+    z-index: 1;
+    scale: 1.1;   /* 커져도 옆 카드와 겹치지 않음 (양옆으로 20씩 < 간격 30) */
+}
+
+.coat-section .product-item > a {
+    display: block;
+    height: 100%;
+}
+
+/* 카드가 넘침을 잘라서 포커스 테두리는 안쪽에 그림 */
+.coat-section .product-item > a:focus-visible {
+    outline-offset: -3px;
+}
+
+.coat-section .product-item img {
+    display: block;
+    width: calc(333 * var(--px));
+    height: calc(500 * var(--px));
+    margin-left: calc(34 * var(--px));
+}
+
+/* 첫 줄은 상품명(왼쪽) · 평점(오른쪽), 원가 · 할인가 줄은 한 줄을 다 씀 */
+.coat-section .product-info {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-content: start;   /* 남는 높이로 줄 간격이 벌어지지 않게 */
+    align-items: center;
+    height: calc(150 * var(--px));
+    padding: calc(20 * var(--px)) calc(34 * var(--px)) 0;
+    background: var(--surface-white);
+}
+
+.coat-section .product-info .name {
+    color: var(--gray-900);
+    font-size: calc(24 * var(--px));   /* H2/line/medium */
+    font-weight: var(--h2-line-medium-weight);
+    line-height: var(--h2-line-medium-line-height);
+}
+
+.coat-section .rating {
+    display: flex;
+    align-items: center;
+    gap: calc(4 * var(--px));
+}
+
+.coat-section .rating .label {
+    width: calc(30 * var(--px));
+    height: calc(30 * var(--px));
+    background: url(../images/icons/star-fill.svg) no-repeat center / contain;
+    font-size: 0;
+}
+
+.coat-section .rating .score {
+    color: var(--body-link);
+    font-size: calc(24 * var(--px));   /* H2/medium */
+    font-weight: var(--h2-medium-weight);
+    line-height: var(--h2-medium-line-height);
+}
+
+.coat-section .origin-price,
+.coat-section .sale-price {
+    grid-column: 1 / -1;
+}
+
+.coat-section .origin-price {
+    margin-top: calc(10 * var(--px));
+    color: var(--body-description);
+    font-size: calc(20 * var(--px));   /* H3/regular, 취소선 */
+    font-weight: var(--h3-regular-weight);
+    line-height: var(--h3-regular-line-height);
+}
+
+.coat-section .sale-price {
+    display: flex;
+    gap: calc(8 * var(--px));
+    margin-top: calc(7 * var(--px));
+    font-size: calc(24 * var(--px));   /* H2/line/bold · H2/line/medium */
+    line-height: var(--h2-line-medium-line-height);
+}
+
+.coat-section .sale {
+    color: var(--brand-blue);
+    font-weight: var(--h2-line-bold-weight);
+}
+
+.coat-section .sale-price .price {
+    color: var(--gray-900);
+    font-weight: var(--h2-line-medium-weight);
+}
+
+/* ── 장바구니 · 위시 수: 카드 링크 밖에 두고 할인가 줄(y 597) 오른쪽에 겹침 ── */
+.coat-section .product-util {
+    position: absolute;
+    top: calc(597 * var(--px));
+    right: calc(34 * var(--px));
+    display: flex;
+    align-items: center;
+}
+
+.coat-section .product-util a {
+    width: calc(36 * var(--px));
+    height: calc(36 * var(--px));
+    background: no-repeat center / contain;
+    font-size: 0;
+}
+
+.coat-section .product-util .go-cart {
+    margin-right: calc(10 * var(--px));
+    background-image: url(../images/icons/bag-fill.svg);
+}
+
+.coat-section .product-util .go-wish {
+    background-image: url(../images/icons/heart-fill.svg);
+}
+
+.coat-section .product-util .count {
+    color: var(--gray-900);
+    font-size: calc(24 * var(--px));   /* 글자 스타일 없음: Medium 24 · 행간 150% (H2/line/medium과 같은 값) */
+    font-weight: 500;
+    line-height: 150%;
+}
+
+/* ── 이전 · 다음 버튼 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용) ── */
+.coat-swiper .swiper-button-prev,
+.coat-swiper .swiper-button-next {
+    top: calc(308.5 * var(--px));
+    width: calc(51 * var(--px));
+    height: calc(108 * var(--px));
+    margin-top: 0;
+    border: 0;
+    border-radius: calc(100 * var(--px));
+    background: no-repeat center / contain;
+    opacity: .8;
+}
+
+.coat-swiper .swiper-button-prev {
+    left: calc(20 * var(--px));
+    background-image: url(../images/icons/chevron-ranking-left.svg);
+}
+
+.coat-swiper .swiper-button-next {
+    right: calc(20 * var(--px));
+    background-image: url(../images/icons/chevron-ranking-right.svg);
+}
+
+.coat-swiper .swiper-button-prev::after,
+.coat-swiper .swiper-button-next::after {
+    display: none;
+}
+
+/* ══════════ 피팅룸 (fitting-room.html) ══════════
+   - 시안 146:1029: 어두운 배경(dim) 가운데에 700×900 창. 화면이 1920×1080보다 작으면 폭 · 높이 중 더 모자란 쪽 비율로 줄어듦
+   - 마네킹은 시안 사진 700×700 (재킷 룩 · 니트 룩), 위에 사이즈 칸(오른쪽 위)과 정확도 칸(왼쪽 아래)을 띄움
+   - 시안에 없는 성별 칸을 키 앞에 더함 (남녀 체형 공식이 달라서) */
+
+.fitting-page {
+    --px: min(1px, 100vw / 1920, 100dvh / 1080);   /* 창 높이 900 + 위아래 90이 화면 높이를 넘지 않게 */
+}
+
+.dim {
+    display: grid;
+    place-items: center;
+    min-height: 100dvh;
+    padding: calc(90 * var(--px)) 0;   /* 시안 상품 상세 창과 같은 위아래 90 */
+    background: var(--surface-dark);   /* 시안 dim #454545 */
+}
+
+.fitting-room {
+    position: relative;
+    width: calc(700 * var(--px));
+    height: calc(900 * var(--px));
+    padding: calc(10 * var(--px)) 0;
+    background: var(--surface-white);
+}
+
+/* ── 몸 정보: 안내 문구 + 성별 · 키 · 몸무게 (높이 62) ── */
+.body-info {
+    padding: 0 calc(20 * var(--px));
+}
+
+.body-info .guide {
+    color: var(--body-placeholder);
+    font-size: calc(18 * var(--px));   /* H4/regular */
+    font-weight: var(--h4-regular-weight);
+    line-height: var(--h4-regular-line-height);
+}
+
+/* 범위를 벗어난 값을 넣으면 안내 문구 자리에 알림을 띄움 */
+.body-info .guide.warn {
+    color: var(--state-warn);
+}
+
+.body-fields {
+    display: flex;
+    gap: calc(40 * var(--px));
+    margin-top: calc(5 * var(--px));
+}
+
+.body-fields .field {
+    display: flex;
+    gap: calc(10 * var(--px));
+    color: var(--body-default);
+    font-size: calc(24 * var(--px));   /* H2/line/medium */
+    font-weight: var(--h2-line-medium-weight);
+    line-height: var(--h2-line-medium-line-height);
+}
+
+/* 성별: 고른 쪽만 본문 색 + 밑줄, 안 고른 쪽은 안내 문구 색 */
+.field.sex label {
+    position: relative;
+    color: var(--body-placeholder);
+    cursor: pointer;
+}
+
+.field.sex input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.field.sex input:checked + span {
+    color: var(--body-default);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: calc(6 * var(--px));
+}
+
+.field.sex input:focus-visible + span {
+    outline: 2px solid var(--button-stroke-focus);
+    outline-offset: 2px;
+}
+
+/* 키 · 몸무게 칸: 시안처럼 "( - )", 값을 넣으면 "( 175cm )" */
+.field .value::before {
+    content: "( ";
+    white-space: pre;
+}
+
+.field .value::after {
+    content: " )";
+    white-space: pre;
+}
+
+.field .value input {
+    width: 3ch;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    text-align: center;
+    appearance: textfield;   /* 숫자 칸 위아래 화살표 숨김 (키보드 위아래 화살표로 1씩 바꾸기는 그대로) */
+}
+
+.field .value input::-webkit-inner-spin-button,
+.field .value input::-webkit-outer-spin-button {
+    margin: 0;
+    appearance: none;
+}
+
+.field .value input::placeholder {
+    color: inherit;   /* 시안 "( - )"는 본문 색 */
+    opacity: 1;
+}
+
+.field .value input:placeholder-shown + .unit {
+    display: none;
+}
+
+/* 넣은 글자 수만큼 칸 폭이 맞춰짐, 못 하는 브라우저는 빈칸일 때만 좁힘 */
+@supports (field-sizing: content) {
+    .field .value input {
+        width: auto;
+        min-width: 1ch;
+        field-sizing: content;
+    }
+}
+
+@supports not (field-sizing: content) {
+    .field .value input:placeholder-shown {
+        width: 1ch;
+    }
+}
+
+/* ── 마네킹 700×700 (시안 y 80) + 옷 목록 ── */
+.fitting-viewer {
+    margin-top: calc(8 * var(--px));   /* 시안 y 80: 자동 레이아웃 간격 20이 창 높이 900에 눌려 있음 */
+}
+
+.mannequin-box {
+    position: relative;
+    height: calc(700 * var(--px));
+    overflow: hidden;
+    background: linear-gradient(#ddd8d8, #eeeae9);   /* 시안 사진의 스튜디오 배경색 (위 → 아래, 토큰 없음) */
+}
+
+.mannequin-box .mannequin {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ── 사이즈: 마네킹 오른쪽 위, 옷 목록에서 고른 옷의 S · M · L · XL (칸 모양은 상품 상세 시안 .size-chip) ──
+   부위별 판정 줄이 들어가서 시안 폭 145보다 넓힘 (마네킹 사진 옆 빈자리 안) */
+.size-panel {
+    position: absolute;
+    top: calc(20 * var(--px));
+    right: calc(20 * var(--px));
+    width: calc(230 * var(--px));
+    padding: calc(15 * var(--px));
+    background: color-mix(in srgb, var(--surface-white) 85%, transparent);
+    color: var(--body-default);
+    font-size: calc(16 * var(--px));   /* Body/medium 크기 */
+}
+
+.size-title .name {
+    font-weight: 600;
+}
+
+.size-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: calc(10 * var(--px)) calc(15 * var(--px));
+    margin-top: calc(10 * var(--px));
+}
+
+.size-list .size {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: calc(44 * var(--px));
+    border: 0;
+    border-radius: calc(10 * var(--px));
+    background: var(--surface-subtle);
+    color: var(--body-default);
+    font-size: calc(20 * var(--px));   /* H3/regular */
+    font-weight: var(--h3-regular-weight);
+    cursor: pointer;
+}
+
+/* 이 상품에 없는 사이즈 */
+.size-list .size:disabled {
+    color: var(--body-placeholder);
+    cursor: default;
+}
+
+/* 마네킹에 입힌 사이즈 */
+.size-list .size[aria-pressed="true"] {
+    background: var(--button-fill-select);
+    color: var(--on-color-text);
+}
+
+/* 체형에 맞는 사이즈: 칸 위에 보라 '추천' 꼬리표 */
+.size-list .size.reco::after {
+    content: "추천";
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 calc(5 * var(--px));
+    border-radius: calc(10 * var(--px));
+    background: var(--color-primary);
+    color: var(--on-color-text);
+    font-size: calc(11 * var(--px));   /* Caption/small 크기 */
+    font-weight: 600;
+    line-height: calc(18 * var(--px));
+    translate: 30% -50%;
+}
+
+.size-fit {
+    margin-top: calc(12 * var(--px));
+    font-weight: 600;
+}
+
+/* 고른 사이즈가 체형에 맞으면 보라색 */
+.size-fit.fit {
+    color: var(--color-primary);
+}
+
+/* 부위별 판정: 부위 | 여유(옷 − 몸) | 등급, 등급마다 색 (작음 빨강 · 타이트 금색 · 딱 맞음 보라 · 여유 청록 · 큼 파랑) */
+.size-parts {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: calc(2 * var(--px)) calc(8 * var(--px));
+    margin-top: calc(6 * var(--px));
+    font-size: calc(13 * var(--px));   /* Caption/large 크기 */
+}
+
+.size-parts li {
+    display: contents;
+}
+
+.size-parts .part {
+    color: var(--body-description);
+}
+
+.size-parts .value {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+.size-parts .grade {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.size-parts [data-grade="0"] .grade { color: var(--red-600); }
+.size-parts [data-grade="1"] .grade { color: var(--gold-700); }
+.size-parts [data-grade="2"] .grade { color: var(--color-primary); }
+.size-parts [data-grade="3"] .grade { color: var(--teal-700); }
+.size-parts [data-grade="4"] .grade { color: var(--blue-700); }
+
+/* 오차 안이라 두 등급 사이: 점선 밑줄 */
+.size-parts .border .grade {
+    text-decoration: underline dotted;
+    text-underline-offset: calc(3 * var(--px));
+}
+
+/* 밑단 위치: 부위 다음 칸부터 끝까지 */
+.size-parts .hem .value {
+    grid-column: 2 / -1;
+    text-align: left;
+}
+
+.size-basis {
+    margin-top: calc(6 * var(--px));
+    color: var(--body-default);
+    font-size: calc(13 * var(--px));   /* Caption/large 크기 */
+    font-weight: 600;
+    word-break: keep-all;
+}
+
+/* 정확도 · 실측표 · '추정' (판정이 단정이 아님을 늘 보여 줌) */
+.size-note {
+    margin-top: calc(2 * var(--px));
+    color: var(--body-description);
+    font-size: calc(11 * var(--px));   /* Caption/small 크기 */
+    word-break: keep-all;
+}
+
+.take-off {
+    margin-top: calc(10 * var(--px));
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--body-link);
+    font-size: calc(14 * var(--px));   /* Body/x-small 크기 */
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* 사이즈가 없는 옷(신발 · 가방)은 칸 · 착용감을 숨김 */
+.size-panel.free .size-list,
+.size-panel.free .size-fit {
+    display: none;
+}
+
+/* ── 정확도 높이기: 마네킹 왼쪽 아래(발 옆 빈자리), 버튼을 누르면 위로 펼쳐짐 ── */
+.accuracy-panel {
+    position: absolute;
+    left: calc(20 * var(--px));
+    bottom: calc(20 * var(--px));
+    width: calc(200 * var(--px));
+    padding: calc(10 * var(--px)) calc(12 * var(--px));
+    background: color-mix(in srgb, var(--surface-white) 85%, transparent);
+    color: var(--body-default);
+    font-size: calc(13 * var(--px));   /* Caption/large 크기 */
+}
+
+.accuracy-toggle {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--body-link);
+    font-size: calc(14 * var(--px));   /* Body/x-small 크기 */
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.accuracy-toggle .level {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.accuracy-form[hidden] {
+    display: none;
+}
+
+.accuracy-form fieldset {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(6 * var(--px)) calc(12 * var(--px));
+    margin-top: calc(10 * var(--px));
+    padding: 0;
+    border: 0;
+}
+
+.accuracy-form legend {
+    width: 100%;
+    margin-bottom: calc(4 * var(--px));
+    padding: 0;
+    color: var(--body-description);
+}
+
+.accuracy-form label {
+    display: flex;
+    align-items: center;
+    gap: calc(4 * var(--px));
+}
+
+.accuracy-form select,
+.accuracy-form input {
+    height: calc(28 * var(--px));
+    padding: 0 calc(4 * var(--px));
+    border: 1px solid var(--border-default);
+    border-radius: calc(6 * var(--px));
+    background: var(--surface-white);
+    color: var(--body-default);
+    font-size: calc(13 * var(--px));
+}
+
+.accuracy-form input {
+    width: calc(52 * var(--px));
+    font-variant-numeric: tabular-nums;
+    appearance: textfield;
+}
+
+.accuracy-form input::-webkit-inner-spin-button,
+.accuracy-form input::-webkit-outer-spin-button {
+    margin: 0;
+    appearance: none;
+}
+
+/* 범위 밖 값(치는 중 포함)은 판정에 쓰지 않고 칸을 빨갛게 */
+.accuracy-form input.warn {
+    border-color: var(--state-warn);
+    color: var(--state-warn);
+}
+
+.accuracy-form .privacy {
+    margin-top: calc(8 * var(--px));
+    color: var(--body-description);
+    font-size: calc(11 * var(--px));   /* Caption/small 크기 */
+    word-break: keep-all;
+}
+
+/* ── 옷 목록: 100×100 칸 8개, 창 폭(700)을 넘는 칸은 가로로 넘겨 봄 (휠 · 끌기 · 키보드) ── */
+.item-list {
+    display: flex;
+    gap: calc(10 * var(--px));
+    margin-top: calc(10 * var(--px));
+    overflow-x: auto;
+    scrollbar-width: none;   /* 시안에 스크롤 막대가 없음, 7번째 칸이 반쯤 보여서 더 있는 걸 알 수 있음 */
+}
+
+.item-list::-webkit-scrollbar {
+    display: none;
+}
+
+.item-list li {
+    flex: none;
+}
+
+/* 옷 칸 100×100: 회색 바탕에 옷 사진 80×80 (화면 시안은 모서리 각짐) */
+.fitting-item {
+    position: relative;
+    display: block;
+    width: calc(100 * var(--px));
+    height: calc(100 * var(--px));
+    padding: calc(10 * var(--px));
+    border: 0;
+    background: var(--state-disabled);
+    cursor: pointer;
+}
+
+/* 입고 있는 옷: 안쪽 보라 선 2 (시안 선택 상태) */
+.fitting-item[aria-pressed="true"] {
+    box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+/* 사이즈를 보고 있는 옷: 보라 선 안쪽에 연보라 한 겹 더 */
+.fitting-item.active {
+    box-shadow: inset 0 0 0 2px var(--color-primary), inset 0 0 0 5px var(--color-secondary);
+}
+
+.item-list .fitting-item:focus-visible {
+    outline-offset: -3px;   /* 목록이 가로로 넘쳐 잘려서 안쪽에 그림 */
+}
+
+.fitting-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* 칸 왼쪽 위 갈래 이름, 오른쪽 아래 '추천 M' */
+.fitting-item .slot {
+    position: absolute;
+    top: calc(5 * var(--px));
+    left: calc(7 * var(--px));
+    color: var(--body-description);
+    font-size: calc(11 * var(--px));   /* Caption/small 크기 */
+}
+
+.fitting-item .reco:not(:empty) {
+    position: absolute;
+    right: calc(5 * var(--px));
+    bottom: calc(5 * var(--px));
+    padding: 0 calc(6 * var(--px));
+    border-radius: calc(10 * var(--px));
+    background: var(--color-primary);
+    color: var(--on-color-text);
+    font-size: calc(11 * var(--px));
+    font-weight: 600;
+    line-height: calc(18 * var(--px));
+}
+
+/* ── 닫기 60×60: 창 오른쪽 위 ── */
+.btn-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(60 * var(--px));
+    height: calc(60 * var(--px));
+    background: var(--surface-white) url(../images/icons/close.svg) no-repeat center / calc(33.75 * var(--px)) auto;   /* 선 30×30 + 굵기 3.75 */
+    font-size: 0;
+}
+
+/* ══════════ 상품 상세 창 (women-coat.html) ══════════
+   - 시안 146:889: 어두운 배경(dim) 가운데 1750×900 창 = 사진 갤러리 1100 + 상품 정보 600 (사이 50)
+   - 피팅룸처럼 화면이 1920×1080보다 작으면 폭 · 높이 중 더 모자란 쪽 비율로 줄어듦 (dim 배경 · 가운데 정렬은 피팅룸 .dim을 같이 씀)
+   - 여자 롱코트 01 카드(#detail-long-coat-01)를 누르면 열림: 여닫기 · 사진 고르기는 main.js, JS가 없으면 :target으로만 열림 (닫기는 뒤로 가기)
+   - 여닫기는 0.3s 등속 페이드만 (주인님 맥 '동작 줄이기' — 위치 · 크기는 움직이지 않고 투명도만) */
+
+.detail-dim {
+    --px: min(1px, 100vw / 1920, 100dvh / 1080);   /* 창 높이 900 + 위아래 90이 화면 높이를 넘지 않게 (피팅룸과 같은 식) */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 200;   /* 고정 헤더(100) 위 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s linear, visibility 0s linear .3s;   /* 닫을 땐 다 흐려진 뒤 숨김 → 닫힌 창에는 포커스가 들어가지 않음 */
+}
+
+/* JS가 연 창(.active) · JS가 없을 때 주소 해시로 연 창(안의 .product-detail이 :target) — JS가 붙으면(.ready) 해시는 JS가 맞춤 */
+.detail-dim.active,
+.detail-dim:not(.ready):has(:target) {
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+/* 열려 있는 동안 뒤 페이지 스크롤을 막음, 스크롤 막대 자리는 남겨 페이지가 옆으로 밀리지 않게 */
+:root:has(.detail-dim.active) {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+}
+
+/* ── 창 1750×900: 갤러리(왼쪽) + 상품 정보(오른쪽) ── */
+.product-detail {
+    position: relative;
+    display: flex;
+    gap: calc(50 * var(--px));
+    width: calc(1750 * var(--px));
+    height: calc(900 * var(--px));
+    background: var(--surface-white);
+}
+
+/* 열 때 창이 포커스를 받아 스크린리더가 제목부터 읽음 — 누르는 곳이 아니라 테두리는 그리지 않음 (Tab은 창 안 버튼으로) */
+.product-detail:focus {
+    outline: none;
+}
+
+/* ── 사진 갤러리 1100×900: 사진이 세로로 이어지고 창 안에서 위아래로 넘겨 봄 ── */
+.detail-gallery {
+    position: relative;
+    flex: none;
+    width: calc(1100 * var(--px));
+    background: var(--gray-250);   /* 누끼 사진 뒤 바탕 (상품 카드 사진 양옆과 같은 회색) */
+}
+
+.gallery-track {
+    position: relative;   /* 사진 위치(offsetTop)를 이 상자 기준으로 재서 고른 사진으로 옮김 (main.js) */
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;   /* 시안에 스크롤 막대가 없음, 사진은 썸네일 · 컬러 칸으로 고름 */
+}
+
+.gallery-track::-webkit-scrollbar {
+    display: none;
+}
+
+/* 시안처럼 폭 1100에 맞춤 → 원본이 2:3이라 한 장이 1650, 창 높이 900을 넘는 아래는 넘겨서 봄 */
+.gallery-track img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ── 썸네일 100×100: 갤러리 왼쪽(x 30 · y 235)에 고정, 지금 보이는 사진만 진하게 ── */
+.gallery-thumbs {
+    position: absolute;
+    top: calc(235 * var(--px));
+    left: calc(30 * var(--px));
+}
+
+.gallery-thumbs li + li {
+    margin-top: calc(10 * var(--px));
+}
+
+.gallery-thumb {
+    display: block;
+    width: calc(100 * var(--px));
+    height: calc(100 * var(--px));
+    padding: 0;
+    border: 0;
+    background: none;
+    opacity: .3;   /* 시안 gallery-thumb 기본 상태 */
+    cursor: pointer;
+    transition: opacity .3s linear;
+}
+
+/* 시안 hover 상태(불투명), 지금 보고 있는 사진 · 키보드 포커스도 같게 */
+.gallery-thumb:hover,
+.gallery-thumb:focus-visible,
+.gallery-thumb[aria-current="true"] {
+    opacity: 1;
+}
+
+.gallery-thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;   /* 2:3 사진의 코트 전체가 칸 안에 보이게 */
+}
+
+/* ── 상품 정보 600: 위 40 · 오른쪽 30 여백, 요약(제목 · 가격 · 옵션 · 버튼 · 피팅룸) → 리뷰, 덩어리 사이 40 ── */
+.detail-info {
+    flex: none;
+    width: calc(600 * var(--px));
+    padding: calc(40 * var(--px)) calc(30 * var(--px)) 0 0;
+}
+
+.product-detail .title {
+    color: var(--surface-dark);   /* 시안 변수 그대로 (글자에 surface/dark #454545) */
+    font-size: calc(30 * var(--px));   /* H1/semibold */
+    font-weight: var(--h1-semibold-weight);
+    line-height: calc(36 * var(--px));   /* 시안 글 상자 36 (AUTO = normal은 줄인 화면에서 26처럼 반올림돼 아래가 위로 밀림) */
+}
+
+.price-box {
+    display: flex;
+    gap: calc(8 * var(--px));
+    margin-top: calc(25 * var(--px));
+    font-size: calc(24 * var(--px));   /* H2/line/bold · H2/line/medium */
+    line-height: var(--h2-line-medium-line-height);
+}
+
+.price-box .sale {
+    color: var(--brand-blue);
+    font-weight: var(--h2-line-bold-weight);
+}
+
+.price-box .price {
+    color: var(--body-default);
+    font-weight: var(--h2-line-medium-weight);
+}
+
+/* ── 옵션: 컬러 · 사이즈 (칸 50×44, 사이 15) ── */
+.product-options {
+    margin-top: calc(40 * var(--px));
+}
+
+.option-size {
+    margin-top: calc(15 * var(--px));
+}
+
+.option-label {
+    display: block;
+    color: var(--body-link);
+    font-size: calc(16 * var(--px));   /* Body-md/line/regular */
+    font-weight: var(--body-md-line-regular-weight);
+    line-height: var(--body-md-line-regular-line-height);
+}
+
+/* 사이즈 목록은 피팅룸 사이즈 칸(.size-list, 두 줄 grid)과 이름이 같아서 창 안에서 가로 한 줄로 다시 잡음 */
+.color-list,
+.product-detail .size-list {
+    display: flex;
+    gap: calc(15 * var(--px));
+    margin-top: calc(10 * var(--px));
+}
+
+.color-chip,
+.size-chip {
+    display: block;
+    width: calc(50 * var(--px));
+    height: calc(44 * var(--px));
+    border: 0;
+    cursor: pointer;
+}
+
+.color-chip {
+    font-size: 0;   /* 색 이름은 스크린리더만 읽음 */
+}
+
+.color-chip.black {
+    background: #2f2e2f;   /* 시안 .color-chip.black (변수 없음) */
+}
+
+.color-chip.ivory {
+    background: #dacebb;   /* 아이보리 사진 속 코트의 평균색 (시안 갈색 칸 자리, 변수 없음) */
+    box-shadow: inset 0 0 0 1px var(--border-default);   /* 흰 창 위에서 칸 가장자리가 보이게 */
+}
+
+/* 고른 컬러: 칸 밖에 흰 틈 2 + 진한 선 2 (시안에 선택 모양이 없어 사이즈 칸 선택색으로 맞춤) */
+.color-chip[aria-pressed="true"] {
+    box-shadow: 0 0 0 calc(2 * var(--px)) var(--surface-white), 0 0 0 calc(4 * var(--px)) var(--button-stroke-select);
+}
+
+.color-chip.ivory[aria-pressed="true"] {
+    box-shadow: inset 0 0 0 1px var(--border-default), 0 0 0 calc(2 * var(--px)) var(--surface-white), 0 0 0 calc(4 * var(--px)) var(--button-stroke-select);
+}
+
+.size-chip {
+    background: var(--surface-subtle);
+    color: var(--body-default);
+    font-size: calc(20 * var(--px));   /* H3/regular */
+    font-weight: var(--h3-regular-weight);
+    line-height: var(--h3-regular-line-height);
+}
+
+/* 고른 사이즈 (피팅룸 사이즈 칸과 같은 선택 색) */
+.size-chip[aria-pressed="true"] {
+    background: var(--button-fill-select);
+    color: var(--on-color-text);
+}
+
+.size-guide {
+    margin-top: calc(10 * var(--px));
+    color: var(--body-placeholder);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));   /* 시안 글 상자 17 (normal은 16으로 그려져 아래가 1 올라감) */
+}
+
+/* ── 장바구니 담기 · 바로구매 하기 (200×44, 사이 15) + 장바구니 수 ── */
+.product-actions {
+    margin-top: calc(40 * var(--px));
+}
+
+.btn-group {
+    display: flex;
+    gap: calc(15 * var(--px));
+}
+
+.btn-cart,
+.btn-buy {
+    width: calc(200 * var(--px));
+    height: calc(44 * var(--px));
+    border: 1px solid var(--button-stroke-focus);
+    background: none;
+    color: var(--body-default);
+    font-size: calc(17 * var(--px));   /* Body-lg/medium · Body-lg/semibold */
+    line-height: var(--body-lg-medium-line-height);
+    cursor: pointer;
+}
+
+.btn-cart {
+    font-weight: var(--body-lg-medium-weight);
+}
+
+.btn-buy {
+    font-weight: var(--body-lg-semibold-weight);
+}
+
+.cart-status {
+    display: flex;
+    align-items: center;
+    gap: calc(8 * var(--px));
+    margin-top: calc(10 * var(--px));
+    color: var(--body-link);
+    font-size: calc(18 * var(--px));   /* H4/regular */
+    font-weight: var(--h4-regular-weight);
+    line-height: var(--h4-regular-line-height);
+}
+
+/* 채운 하트 24 + 수 (시안 like number 컴포넌트) */
+.like-count {
+    display: flex;
+    align-items: center;
+    gap: calc(5 * var(--px));
+    color: var(--body-default);
+    font-size: calc(15 * var(--px));   /* Body-sm/line/regular */
+    line-height: var(--body-sm-line-regular-line-height);
+}
+
+.like-count::before {
+    content: "";
+    width: calc(24 * var(--px));
+    height: calc(24 * var(--px));
+    background: url(../images/icons/heart-like.svg) no-repeat center / contain;
+}
+
+/* ── 피팅룸으로 이동: 테두리 칸 안에 파란 글자 + 갈매기표 ── */
+.btn-fitting-room {
+    display: flex;
+    align-items: center;
+    gap: calc(10 * var(--px));
+    width: fit-content;
+    height: calc(62 * var(--px));   /* 테두리까지 시안 62 (1px 테두리는 줄지 않아서 높이로 정함 → 줄인 화면에서도 아래 리뷰 자리가 맞음) */
+    margin-top: calc(40 * var(--px));
+    padding: calc(12 * var(--px)) calc(40 * var(--px));
+    border: 1px solid var(--button-stroke-focus);
+    color: var(--brand-blue);
+    font-size: calc(30 * var(--px));   /* H1/semibold */
+    font-weight: var(--h1-semibold-weight);
+    line-height: var(--h1-semibold-line-height);
+}
+
+.btn-fitting-room .chevron {
+    width: calc(15 * var(--px));
+    height: calc(24 * var(--px));
+    background: url(../images/icons/chevron-fitting-room.svg) no-repeat center / contain;
+}
+
+/* ── 리뷰: 리뷰 쓰기 + 카드 180 가로 목록 (사이 30, 창 폭을 넘는 카드는 옆으로 넘겨 봄) ── */
+.review {
+    margin-top: calc(40 * var(--px));
+}
+
+.review-title {
+    display: flex;
+    align-items: center;
+    gap: calc(8 * var(--px));
+    width: fit-content;
+    height: calc(41 * var(--px));   /* 테두리까지 시안 41 (피팅룸 버튼과 같은 이유) */
+    padding: calc(5 * var(--px)) calc(20 * var(--px));
+    border: 1px solid var(--button-stroke-focus);
+    color: var(--gray-900);
+    font-size: calc(24 * var(--px));   /* H2/medium */
+    font-weight: var(--h2-medium-weight);
+    line-height: var(--h2-medium-line-height);
+}
+
+.review-title .chevron {
+    width: calc(11 * var(--px));
+    height: calc(18 * var(--px));
+    background: url(../images/icons/chevron-review.svg) no-repeat center / contain;
+}
+
+.review-list {
+    display: flex;
+    gap: calc(30 * var(--px));
+    margin-top: calc(20 * var(--px));
+    overflow-x: auto;
+    scrollbar-width: none;   /* 시안에 스크롤 막대가 없음, 세 번째 카드가 잘려 보여서 더 있는 걸 알 수 있음 */
+}
+
+.review-list::-webkit-scrollbar {
+    display: none;
+}
+
+.review-card {
+    flex: none;
+    width: calc(180 * var(--px));
+    color: var(--body-link);
+    font-size: calc(20 * var(--px));   /* H3/regular (닉네임 · 평점 · 글 모두) */
+    font-weight: var(--h3-regular-weight);
+    line-height: var(--h3-regular-line-height);
+}
+
+.review-head {
+    display: flex;
+    align-items: center;
+    gap: calc(15 * var(--px));
+}
+
+.reviewer,
+.review-card .rating {
+    display: flex;
+    align-items: center;
+}
+
+.reviewer {
+    gap: calc(3 * var(--px));
+}
+
+/* 프로필 사진 자리 24 (사진이 없어 회색 원) */
+.reviewer .avatar {
+    width: calc(24 * var(--px));
+    height: calc(24 * var(--px));
+    border-radius: 50%;
+    background: var(--gray-300);
+}
+
+/* 시안 폭 75에서 넘치는 닉네임은 … */
+.reviewer .nickname {
+    width: calc(75 * var(--px));
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.review-card .rating {
+    gap: calc(4 * var(--px));
+}
+
+.review-card .rating .label {
+    width: calc(24 * var(--px));
+    height: calc(24 * var(--px));
+    background: url(../images/icons/star-review.svg) no-repeat center / contain;
+    font-size: 0;
+}
+
+/* 네 줄까지 보이고 넘치면 … (시안 글 상자 높이 105 = 네 줄) */
+.review-text {
+    display: -webkit-box;
+    margin-top: calc(28 * var(--px));
+    overflow: hidden;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+/* ── 닫기 60×60: 창 오른쪽 위 (모양은 피팅룸 .btn-close, 여기서는 button이라 기본 테두리만 지움) ── */
+.product-detail .btn-close {
+    border: 0;
+    cursor: pointer;
+}
