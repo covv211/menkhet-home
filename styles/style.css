@@ -1645,7 +1645,7 @@ footer hr {
 }
 
 .side-option {
-    position: relative;   /* 상품 상세 창 '모델 착용' 꼬리표(.wear-tag)를 칸 오른쪽 위에 띄움 */
+    position: relative;   /* '추천' 꼬리표(.wear-tag — 피팅룸 셔츠 · 바지 · 로퍼 칸, 상품 상세 창 모델 착용 줄)를 칸 오른쪽 위에 띄움 */
     display: block;
     width: calc(70 * var(--px));
     height: calc(106 * var(--px));
@@ -1876,7 +1876,7 @@ footer hr {
     width: calc(150 * var(--px));
 }
 
-/* '모델 착용' 꼬리표 (시안 span.wear-tag, 주인님이 2026-10-27 고침): 칸 오른쪽 위(x 49 · y 2.5)에 18×18 파란 원, 흰 글자 5 */
+/* '추천' 꼬리표 (시안 span.wear-tag, 주인님이 2026-10-27 고침 — 글자 '모델 착용' → '추천', 피팅룸 셔츠 · 바지 · 로퍼 칸에도 붙임): 칸 오른쪽 위(x 49 · y 2.5)에 18×18 파란 원, 흰 글자 5 */
 .wear-tag {
     position: absolute;
     top: calc(2.5 * var(--px));
