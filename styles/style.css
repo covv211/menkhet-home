@@ -1364,7 +1364,7 @@ footer hr {
 
 /* ══════════ 피팅룸 (fitting-room.html) ══════════
    - 수정 시안 231:1372: 어두운 배경(dim) 가운데에 700×900 창. 페이지와 같이 폭 1920 기준 비율로 줄고, 화면 높이가 모자랄 때만 더 줄어듦 (위아래 최소 20px)
-   - 위 60: 안내 문구 + 성별 · 키 · 몸무게 칸(누르면 아래로 목록) / 아래 700×840: 회색 바탕에 마네킹 + 왼쪽 옷 칸 + 오른쪽 위 사이즈 칸
+   - 위 56: 안내 문구 + 성별 · 키 · 몸무게 칸(누르면 아래로 목록, 고르면 갈매기표 자리에 값) / 아래 700×844: 회색 바탕에 마네킹 + 왼쪽 옷 칸 + 오른쪽 위 사이즈 칸
    - 옷 칸 펼침 · 마네킹 사진 · 실측 그림 바뀜은 모두 0.3s 등속 (시안 SMART_ANIMATE · DISSOLVE), 맥 '동작 줄이기'여도 그대로 (주인님 지정)
    - 상품 상세 창의 '피팅룸으로 이동'은 이 페이지를 창 안 iframe으로 띄움 (.embed — 아래 .fitting-page.embed, 밀려 나오는 움직임은 상세 창 쪽 .fitting-popup) */
 
@@ -1401,7 +1401,7 @@ footer hr {
     background: var(--surface-white);
 }
 
-/* ── 몸 정보 (높이 40): 안내 문구 + 성별 · 키 · 몸무게 칸 ── */
+/* ── 몸 정보 (높이 46 — 시안 2026-10-27 수정): 안내 문구 + 성별 · 키 · 몸무게 칸 ── */
 .body-info {
     padding: 0 calc(20 * var(--px));
 }
@@ -1419,19 +1419,15 @@ footer hr {
     margin-top: calc(6 * var(--px));
 }
 
-/* 칸 하나: 이름 + 고른 값 + 갈매기표 (시안처럼 칸 어디를 눌러도 목록이 열림 — fitting-room.js) */
+/* 칸 하나: 이름 + 갈매기표 칸 (시안처럼 칸 어디를 눌러도 목록이 열림 — fitting-room.js) */
 .body-fields .field {
     display: flex;
-    gap: calc(10 * var(--px));
-    color: var(--body-default);
+    align-items: center;
+    color: var(--gray-700);   /* 시안 칸 이름 gray/700 */
     font-size: calc(17 * var(--px));   /* Body-lg/regular */
     font-weight: var(--body-lg-regular-weight);
     line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
     cursor: pointer;
-}
-
-.body-fields .field.sex {
-    gap: calc(7 * var(--px));
 }
 
 /* 칸 이름 글 상자: 시안 폭 30 · 15 · 44 (브라우저는 글자를 1~2px 좁게 재서 그대로 두면 뒤 칸들이 왼쪽으로 밀림) */
@@ -1447,52 +1443,58 @@ footer hr {
     min-width: calc(44 * var(--px));
 }
 
-/* 아직 고르지 않은 칸은 값 자리를 비워 두지 않음 */
-.field .selected:empty {
-    display: none;
-}
-
 .select {
     position: relative;
 }
 
-/* 갈매기표 칸: 성별 30 · 키 62 · 몸무게 50 (시안 폭 그대로, 갈매기표 15×6 · 굵기 1.5는 가운데) */
+/* 갈매기표 칸: 높이 26, 폭 성별 50 · 키 90 · 몸무게 90 (시안 폭 그대로, 갈매기표 20×6 · 굵기 1.5는 가운데)
+   고른 칸(.chosen — fitting-room.js)은 갈매기표가 사라지고 그 자리 가운데에 고른 값 (목록 줄과 같은 글자) → 앞 칸을 다시 고르면 뒤 칸은 갈매기표로 돌아감 */
 .select .toggle {
-    display: block;
-    width: calc(30 * var(--px));
-    height: calc(20 * var(--px));
+    display: grid;
+    place-items: center;
+    width: calc(90 * var(--px));
+    height: calc(26 * var(--px));
     border: 0;
-    background: url(../images/icons/chevron-down.svg) no-repeat center / calc(17 * var(--px)) auto;
+    background: url(../images/icons/chevron-down.svg) no-repeat center / calc(21.5 * var(--px)) auto;
+    color: var(--gray-900);
+    font-size: calc(15 * var(--px));   /* Body-sm/medium */
+    font-weight: var(--body-sm-medium-weight);
+    line-height: calc(18 * var(--px));   /* 시안 글 상자 18 */
+    white-space: nowrap;
     cursor: pointer;
 }
 
-.field.height .toggle {
-    width: calc(62 * var(--px));
-}
-
-.field.weight .toggle {
+.field.sex .toggle {
     width: calc(50 * var(--px));
+    font-size: calc(17 * var(--px));   /* Body-lg/medium */
+    font-weight: var(--body-lg-medium-weight);
+    line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
 }
 
-/* 목록: 갈매기표 칸 바로 아래, 흰 바탕 + 회색 테두리 1, 줄 높이 20 (키 · 몸무게는 Caption-md/medium) */
+.field.chosen .toggle {
+    background-image: none;
+}
+
+/* 목록: 갈매기표 칸 바로 아래에 같은 폭, 흰 바탕(시안에 테두리 없음 — 아래 회색 마네킹 칸 위에 뜸), 줄 높이 26에 글자 가운데 */
 .select-list {
     position: absolute;
     top: 100%;
     left: 0;
     z-index: 1;   /* 아래 마네킹 칸 위에 뜨게 (몸 정보 줄 전체에 z-index를 주면 창 오른쪽 위 닫기 버튼까지 덮음) */
     min-width: 100%;
-    border: 1px solid var(--border-default);
     background: var(--surface-white);
-    font-size: calc(12 * var(--px));   /* Caption-md/medium */
-    font-weight: var(--caption-md-medium-weight);
-    line-height: calc(14 * var(--px));   /* 시안 글 상자 14 */
+    color: var(--gray-900);
+    font-size: calc(15 * var(--px));   /* Body-sm/medium */
+    font-weight: var(--body-sm-medium-weight);
+    line-height: calc(18 * var(--px));   /* 시안 글 상자 18 */
+    text-align: center;
     white-space: nowrap;
 }
 
 .select-list .option {
     display: block;
     width: 100%;
-    height: calc(20 * var(--px));
+    height: calc(26 * var(--px));
     padding: 0 calc(4 * var(--px));
     border: 0;
     background: none;
@@ -1507,48 +1509,28 @@ footer hr {
 }
 
 .select-list .option:focus-visible {
-    outline-offset: -2px;   /* 테두리 칸 밖으로 삐져나오지 않게 안쪽에 그림 */
+    outline-offset: -2px;   /* 줄 밖으로 삐져나오지 않게 안쪽에 그림 */
 }
 
-/* '성별을 먼저 골라 주세요' · '키를 먼저 골라 주세요' (시안 안쪽 여백 3 · 8) */
+/* '성별을 먼저 골라 주세요' · '키를 먼저 골라 주세요': 줄 높이 26 (위아래 7), Caption-xsm/regular */
 .select-list .hint {
-    padding: calc(3 * var(--px)) calc(8 * var(--px));
+    padding: calc(7 * var(--px)) 0;
+    font-size: calc(10 * var(--px));   /* Caption-xsm/regular */
+    font-weight: var(--caption-xsm-regular-weight);
+    line-height: calc(12 * var(--px));   /* 시안 글 상자 12 */
 }
 
-/* 성별 목록: 위아래 2 · 줄 사이 5, 글자는 칸 이름과 같은 Body-lg/regular */
+/* 성별 목록: 갈매기표 칸에 나오는 고른 값과 같은 Body-lg/medium (시안 '여자' 줄) */
 .field.sex .select-list {
-    padding: calc(2 * var(--px)) 0;
-    font-size: calc(17 * var(--px));   /* Body-lg/regular */
-    font-weight: var(--body-lg-regular-weight);
-    line-height: calc(20 * var(--px));
+    font-size: calc(17 * var(--px));   /* Body-lg/medium */
+    font-weight: var(--body-lg-medium-weight);
+    line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
 }
 
-.field.sex .select-list li + li {
-    margin-top: calc(5 * var(--px));
-}
-
-/* 성별 줄: 시안 폭 42 (글자 상자 30 + 양옆 6) */
-.field.sex .option {
-    min-width: calc(42 * var(--px));
-    padding: 0 calc(6 * var(--px));
-}
-
-/* 키 목록: 시안 줄 폭 62에 글자 가운데, 옆 여백 없음 */
-.field.height .option {
-    min-width: calc(62 * var(--px));
-    padding: 0;
-}
-
-/* 몸무게 목록: 시안 줄 폭 58 (글자가 긴 95~100kg 줄만 위 기본 여백 4로 조금 넓어짐) */
-.field.weight .option {
-    min-width: calc(58 * var(--px));
-}
-
-/* ── 마네킹 칸 700×840 (시안 y 60): 회색 바탕 가운데에 마네킹 사진 전체 ── */
+/* ── 마네킹 칸 700×844 (시안 y 56 — 몸 정보가 46으로 커지며 창 아래 끝까지): 회색 바탕 가운데에 마네킹 사진 전체 ── */
 .fitting-viewer {
     position: relative;
-    height: calc(840 * var(--px));
-    margin-top: calc(10 * var(--px));   /* 시안 y 60 = 창 위 여백 10 + 몸 정보 40 + 10 */
+    height: calc(844 * var(--px));
 }
 
 .mannequin-box {
@@ -1557,7 +1539,7 @@ footer hr {
     background: var(--gray-300);
 }
 
-/* 사진 683×1024(2:3)을 칸 높이에 맞춰 가운데 (560×840), 바뀔 땐 새 사진이 위에 겹쳐 0.3s 등속으로 뜸 (fitting-room.js가 .active를 붙임) */
+/* 사진 683×1024(2:3)을 칸 높이에 맞춰 가운데 (563×844), 바뀔 땐 새 사진이 위에 겹쳐 0.3s 등속으로 뜸 (fitting-room.js가 .active를 붙임) */
 .mannequin-box .mannequin {
     position: absolute;
     top: 0;

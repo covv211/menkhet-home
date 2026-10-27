@@ -2,7 +2,7 @@
    - fitting-room.html 전용 (main.js는 헤더가 있는 페이지용이라 따로 둠)
    - 수정 시안 231:1372: 위에서 성별 · 키 · 몸무게를 고르고, 왼쪽 옷 칸에서 코트 · 셔츠 · 바지 · 로퍼 색을 골라 마네킹에 입혀 봄
    - 키 · 몸무게 구간은 주인님 표(시안 232:1695 여자 기준 · 232:2147 남자 기준) → 성별을 바꾸면 키 · 몸무게를, 키를 바꾸면 몸무게를 비움
-   - 고른 몸 정보는 칸 이름 옆에 보여 주고, 그 체형의 사진(조합 사진 · 기본 마네킹)이 있으면 마네킹을 그 체형으로 바꿈 (저장하거나 보내지 않음)
+   - 고른 몸 정보는 갈매기표 자리에 보여 주고(고른 칸은 갈매기표가 사라짐 — 시안 2026-10-27 수정), 그 체형의 사진(조합 사진 · 기본 마네킹)이 있으면 마네킹을 그 체형으로 바꿈 (저장하거나 보내지 않음)
    - 마네킹 사진은 mannequinPhoto() 한 곳에서 정함
      · 여자 · 키 · 몸무게를 다 골랐고 조합 사진이 없는 체형 → 그 체형의 코디 없는 기본 마네킹 정면(images/fitting/body/women/<키>/<몸무게>.webp, 흰 티 · 회색 레깅스)
        옷 · 사이즈를 골라도 사진은 그대로, 고른 건 기억해 뒀다가 조합 사진 체형으로 돌아오면 입힘
@@ -12,7 +12,7 @@
    - 사진 · 실측 그림은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
    - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
    - 마네킹 사진(683×1024)은 모두 한 규칙으로 맞춤: 사람 키(똥머리 위 ~ 발끝) = 980px × 키 구간 가운데 값 / 177.5cm, 발끝은 y 1004, 가운데 정렬 → 같은 키 구간은 몸무게를 바꿔도 키가 그대로, 키 구간을 바꾸면 키가 바뀜 (새 사진도 이 규칙으로)
-   - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄움 → 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, 첫 칸 · 마지막 칸에서 Tab을 넘기면 상세 창 사진 칸으로 가라고 알림
+   - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄우고 닫을 때마다 새로 읽음(main.js) → 다시 열면 처음부터 · 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, 첫 칸 · 마지막 칸에서 Tab을 넘기면 상세 창 사진 칸으로 가라고 알림
    - 예전 숫자 판정(상품 실측표 data/fitting-items.json · 정확도 칸 · 부위별 여유)과 아래 옷 목록은 수정 시안에서 빠져서 지움 (JSON 파일은 남겨 둠) */
 
 /* ── 상품 상세 창 안에 띄울 때 (fitting-room.html?embed=1) ── */
@@ -150,10 +150,11 @@ function fillList(name, values) {
     list.replaceChildren(...(values ? values.map((value) => optionItem(value, `${value}${UNIT[name]}`)) : [hint]));
 }
 
-// 고른 값 → 칸 이름 옆 글자 · 목록의 고른 줄 표시
+// 고른 값 → 갈매기표 자리 글자 · 목록의 고른 줄 표시
+// 고른 칸은 .chosen → 갈매기표가 사라지고 값만 보임, 비운 칸(처음 · 앞 칸을 다시 골라 비운 뒤 칸)은 갈매기표로 돌아감 (style.css)
 function render() {
     ORDER.forEach((name) => {
-        const { list, selected } = fields[name];
+        const { field, list, selected } = fields[name];
         let text = '';
         list.querySelectorAll('.option').forEach((button) => {
             const on = button.dataset.value === chosen[name];
@@ -161,6 +162,7 @@ function render() {
             if (on) text = button.textContent;
         });
         selected.textContent = text;
+        field.classList.toggle('chosen', text !== '');
     });
 }
 

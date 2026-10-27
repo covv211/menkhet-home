@@ -223,7 +223,7 @@ if (detail) {
     detail.classList.add('ready');   // 이제 해시가 아니라 JS가 여닫음 (style.css의 :target은 JS가 없을 때만)
 
     /* 피팅룸: '피팅룸으로 이동'을 누르면 창 오른쪽 끝에서 밀려 들어옴 (시안 프로토타입 오버레이, 다른 페이지로 가지 않고 주소 기록도 남기지 않음)
-       내용은 fitting-room.html?embed=1 하나를 처음 열 때 iframe으로 넣고 닫아도 남겨 둠 → 다시 열면 고른 몸 정보 · 옷 · 사이즈가 그대로
+       내용은 fitting-room.html?embed=1 하나를 처음 열 때 iframe으로 넣고, 닫으면 다 나간 뒤 새로 읽어 둠 → 다시 열면 처음부터 (몸 정보는 갈매기표, 옷 · 사이즈는 처음 값 — 주인님 요청 '다시 새로 리스타트 되면 다시 처음으로')
        열려 있는 동안 피팅룸에 가려진 정보 · 닫기만 inert, 사진(갤러리)은 그대로 → 피팅룸 코디와 모델 코디를 나란히 비교 (주인님 요청): 휠로 넘기기 · 썸네일 · Tab은 사진 칸 · 썸네일 ↔ 피팅룸
        사진을 눌러도 피팅룸은 닫히지 않음 (시안 오버레이 설정, 피팅룸 안에 열린 목록 · 옷 칸은 fitting-room.js가 닫음)
        닫기: 피팅룸의 닫기 · Esc(피팅룸 안 → fitting-room.js가 알림, 창 쪽 → 여기) → '피팅룸으로 이동'으로 포커스, 상세 창을 닫으면 같이 닫힘
@@ -233,8 +233,10 @@ if (detail) {
     const gallery = panel.querySelector('.detail-gallery');
     const coveredParts = [...panel.children].filter((part) => part !== fitting && part !== gallery);   // 피팅룸이 열리면 inert (정보 · 닫기)
     const FITTING_SRC = `${fittingLink.getAttribute('href')}?embed=1`;   // 링크(JS가 없을 때 가는 피팅룸 페이지)와 같은 파일
+    const FITTING_MOVE = 300;   // 밀려 나가는 시간 (ms, style.css .fitting-popup 0.3s)
     let fittingFrame = null;   // 처음 열 때 만듦
     let fittingByKey = false;   // 키보드(Enter)로 열었는지
+    let fittingReset = 0;   // 닫은 뒤 새로 읽기 타이머
 
     fitting.inert = true;   // 닫힌 피팅룸에는 Tab이 들어가지 않게
 
@@ -259,8 +261,18 @@ if (detail) {
         if (fitting.classList.contains('active') && document.activeElement === panel) focusFitting();
     }
 
+    // 닫힌 피팅룸을 새로 읽음 → 다시 열면 처음부터 (몸 정보 · 옷 · 사이즈 모두 페이지를 처음 연 때와 같음)
+    // 다 나간 뒤에 읽어서 나가는 동안 내용이 비지 않게, 그 사이 다시 열었으면 그대로 둠
+    // location.replace → 기록이 남지 않아 브라우저 뒤로 가기가 iframe 안에서 멈추지 않음, 읽는 동안은 숨기고 준비되면 다시 보임 (frameReady)
+    function resetFitting() {
+        if (!fittingFrame || fitting.classList.contains('active')) return;
+        fittingFrame.classList.remove('ready');
+        fittingFrame.contentWindow.location.replace(FITTING_SRC);
+    }
+
     function openFitting(byKey) {
         if (fitting.classList.contains('active')) return;
+        clearTimeout(fittingReset);
         fittingByKey = byKey;
         if (!fittingFrame) {
             fittingFrame = document.createElement('iframe');
@@ -285,6 +297,8 @@ if (detail) {
         coveredParts.forEach((part) => { part.inert = false; });
         syncReview();   // 상세 창이 열려 있으면 리뷰 자동 넘김을 다시
         if (focusLink) fittingLink.focus({ focusVisible: byKey });   // 키보드로 닫았을 때만 테두리 (마우스로 닫으면 없음)
+        clearTimeout(fittingReset);
+        fittingReset = setTimeout(resetFitting, FITTING_MOVE);
     }
 
     // 창 안에서 Tab이 멈추는 곳 (가려진 칸은 inert라 빠짐): 피팅룸이 열리면 사진 칸 · 썸네일 · 피팅룸 iframe(받는 동안은 숨어 있어서 빼고), 닫히면 iframe 빼고 전부
