@@ -152,6 +152,7 @@ function fillList(name, values) {
 
 // 고른 값 → 갈매기표 자리 글자 · 목록의 고른 줄 표시
 // 고른 칸은 .chosen → 갈매기표가 사라지고 값만 보임, 비운 칸(처음 · 앞 칸을 다시 골라 비운 뒤 칸)은 갈매기표로 돌아감 (style.css)
+// 비운 칸의 옛 값은 바로 지우지 않고 0.5s 옅어진 뒤 지움 → 갈매기표와 엇갈려 페이드 (그 0.5s 동안은 칸 이름에 옛 값이 남음)
 function render() {
     ORDER.forEach((name) => {
         const { field, list, selected } = fields[name];
@@ -161,27 +162,46 @@ function render() {
             button.setAttribute('aria-pressed', String(on));
             if (on) text = button.textContent;
         });
-        selected.textContent = text;
+        const old = selected.textContent;
+        if (text) {
+            selected.textContent = text;
+            if (old && old !== text) selected.animate({ opacity: [0, 1] }, { duration: 500, easing: 'linear' });   // 다른 값으로 바꾸면 새 값이 0.5s 동안 짙어짐
+        } else if (old) {
+            setTimeout(() => clearSelected(name), 600);   // 페이드가 끝나지 않는 경우(탭 숨김 등)에도 지움
+        }
         field.classList.toggle('chosen', text !== '');
     });
 }
 
+// 다 옅어진 비운 칸의 옛 값을 지움 (그 사이 다시 골랐으면 그대로)
+function clearSelected(name) {
+    const { field, selected } = fields[name];
+    if (!field.classList.contains('chosen')) selected.textContent = '';
+}
+ORDER.forEach((name) => {
+    fields[name].selected.addEventListener('transitionend', () => clearSelected(name));
+});
+
+// 바꾼 칸 뒤의 목록만 다시 만듦 → 지금 고른 목록은 줄이 그대로라 고른 줄 바탕도 0.5s 페이드 (새로 만든 줄은 페이드 없이 바로 바뀜)
+// 성별을 바꾸면 키가 비므로 몸무게 목록은 '키를 먼저 골라 주세요'로 돌아감
 function choose(name, value) {
     if (chosen[name] === value) return;
     chosen[name] = value;
     ORDER.slice(ORDER.indexOf(name) + 1).forEach((after) => { chosen[after] = null; });
-    fillList('height', chosen.sex && ranges(HEIGHT_RANGE[chosen.sex]));
-    fillList('weight', chosen.height && ranges(WEIGHT_RANGE[chosen.sex][chosen.height]));
+    if (name === 'sex') fillList('height', ranges(HEIGHT_RANGE[chosen.sex]));
+    if (name !== 'weight') fillList('weight', chosen.height && ranges(WEIGHT_RANGE[chosen.sex][chosen.height]));
     render();
     changeBody();
 }
 
-/* ── 목록 열고 닫기 ── */
+/* ── 목록 열고 닫기 (0.5s 페이드는 style.css) ── */
+// 닫는 목록은 옅어지는 0.5s 동안에도 보이므로 inert → 그 사이 누르거나 Tab으로 들어가지 않게
 function closeList(focusToggle) {
     if (!openName) return;
     const { list, toggle } = fields[openName];
     openName = null;
     list.hidden = true;
+    list.inert = true;
     toggle.setAttribute('aria-expanded', 'false');
     if (focusToggle) toggle.focus();
 }
@@ -192,6 +212,7 @@ function openList(name) {
     const { list, toggle } = fields[name];
     openName = name;
     list.hidden = false;
+    list.inert = false;
     toggle.setAttribute('aria-expanded', 'true');
     (list.querySelector('[aria-pressed="true"]') || list.querySelector('.option, .hint')).focus();
 }

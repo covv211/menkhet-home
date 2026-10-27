@@ -71,7 +71,7 @@ header {
     width: calc(170 * var(--px));
     height: calc(80 * var(--px));
     border: 0;
-    background: var(--icon-white) url(../images/icons/menu.svg) no-repeat calc(60 * var(--px)) center / calc(70 * var(--px)) auto;
+    background: var(--icon-white) url(../images/icons/menu.svg) no-repeat calc(60 * var(--px)) calc(15 * var(--px)) / calc(70 * var(--px)) auto;   /* 위 15: 시안 막대 y 29.5~74.5 (선 굵기가 선 위쪽으로 그려져 칸 가운데보다 2.5 위) */
     font-size: 0;
     cursor: pointer;
 }
@@ -168,7 +168,7 @@ header {
     color: var(--gray-800);
     font-size: calc(34 * var(--px));   /* placeholder/medium/regular */
     font-weight: var(--placeholder-medium-regular-weight);
-    line-height: var(--placeholder-medium-regular-line-height);
+    line-height: calc(41 * var(--px));   /* 시안 글 상자 41 → 줄 높이 61 (normal은 40으로 그려져 줄이 60이 되고 목록 아래로 갈수록 어긋남) */
     letter-spacing: var(--placeholder-medium-regular-letter-spacing);
     white-space: nowrap;   /* '이벤트'·'액세서리'는 시안에서도 오른쪽 여백을 넘어 한 줄로 둠 */
 }
@@ -619,7 +619,7 @@ header {
     white-space: nowrap;
 }
 
-/* 랭킹 · 나라별 룩 · 프로모션 · 여자 코트가 같은 제목 묶음: 가운데 정렬, 아래 내용과 40 */
+/* 랭킹 · 나라별 룩 · 프로모션이 같은 제목 묶음: 가운데 정렬, 아래 내용과 40 */
 section > .title {
     margin-bottom: calc(40 * var(--px));
     text-align: center;
@@ -1175,18 +1175,23 @@ footer hr {
 }
 
 /* ══════════ 여자 코트 (women-coat.html) ══════════
-   - 시안 146:2227: 헤더는 메인과 같이 화면 위에 고정(높이 110), 본문은 120 아래에서 시작 → 첫 제목 y 170
+   - 시안 146:2227: 헤더는 메인과 같이 화면 위에 고정(높이 110), 본문은 120 아래에서 시작
+   - 2026-10-27 시안 수정: 섹션 제목이 빠지고 섹션 = 상품 슬라이더 775만 (첫 섹션만 위 100) → 카드 줄 y 282.5 · 1057.5 · 1832.5 · 2607.5, 제목은 스크린리더용 h2(.blind)로만 둠
    - 섹션 4개(롱코트 · 케이프 · 트렌치 · 하프코트)는 모양이 같아 클래스 하나로 묶음 (시안 이름 .women's-long-coat-swiper는 ' 때문에 클래스로 못 써서 역할 이름으로 바꿈)
-   - 카드에 마우스를 올리면 1.1배로 커짐 (시안 hover 변형 440×715, Smart animate linear 0.3s) */
+   - 카드에 마우스를 올리면 1.1배로 커지고 양옆 카드는 20씩 밀려남 (시안 hover 변형 440×715, Smart animate linear 0.3s) */
 
 .women-coat {
-    padding: calc(120 * var(--px)) 0 calc(80 * var(--px));   /* 아래 80 = 프레임 끝(4164) - 마지막 섹션 끝(4084), 자동 레이아웃 값 100은 고정 높이에 잘려 있음 */
+    padding: calc(120 * var(--px)) 0 calc(100 * var(--px));   /* 아래 100 = 시안 자동 레이아웃 아래 여백 (프레임 높이 4164는 예전 제목 있던 때 그대로 고정돼 있어 따르지 않음) */
     background: var(--surface-white);
 }
 
-/* ── 섹션: 제목 + 상품 슬라이더 (높이 991) ── */
+/* ── 섹션: 상품 슬라이더만 (높이 775, 첫 섹션은 위 100을 더해 875) ── */
 .coat-section {
-    padding: calc(50 * var(--px)) 0;   /* 폭 1800(슬라이더 x 60~1860)은 공통 .inner */
+    padding: 0;   /* 폭 1800(슬라이더 x 60~1860)은 공통 .inner */
+}
+
+.coat-section:first-child {
+    padding-top: calc(100 * var(--px));
 }
 
 /* ── 슬라이더: 1800 상자가 카드를 자르고, 카드 4장 폭(1690)의 Swiper는 overflow를 풀어 양옆에 다음 카드가 25씩 보이게 ── */
@@ -1206,14 +1211,30 @@ footer hr {
     height: calc(650 * var(--px));
     overflow: hidden;
     background: var(--gray-250);   /* 사진 양옆 회색 */
-    box-shadow: 0 0 calc(6 * var(--px)) rgba(0, 0, 0, .1);   /* 시안 drop shadow 0 0 6, 검정 10% */
-    transition: scale .3s linear;
+    box-shadow: 0 calc(4 * var(--px)) calc(6 * var(--px)) rgba(0, 0, 0, .1);   /* 시안 drop shadow 0 4 6, 검정 10% (부품 원본은 0 0 6, 페이지의 카드 40개가 모두 0 4 6으로 덮어씀) */
+    transition: scale .3s linear .1s, translate .3s linear .1s;   /* 제자리로 돌아갈 때만 .1s 늦게 → 카드 사이 간격 30을 지나는 동안 먼 카드들이 돌아갔다 다시 밀리며 흔들리지 않게 (커지고 밀릴 때는 아래 규칙에서 바로) */
 }
 
+/* 마우스를 올린 카드 · 키보드로 포커스한 카드(테두리가 보일 때만)는 1.1배, 마우스를 올린 카드가 있으면 포커스 쪽은 쉼
+   → 마우스로 상세 창을 닫아 카드 링크로 포커스가 돌아와도 커진 채 남지 않고, 포커스 카드와 마우스 카드의 밀기가 겹쳐 간격이 50 · 10으로 틀어지지 않게 */
 .coat-section .product-item:hover,
-.coat-section .product-item:focus-within {
+.coat-section .product-list:not(:has(.product-item:hover)) .product-item:has(:focus-visible) {
     z-index: 1;
-    scale: 1.1;   /* 커져도 옆 카드와 겹치지 않음 (양옆으로 20씩 < 간격 30) */
+    scale: 1.1;   /* 양옆으로 20씩 커짐 */
+    transition-delay: 0s;
+}
+
+/* 커진 카드의 양옆 카드는 20씩 밀려나 간격 30을 그대로 둠 (시안은 가운데 정렬 목록에서 440으로 바뀐 카드가 양옆을 밀어냄) */
+.coat-section .product-item:has(~ .product-item:hover),
+.coat-section .product-list:not(:has(.product-item:hover)) .product-item:has(~ .product-item :focus-visible) {
+    translate: calc(-20 * var(--px)) 0;
+    transition-delay: 0s;
+}
+
+.coat-section .product-item:hover ~ .product-item,
+.coat-section .product-list:not(:has(.product-item:hover)) .product-item:has(:focus-visible) ~ .product-item {
+    translate: calc(20 * var(--px)) 0;
+    transition-delay: 0s;
 }
 
 .coat-section .product-item > a {
@@ -1447,15 +1468,18 @@ footer hr {
     position: relative;
 }
 
+/* 몸 정보 칸 안의 바뀜(목록 여닫기 · 갈매기표 ↔ 고른 값 · 줄 바탕)은 모두 0.5s 등속 페이드 (주인님 지정 transition .5s, 이 창의 다른 움직임처럼 등속) */
+
 /* 갈매기표 칸: 높이 26, 폭 성별 50 · 키 90 · 몸무게 90 (시안 폭 그대로, 갈매기표 20×6 · 굵기 1.5는 가운데)
    고른 칸(.chosen — fitting-room.js)은 갈매기표가 사라지고 그 자리 가운데에 고른 값 (목록 줄과 같은 글자) → 앞 칸을 다시 고르면 뒤 칸은 갈매기표로 돌아감 */
 .select .toggle {
+    position: relative;
     display: grid;
     place-items: center;
     width: calc(90 * var(--px));
     height: calc(26 * var(--px));
     border: 0;
-    background: url(../images/icons/chevron-down.svg) no-repeat center / calc(21.5 * var(--px)) auto;
+    background: none;
     color: var(--gray-900);
     font-size: calc(15 * var(--px));   /* Body-sm/medium */
     font-weight: var(--body-sm-medium-weight);
@@ -1471,11 +1495,33 @@ footer hr {
     line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
 }
 
-.field.chosen .toggle {
-    background-image: none;
+/* 갈매기표는 칸을 덮는 겹으로 그려서 고른 값과 따로 페이드 (배경 그림은 투명도를 따로 못 바꿈) */
+.select .toggle::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url(../images/icons/chevron-down.svg) no-repeat center / calc(21.5 * var(--px)) auto;
+    transition: opacity .5s linear;
 }
 
-/* 목록: 갈매기표 칸 바로 아래에 같은 폭, 흰 바탕(시안에 테두리 없음 — 아래 회색 마네킹 칸 위에 뜸), 줄 높이 26에 글자 가운데 */
+.select .selected {
+    opacity: 0;
+    transition: opacity .5s linear;
+}
+
+.field.chosen .toggle::before {
+    opacity: 0;
+}
+
+.field.chosen .selected {
+    opacity: 1;
+}
+
+/* 목록: 갈매기표 칸 바로 아래에 같은 폭, 흰 바탕(시안에 테두리 없음 — 아래 회색 마네킹 칸 위에 뜸), 줄 높이 26에 글자 가운데
+   열면 바로 보이며 0.5s 동안 짙어지고, 닫으면(hidden — fitting-room.js) 0.5s 동안 옅어진 뒤 숨김 → 닫힌 목록은 Tab · 스크린리더에서 빠짐 (닫히는 동안은 inert라 눌리지도 않음) */
 .select-list {
     position: absolute;
     top: 100%;
@@ -1489,6 +1535,14 @@ footer hr {
     line-height: calc(18 * var(--px));   /* 시안 글 상자 18 */
     text-align: center;
     white-space: nowrap;
+    transition: opacity .5s linear, visibility 0s;
+}
+
+.select-list[hidden] {
+    display: block;   /* hidden의 기본 display: none을 풀어야 옅어지는 게 보임 */
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .5s linear, visibility 0s linear .5s;
 }
 
 .select-list .option {
@@ -1500,6 +1554,7 @@ footer hr {
     background: none;
     color: inherit;
     cursor: pointer;
+    transition: background-color .5s linear;
 }
 
 /* 마우스를 올린 줄 · 고른 줄: 옅은 회색 바탕 (시안에 상태가 없어 사이즈 칸 기본색으로) */
