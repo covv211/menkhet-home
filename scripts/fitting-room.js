@@ -6,13 +6,15 @@
    - 마네킹 사진은 mannequinPhoto() 한 곳에서 정함
      · 성별 · 키 · 몸무게를 다 골랐고 조합 사진이 없는 체형 → 그 체형의 코디 없는 기본 마네킹 정면(images/fitting/body/<women|men>/<키>/<몸무게>.webp, 흰 티 · 회색 레깅스)
        옷 · 사이즈를 골라도 사진은 그대로, 고른 건 기억해 뒀다가 조합 사진 체형으로 돌아오면 입힘
-     · 그 밖(고르기 전 · 일부만 고름 · 여자 165~170cm · 65~70kg) → 조합 사진 체형(지금은 여자 165~170cm · 65~70kg뿐)
-       셔츠 하늘색 · 바지 검정 · 로퍼 검정이면 고른 사이즈의 코트 사진(outfit/…/size/coat-<색>_<사이즈>.webp, 3색 × 4사이즈), 아니면 체형마다 4종 각 3색(3 × 3 × 3 × 3) = 81가지 조합 사진(코트 M) 중 고른 색의 사진
+     · 그 밖(고르기 전 · 일부만 고름 · 여자 160~165cm · 55~60kg) → 조합 사진 체형(지금은 여자 160~165cm · 55~60kg뿐)
+       체형마다 4종 각 3색(3 × 3 × 3 × 3) = 81가지 조합 사진(코트 M) 중 고른 색의 사진, 코트 사이즈 사진(outfit/…/size/coat-<색>_<사이즈>.webp)이 있는 체형이면 그 차림일 때 고른 사이즈의 코트 사진 (지금은 사이즈 사진 체형 없음)
    - 지금 사진에서 옷 한 벌 · 사이즈 하나만 바꾼 사진을, 키를 고르면 그 키의 몸무게별 기본 마네킹을 미리 받아 둬서 바로 바뀜
    - 사진 · 실측 그림은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
    - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
    - 마네킹 사진(683×1024)은 모두 한 규칙으로 맞춤: 사람 키(머리 위 ~ 발끝) = 980px × 키 구간 가운데 값 / 187.5cm, 발끝은 y 1004, 가운데 정렬 → 같은 키 구간은 몸무게를 바꿔도 키가 그대로, 키 구간을 바꾸면 키가 바뀜 (새 사진도 이 규칙으로)
-     2026-10-27 기본 마네킹을 주인님 새 model.zip(여자 26 · 남자 36체형, 원본은 model/women · model/men)으로 바꾸며 기준을 177.5 → 187.5cm로(남자 185~190cm가 980), 조합 사진도 같은 비율(177.5/187.5)로 줄임
+     2026-10-27 기본 마네킹을 주인님 새 model.zip(여자 26 · 남자 36체형, 원본은 model/women · model/men)으로 바꾸며 기준을 177.5 → 187.5cm로(남자 185~190cm가 980)
+     같은 날 옛 마네킹의 조합 · 코트 사이즈 사진(여자 165~170cm · 65~70kg 93장)을 지우고 새 마네킹 81조합(여자 160~165cm · 55~60kg, 원본 model/의상_색상조합_정면81_160-165cm_55-60kg_20261027)으로 바꿈
+     조합 사진은 같은 체형 기본 마네킹 원본의 배율 · 위치를 그대로 씀(model/build_mannequins.py) → 기본 마네킹 ↔ 조합 사진을 오가도 머리 · 몸이 같은 자리
    - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄우고 닫을 때마다 새로 읽음(main.js) → 다시 열면 처음부터 · 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, 첫 칸 · 마지막 칸에서 Tab을 넘기면 상세 창 사진 칸으로 가라고 알림
    - 예전 숫자 판정(상품 실측표 data/fitting-items.json · 정확도 칸 · 부위별 여유)과 아래 옷 목록은 수정 시안에서 빠져서 지움 (JSON 파일은 남겨 둠) */
 
@@ -243,14 +245,14 @@ sideItems.forEach((item) => {
 const dressMannequin = imageSlot(document.querySelector('.mannequin'));
 let openItem = null;   // 펼친 옷 칸
 
-// 체형별 조합 사진 폴더 (images/fitting/outfit/<성별>/<키>/<몸무게>) → 지금은 주인님이 만든 여자 165~170cm · 65~70kg 81장뿐, 다른 체형은 사진이 생기면 여기에 더함
-const OUTFIT_BODIES = ['women/165-170cm/65-70kg'];
+// 체형별 조합 사진 폴더 (images/fitting/outfit/<성별>/<키>/<몸무게>) → 지금은 주인님이 만든 여자 160~165cm · 55~60kg 81장뿐, 다른 체형은 사진이 생기면 여기에 더함
+const OUTFIT_BODIES = ['women/160-165cm/55-60kg'];
 const DEFAULT_BODY = OUTFIT_BODIES[0];   // 고르기 전 · 일부만 고름은 이 체형으로 보여 줌
 const BODY_DIR = { female: 'women', male: 'men' };
 // 코디 없는 기본 마네킹 정면이 있는 성별 (images/fitting/body/<성별>/<키>/<몸무게>.webp) → 여자 26 · 남자 36체형 모두 (조합 사진 체형은 조합 사진을 씀)
 const PLAIN_SEXES = ['female', 'male'];
-// 코트 사이즈 사진이 있는 체형 (images/fitting/outfit/<체형>/size/coat-<색>_<사이즈>.webp, 주인님 코트 3색 × 4사이즈 12장)
-const SIZE_BODIES = ['women/165-170cm/65-70kg'];
+// 코트 사이즈 사진이 있는 체형 (images/fitting/outfit/<체형>/size/coat-<색>_<사이즈>.webp, 코트 3색 × 4사이즈 12장) → 지금은 없음 (옛 마네킹 12장은 2026-10-27에 지움, 새로 생기면 여기에 더함)
+const SIZE_BODIES = [];
 const SIZE_OUTFIT = { shirt: 'skyblue', pants: 'black', loafers: 'black' };   // 사이즈 사진 12장은 셔츠 · 바지 · 로퍼가 이 색으로 고정 → 이 차림일 때만 사이즈 사진을 씀
 
 // 성별 · 키 · 몸무게 → 체형 이름 ('female', '160~165', '50~55' → 'women/160-165cm/50-55kg')
@@ -275,12 +277,12 @@ function plainBody() {
     return body && !OUTFIT_BODIES.includes(body) && PLAIN_SEXES.includes(chosen.sex) ? body : null;
 }
 
-// 조합 → 사진 주소 (images/fitting/outfit/women/165-170cm/65-70kg/coat-black_shirt-skyblue_pants-black_loafers-black.webp)
+// 조합 → 사진 주소 (images/fitting/outfit/women/160-165cm/55-60kg/coat-black_shirt-skyblue_pants-black_loafers-black.webp)
 function outfitSrc(colors, body = bodyDir()) {
     return `images/fitting/outfit/${body}/${sideItems.map((item) => `${item.dataset.part}-${colors[item.dataset.part]}`).join('_')}.webp`;
 }
 
-// 조합 · 사이즈 → 코트 사이즈 사진 주소 (…/65-70kg/size/coat-black_m.webp), 사이즈 사진 차림 · 체형이 아니면 null
+// 조합 · 사이즈 → 코트 사이즈 사진 주소 (…/<몸무게>/size/coat-black_m.webp), 사이즈 사진 차림 · 체형이 아니면 null
 function sizeSrc(colors, size, body = bodyDir()) {
     const fixed = SIZE_BODIES.includes(body) && Object.keys(SIZE_OUTFIT).every((part) => colors[part] === SIZE_OUTFIT[part]);
     return fixed ? `images/fitting/outfit/${body}/size/coat-${colors.coat}_${size}.webp` : null;
