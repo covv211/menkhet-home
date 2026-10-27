@@ -5,7 +5,8 @@
    - 히어로 Swiper: 한 장씩 옆으로 1.5s 등속, 자동 넘김 (동작 줄이기여도 넘김 그대로 — 주인님 지정)
    - 랭킹 · 나라별 룩 · 여자 코트 Swiper, 프로모션 두 줄 흐름
    - 여자 코트 상품 상세 창: 롱코트 01 카드를 누르면 페이지 위에 열림 (주소 해시 · 뒤로 가기와 맞춤, 0.3s 페이드는 style.css)
-   - 상세 창의 '피팅룸으로 이동': 다른 페이지로 가지 않고 창 오른쪽 끝에서 피팅룸(fitting-room.html?embed=1 iframe)이 밀려 들어옴 (0.3s 등속은 style.css) */
+   - 상세 창의 '피팅룸으로 이동': 다른 페이지로 가지 않고 창 오른쪽 끝에서 피팅룸(fitting-room.html?embed=1 iframe)이 밀려 들어옴 (0.3s 등속은 style.css)
+   - 상세 창의 리뷰 Swiper: 한 장씩 3s 등속으로 넘어가고 3s 쉬며 끝없이 돎, 창이 열려 있고 피팅룸이 덮지 않을 때만 (마우스를 올리거나 키보드로 오면 멈춤) */
 
 /* ── 헤더 전체 메뉴 ── */
 const sub = document.querySelector('.sub');
@@ -271,6 +272,7 @@ if (detail) {
         fitting.classList.add('active');
         fitting.inert = false;
         coveredParts.forEach((part) => { part.inert = true; });
+        syncReview();   // 피팅룸이 리뷰를 덮는 동안 리뷰 자동 넘김을 멈춤
         if (fittingFrame.classList.contains('ready')) focusFitting();
         else panel.focus();   // 받는 동안은 창에 포커스를 둠 → 누른 링크가 inert가 되며 포커스가 창 밖 페이지로 빠지지 않게 (받는 동안 Tab은 사진 칸 · 썸네일만 돎 — 아래 keydown)
     }
@@ -280,6 +282,7 @@ if (detail) {
         fitting.classList.remove('active');
         fitting.inert = true;
         coveredParts.forEach((part) => { part.inert = false; });
+        syncReview();   // 상세 창이 열려 있으면 리뷰 자동 넘김을 다시
         if (focusLink) fittingLink.focus({ focusVisible: byKey });   // 키보드로 닫았을 때만 테두리 (마우스로 닫으면 없음)
     }
 
@@ -315,14 +318,16 @@ if (detail) {
         opener = link;
         detail.classList.add('active');
         pageParts.forEach((part) => { part.inert = true; });
+        syncReview();   // 열려 있는 동안만 리뷰 자동 넘김
         panel.focus();
     }
 
     function closeDetail() {
         if (!detail.classList.contains('active')) return;
+        detail.classList.remove('active');   // 피팅룸보다 먼저 → 아래 closeFitting이 리뷰 자동 넘김을 켰다가 바로 끄지 않게
         closeFitting(false);   // 피팅룸이 열려 있었으면 같이 닫음 (포커스는 아래에서 카드로)
-        detail.classList.remove('active');
         pageParts.forEach((part) => { part.inert = false; });
+        syncReview();   // 닫힌 창의 리뷰는 넘기지 않음 (발열 줄이기)
         if (location.hash === hash) {
             // 카드를 눌러 남긴 기록(state 표시)은 뒤로 가기로 지움 → 여닫을 때마다 같은 주소 기록이 쌓여 뒤로 가기를 여러 번 눌러야 떠나는 일이 없게 (뒤따르는 popstate는 이미 닫혀서 그냥 지나감)
             // 해시를 달고 들어온 주소는 앞 기록이 다른 사이트일 수 있어 주소만 바꿈
@@ -430,14 +435,94 @@ if (detail) {
         });
     });
 
-    // 리뷰 목록은 마우스 휠로도 가로로 넘김 (스크롤 막대를 숨겨서 휠만으로는 셋째 카드 뒤를 볼 수 없음)
-    const reviewList = detail.querySelector('.review-list');
+    /* 리뷰: 카드 180 · 사이 30의 가로 Swiper — 한 장씩 3s 등속으로 넘어가고 3s 쉬기를 되풀이하며 8장이 끝없이 돎 (speed 3000은 주인님 지정, 동작 줄이기여도 그대로)
+       시안처럼 목록 폭 570에서 셋째 카드가 오른쪽에서 잘려 보임: 카드 폭은 style.css, 사이는 목록 폭의 %로 넘겨 화면이 줄면 같이 줄어듦
+       자동 넘김은 창이 열려 있고 피팅룸이 리뷰를 덮지 않을 때만 (안 보이는 리뷰는 움직이지 않게 — 발열 줄이기), 마우스를 올리거나 키보드로 리뷰 칸에 오면 멈춤
+       Swiper 키보드 모듈은 안 씀: 문서 전체의 화살표를 들어서 닫힌 창 · 사진 칸에서 화살표를 눌러도 리뷰가 움직임 → 리뷰 칸에 포커스가 있을 때만 ←/→로 한 장씩
+       Swiper를 못 받으면 예전처럼 가로 스크롤로 봄 (style.css의 :not(.swiper-initialized)) */
+    const REVIEW_SPEED = 3000;   // 넘김 3s (주인님 지정, 등속은 style.css의 linear)
+    const REVIEW_DELAY = 3000;   // 다 넘긴 뒤 쉬는 시간 = Swiper 기본값 (움직임 3s · 멈춤 3s가 번갈아)
+    const REVIEW_VIEW = 570;   // 목록 폭(시안 px) = 정보 칸 600 - 오른쪽 여백 30
+    const REVIEW_GAP = 30;   // 카드 사이(시안 px), 화면 폭에 맞춰 같이 줄도록 목록 폭의 %로 넘김
+    const reviewBox = detail.querySelector('.review-slider');
+    let reviewByKey = false;   // 키보드로 리뷰 칸에 와 있는지 (그동안 자동 넘김을 멈춤)
 
-    reviewList.addEventListener('wheel', (e) => {
-        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-        e.preventDefault();
-        reviewList.scrollLeft += e.deltaY;
-    }, { passive: false });
+    const reviewSwiper = window.Swiper ? new Swiper(reviewBox, {
+        loop: true,   // 8장이 끝없이 이어짐 (넘기는 중에도 오른쪽 끝에 다음 카드가 있게 Swiper가 카드를 앞뒤로 옮겨 둠)
+        speed: REVIEW_SPEED,
+        slidesPerView: 'auto',   // 카드 폭 180은 style.css → 570 안에 두 장 + 셋째 카드 150이 보이고 나머지는 잘림
+        slidesPerGroup: 1,   // 자동 넘김 · 휠 · ←/→ 모두 한 장씩 (넘기는 3s 동안 또 하면 Swiper가 무시 → 쌓이지 않음)
+        spaceBetween: `${REVIEW_GAP / REVIEW_VIEW * 100}%`,
+        grabCursor: true,   // 마우스로 끌어 넘길 수 있다는 걸 손 모양으로 알림
+        autoplay: { delay: REVIEW_DELAY, disableOnInteraction: false, pauseOnMouseEnter: true },
+        mousewheel: { enabled: true },   // 리뷰 위에서 휠을 굴리면 한 장씩 (세로 휠도 가로로)
+        a11y: {
+            slideLabelMessage: '{{index}} / {{slidesLength}}',
+            slideRole: 'listitem',   // 카드는 ul 안의 li → Swiper 기본 group이면 목록 구조가 깨져 스크린리더가 목록으로 읽지 못함
+        },
+    }) : null;
+
+    // 리뷰 자동 넘김을 지금 상태에 맞춤: 창이 열려 있고 · 피팅룸이 리뷰를 덮지 않고 · 키보드로 리뷰 칸에 와 있지 않을 때만 돎
+    // stop으로 멈춘 동안은 마우스를 올렸다 떼도 다시 돌지 않음 (pauseOnMouseEnter는 돌고 있을 때만 잠깐 멈췄다 이어 감)
+    function syncReview() {
+        if (!reviewSwiper) return;
+        const autoplay = reviewSwiper.autoplay;
+        const play = detail.classList.contains('active') && !fitting.classList.contains('active') && !reviewByKey;
+        if (play && !autoplay.running) {
+            autoplay.paused = false;   // 넘기는 중에 stop하면 Swiper가 paused를 남겨 둠 → 다시 켠 뒤 첫 3s 동안 마우스를 올려도 안 멈추는 일이 없게
+            autoplay.start();
+            // 지난 넘김(자동 · ←/→)이 아직 움직이면 Swiper가 넘길 때처럼 멈춰 두고 끝난 뒤부터 3s 쉼 → start의 3s 타이머가 넘김 도중에 끝나 그사이 올린 마우스 아래에서 한 장 더 넘어가거나 자동 넘김이 서 버리지 않게
+            // 마우스가 이미 리뷰 위에 있으면 뗄 때까지 기다림 (떼면 pauseOnMouseEnter가 이어 감)
+            if (reviewSwiper.animating || reviewBox.matches(':hover')) autoplay.pause();
+        } else if (!play && autoplay.running) {
+            autoplay.stop();
+        }
+    }
+
+    if (reviewSwiper) {
+        syncReview();   // 만들자마자 도는 자동 넘김을 창이 열릴 때까지 멈춰 둠
+
+        // 쉬는 동안 창 크기가 한 번에 바뀌면(최대화 · 전체 화면 등) Swiper 11.1.14가 다음 프레임에 카드를 제자리로 옮기며(넘김 0s) 자동 넘김을 멈춤으로 남김 → 끝 알림(transitionend)이 오지 않아 영영 서 있음
+        // Swiper가 옮긴 바로 뒤(같은 프레임, 나중에 건 requestAnimationFrame)에 넘기는 중도 아니고 마우스도 올라와 있지 않은데 멈춰 있으면 다시 켬 (3s 쉬고 이어 감, stop으로 멈춘 동안은 running이 아니라 그대로)
+        reviewSwiper.on('resize', () => {
+            requestAnimationFrame(() => {
+                const autoplay = reviewSwiper.autoplay;
+                if (!autoplay.running || !autoplay.paused || reviewSwiper.animating || reviewBox.matches(':hover')) return;
+                autoplay.stop();
+                syncReview();
+            });
+        });
+
+        // 키보드로 리뷰 칸에 오면 멈추고 나가면 다시 (나라별 룩과 같은 방식, 마우스로 누른 포커스는 그대로 돎)
+        reviewBox.addEventListener('focusin', (e) => {
+            if (!e.target.matches(':focus-visible')) return;
+            reviewByKey = true;
+            syncReview();
+        });
+
+        reviewBox.addEventListener('focusout', (e) => {
+            if (reviewBox.contains(e.relatedTarget)) return;
+            reviewByKey = false;
+            syncReview();   // 창이 닫혔거나 피팅룸이 열려 있으면 그대로 멈춰 둠
+        });
+
+        // 리뷰 칸에 포커스가 있을 때 ←/→로 한 장씩 (마우스로 누른 뒤 화살표를 써도 키보드로 온 것으로 보고 자동 넘김을 멈춤)
+        reviewBox.addEventListener('keydown', (e) => {
+            if ((e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+            e.preventDefault();
+            reviewByKey = true;
+            syncReview();
+            if (e.key === 'ArrowLeft') reviewSwiper.slidePrev();
+            else reviewSwiper.slideNext();
+        });
+    } else {
+        // Swiper를 못 받았을 때: 마우스 휠로도 가로로 넘김 (스크롤 막대를 숨겨서 휠만으로는 셋째 카드 뒤를 볼 수 없음)
+        reviewBox.addEventListener('wheel', (e) => {
+            if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+            e.preventDefault();
+            reviewBox.scrollLeft += e.deltaY;
+        }, { passive: false });
+    }
 
     if (location.hash === hash) openDetail();   // 해시를 달고 들어오면 바로 열림 (주소 공유)
 }

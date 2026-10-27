@@ -18,7 +18,7 @@ body {
     background: var(--surface-white);   /* 시안 PC 프레임 배경 (누끼 사진 뒤가 흰색이어야 시안과 같음) */
 }
 
-/* Swiper 넘김은 모두 등속 (히어로 · 랭킹 · 나라별 룩 · 여자 코트, 주인님 지정) */
+/* Swiper 넘김은 모두 등속 (히어로 · 랭킹 · 나라별 룩 · 여자 코트 · 상품 상세 리뷰, 주인님 지정) */
 .swiper {
     --swiper-wrapper-transition-timing-function: linear;
 }
@@ -2048,7 +2048,7 @@ footer hr {
     background: url(../images/icons/chevron-fitting-room.svg) no-repeat center / contain;
 }
 
-/* ── 리뷰: 리뷰 쓰기 + 카드 180 가로 목록 (사이 30, 창 폭을 넘는 카드는 옆으로 넘겨 봄) ── */
+/* ── 리뷰: 리뷰 쓰기 + 카드 180 가로 Swiper (사이 30, 목록 폭 570에서 셋째 카드가 오른쪽에서 잘려 보임 · 한 장씩 3s 등속 자동 넘김은 main.js) ── */
 .review {
     margin-top: calc(40 * var(--px));
 }
@@ -2073,16 +2073,30 @@ footer hr {
     background: url(../images/icons/chevron-review.svg) no-repeat center / contain;
 }
 
-.review-list {
-    display: flex;
-    gap: calc(30 * var(--px));
+/* 목록 폭 570 = 정보 칸 내용 폭, 넘치는 카드는 잘라서 셋째 카드가 오른쪽 끝에 걸쳐 보임 (시안 clipsContent) */
+.review-slider {
+    z-index: 0;   /* Swiper 기본 1이면 피팅룸(z-index 없음)보다 위에 그려져 리뷰가 피팅룸을 뚫고 보임 → 0이면 문서 순서대로 피팅룸이 덮음 */
     margin-top: calc(20 * var(--px));
+    overflow: hidden;
+}
+
+/* 카드 사이 30은 Swiper가 카드 오른쪽 여백으로 붙임 (main.js, 목록 폭의 %) */
+.review-list {
+    display: flex;   /* Swiper CSS를 못 받아도 가로로 이어지게 */
+}
+
+/* Swiper를 못 받았을 때(.swiper-initialized 없음)만 예전처럼 가로 스크롤 + 사이 30 (휠 가로 넘김은 main.js) */
+.review-slider:not(.swiper-initialized) {
     overflow-x: auto;
     scrollbar-width: none;   /* 시안에 스크롤 막대가 없음, 세 번째 카드가 잘려 보여서 더 있는 걸 알 수 있음 */
 }
 
-.review-list::-webkit-scrollbar {
+.review-slider:not(.swiper-initialized)::-webkit-scrollbar {
     display: none;
+}
+
+.review-slider:not(.swiper-initialized) .review-list {
+    gap: calc(30 * var(--px));
 }
 
 .review-card {
