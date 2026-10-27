@@ -207,7 +207,7 @@ if (window.Swiper && document.querySelector('.coat-slider')) {
 /* ── 여자 코트 상품 상세 창 (women-coat.html, 롱코트 01 카드) ── */
 // 카드 링크가 #detail-long-coat-01이라 JS가 없어도 :target으로 열림 (style.css) → JS가 있으면 누를 때 열고, 주소 해시 · 뒤로 가기와 맞춤
 // 열면 창 안으로 포커스를 옮기고 Tab이 창 안에서만 돎, 뒤 페이지(헤더 · 본문)는 inert + 스크롤 막음(style.css의 :has)
-// 닫기(닫기 버튼 · Esc · 창 밖 어두운 곳)는 주소 해시를 지우고 연 카드로 포커스를 돌려줌: 카드를 눌러 남긴 기록은 뒤로 가기로 되돌리고, 해시를 달고 들어온 주소는 replaceState로 지움
+// 닫기(닫기 버튼 · Esc · 뒤로 가기, 창 밖 어두운 곳을 눌러도 닫히지 않음 — 주인님 지정)는 주소 해시를 지우고 연 카드로 포커스를 돌려줌: 카드를 눌러 남긴 기록은 뒤로 가기로 되돌리고, 해시를 달고 들어온 주소는 replaceState로 지움
 const detail = document.querySelector('.detail-dim');
 
 if (detail) {
@@ -217,7 +217,6 @@ if (detail) {
     const pageParts = document.querySelectorAll('body > header, body > main');
     const FOCUSABLE = 'a[href], button:not(:disabled), iframe, [tabindex="0"]';   // 창 안에서 Tab이 멈추는 곳 (iframe = 피팅룸)
     let opener = null;   // 닫을 때 포커스를 돌려줄 카드 링크
-    let downOnDim = false;
 
     detail.classList.add('ready');   // 이제 해시가 아니라 JS가 여닫음 (style.css의 :target은 JS가 없을 때만)
 
@@ -368,15 +367,6 @@ if (detail) {
     window.addEventListener('hashchange', syncDetail);
 
     detail.querySelector('.btn-close').addEventListener('click', closeDetail);
-
-    // 창 밖 어두운 곳을 누르면 닫음 (창 안에서 누른 채 끌고 나와 뗀 건 빼고)
-    detail.addEventListener('pointerdown', (e) => {
-        downOnDim = e.target === detail;
-    });
-
-    detail.addEventListener('click', (e) => {
-        if (e.target === detail && downOnDim) closeDetail();
-    });
 
     // Esc로 닫고(피팅룸이 열려 있으면 피팅룸부터), Tab은 창 안 마지막 → 처음(Shift+Tab은 반대)으로 돌림
     // 포커스가 피팅룸 iframe 안에 있을 땐 키가 이 페이지로 오지 않음 → Esc · Tab은 fitting-room.js가 맡고, 피팅룸 끝에서 Tab을 넘기면 위 tabOutOfFitting
