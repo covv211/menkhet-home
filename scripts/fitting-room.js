@@ -152,7 +152,7 @@ function fillList(name, values) {
 
 // 고른 값 → 갈매기표 자리 글자 · 목록의 고른 줄 표시
 // 고른 칸은 .chosen → 갈매기표가 사라지고 값만 보임, 비운 칸(처음 · 앞 칸을 다시 골라 비운 뒤 칸)은 갈매기표로 돌아감 (style.css)
-// 비운 칸의 옛 값은 바로 지우지 않고 0.5s 옅어진 뒤 지움 → 갈매기표와 엇갈려 페이드 (그 0.5s 동안은 칸 이름에 옛 값이 남음)
+// 비운 칸의 옛 값은 바로 지우지 않고 0.5s 동안 위로 올라간 뒤 지움 → 올라가는 동안 아래 갈매기표가 드러남 (그 0.5s 동안은 칸 이름에 옛 값이 남음)
 function render() {
     ORDER.forEach((name) => {
         const { field, list, selected } = fields[name];
@@ -165,15 +165,15 @@ function render() {
         const old = selected.textContent;
         if (text) {
             selected.textContent = text;
-            if (old && old !== text) selected.animate({ opacity: [0, 1] }, { duration: 500, easing: 'linear' });   // 다른 값으로 바꾸면 새 값이 0.5s 동안 짙어짐
+            if (old && old !== text) selected.animate({ translate: ['0 -100%', '0 0'] }, { duration: 500, easing: 'linear' });   // 다른 값으로 바꾸면 새 값이 위에서 0.5s 동안 다시 내려옴 (move in)
         } else if (old) {
-            setTimeout(() => clearSelected(name), 600);   // 페이드가 끝나지 않는 경우(탭 숨김 등)에도 지움
+            setTimeout(() => clearSelected(name), 600);   // 움직임이 끝나지 않는 경우(탭 숨김 등)에도 지움
         }
         field.classList.toggle('chosen', text !== '');
     });
 }
 
-// 다 옅어진 비운 칸의 옛 값을 지움 (그 사이 다시 골랐으면 그대로)
+// 다 올라간 비운 칸의 옛 값을 지움 (그 사이 다시 골랐으면 그대로)
 function clearSelected(name) {
     const { field, selected } = fields[name];
     if (!field.classList.contains('chosen')) selected.textContent = '';
@@ -194,8 +194,8 @@ function choose(name, value) {
     changeBody();
 }
 
-/* ── 목록 열고 닫기 (0.5s 페이드는 style.css) ── */
-// 닫는 목록은 옅어지는 0.5s 동안에도 보이므로 inert → 그 사이 누르거나 Tab으로 들어가지 않게
+/* ── 목록 열고 닫기 (0.5s move in은 style.css) ── */
+// 닫는 목록은 올라가는 0.5s 동안에도 보이므로 inert → 그 사이 누르거나 Tab으로 들어가지 않게
 function closeList(focusToggle) {
     if (!openName) return;
     const { list, toggle } = fields[openName];

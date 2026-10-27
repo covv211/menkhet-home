@@ -1468,18 +1468,19 @@ footer hr {
     position: relative;
 }
 
-/* 몸 정보 칸 안의 바뀜(목록 여닫기 · 갈매기표 ↔ 고른 값 · 줄 바탕)은 모두 0.5s 등속 페이드 (주인님 지정 transition .5s, 이 창의 다른 움직임처럼 등속) */
+/* 몸 정보 칸 안의 바뀜은 0.5s 등속 move in (주인님 지정 — 처음엔 transition .5s 페이드, 같은 날 move in으로 바꿈)
+   목록 · 고른 값 모두 위에서 아래로 밀려 내려오고(닫히거나 비울 땐 위로 올라감), 갈매기표 칸 아래끝 · 칸 위끝에서 잘려 칸 뒤에서 나오는 것처럼 보임. 줄 바탕만 0.5s 페이드 */
 
 /* 갈매기표 칸: 높이 26, 폭 성별 50 · 키 90 · 몸무게 90 (시안 폭 그대로, 갈매기표 20×6 · 굵기 1.5는 가운데)
-   고른 칸(.chosen — fitting-room.js)은 갈매기표가 사라지고 그 자리 가운데에 고른 값 (목록 줄과 같은 글자) → 앞 칸을 다시 고르면 뒤 칸은 갈매기표로 돌아감 */
+   고른 칸(.chosen — fitting-room.js)은 흰 바탕의 고른 값이 내려와 갈매기표를 덮음 (시안 '선택값' 상자, 목록 줄과 같은 글자) → 앞 칸을 다시 고르면 뒤 칸은 값이 올라가며 갈매기표가 다시 보임 */
 .select .toggle {
     position: relative;
-    display: grid;
-    place-items: center;
+    display: block;
     width: calc(90 * var(--px));
     height: calc(26 * var(--px));
+    overflow: hidden;   /* 칸 위로 올라가 있는 고른 값을 숨김 */
     border: 0;
-    background: none;
+    background: url(../images/icons/chevron-down.svg) no-repeat center / calc(21.5 * var(--px)) auto;
     color: var(--gray-900);
     font-size: calc(15 * var(--px));   /* Body-sm/medium */
     font-weight: var(--body-sm-medium-weight);
@@ -1495,33 +1496,27 @@ footer hr {
     line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
 }
 
-/* 갈매기표는 칸을 덮는 겹으로 그려서 고른 값과 따로 페이드 (배경 그림은 투명도를 따로 못 바꿈) */
-.select .toggle::before {
-    content: "";
+/* 고른 값: 칸을 꽉 채운 흰 상자, 고르기 전에는 칸 바로 위(잘려서 안 보임)에 있다가 고르면 내려옴 */
+.select .selected {
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    background: url(../images/icons/chevron-down.svg) no-repeat center / calc(21.5 * var(--px)) auto;
-    transition: opacity .5s linear;
-}
-
-.select .selected {
-    opacity: 0;
-    transition: opacity .5s linear;
-}
-
-.field.chosen .toggle::before {
-    opacity: 0;
+    display: grid;
+    place-items: center;
+    background: var(--surface-white);
+    translate: 0 -100%;
+    transition: translate .5s linear;
 }
 
 .field.chosen .selected {
-    opacity: 1;
+    translate: 0 0;
 }
 
 /* 목록: 갈매기표 칸 바로 아래에 같은 폭, 흰 바탕(시안에 테두리 없음 — 아래 회색 마네킹 칸 위에 뜸), 줄 높이 26에 글자 가운데
-   열면 바로 보이며 0.5s 동안 짙어지고, 닫으면(hidden — fitting-room.js) 0.5s 동안 옅어진 뒤 숨김 → 닫힌 목록은 Tab · 스크린리더에서 빠짐 (닫히는 동안은 inert라 눌리지도 않음) */
+   열면 칸 아래끝에서 0.5s 동안 내려오고, 닫으면(hidden — fitting-room.js) 0.5s 동안 올라간 뒤 숨김 → 닫힌 목록은 Tab · 스크린리더에서 빠짐 (닫히는 동안은 inert라 눌리지도 않음)
+   밀기 translate와 자르기 clip-path가 같은 0.5s 등속이라 자른 선이 늘 칸 아래끝에 붙어 있음 (피팅룸 창이 밀려 나오는 것과 같은 방식) */
 .select-list {
     position: absolute;
     top: 100%;
@@ -1535,14 +1530,16 @@ footer hr {
     line-height: calc(18 * var(--px));   /* 시안 글 상자 18 */
     text-align: center;
     white-space: nowrap;
-    transition: opacity .5s linear, visibility 0s;
+    clip-path: inset(0);
+    transition: translate .5s linear, clip-path .5s linear, visibility 0s;
 }
 
 .select-list[hidden] {
-    display: block;   /* hidden의 기본 display: none을 풀어야 옅어지는 게 보임 */
+    display: block;   /* hidden의 기본 display: none을 풀어야 올라가는 게 보임 */
     visibility: hidden;
-    opacity: 0;
-    transition: opacity .5s linear, visibility 0s linear .5s;
+    translate: 0 -100%;
+    clip-path: inset(100% 0 0 0);
+    transition: translate .5s linear, clip-path .5s linear, visibility 0s linear .5s;
 }
 
 .select-list .option {
