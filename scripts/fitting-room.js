@@ -325,10 +325,14 @@ function changeBody() {
 }
 
 // 칸을 여닫는 건 입은 색 버튼 하나 → aria-expanded는 그 버튼에만 (다른 두 색은 고르기만 하는 버튼)
+// 접힌 칸의 다른 색은 Tab에서 바로 뺌 (style.css visibility는 0.3s 접힌 뒤에야 숨어서, 그 사이 Tab이 숨는 색에 멈추지 않게)
 function markExpanded(item, open) {
     item.querySelectorAll('.side-option').forEach((button) => {
-        if (button.getAttribute('aria-pressed') === 'true') button.setAttribute('aria-expanded', String(open));
+        const worn = button.getAttribute('aria-pressed') === 'true';
+        if (worn) button.setAttribute('aria-expanded', String(open));
         else button.removeAttribute('aria-expanded');
+        if (worn || open) button.removeAttribute('tabindex');
+        else button.tabIndex = -1;
     });
 }
 
@@ -350,6 +354,7 @@ function openRow(item) {
 
 // 접힌 칸에는 입은 색 하나만 보임 → 누르면 펼치기, 펼친 칸에서 색을 누르면 입히고 접음 (입은 색을 다시 누르면 그대로 접기만)
 sideItems.forEach((item) => {
+    markExpanded(item, false);   // 처음부터 접힌 칸의 다른 색은 Tab에서 뺌
     item.addEventListener('click', (e) => {
         const option = e.target.closest('.side-option');
         if (!option) return;

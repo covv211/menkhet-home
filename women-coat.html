@@ -978,7 +978,7 @@
     </main>
 
     <!-- 상품 상세 창: 시안 146:889 — 여자 코트 페이지 위를 반투명 어두운 배경(dim)으로 덮고 가운데 1750×900 창을 띄움 (다른 페이지로 가지 않음), 여자 롱코트 01 카드를 누르면 열림 (여닫기 · 사진 고르기 · 피팅룸은 main.js)
-         내용은 롱코트 01 (주인님 결정): 시안 봄버 재킷 자리에 카드의 상품명 · 할인가, 컬러 두 칸은 검정 · 아이보리 -->
+         내용은 롱코트 01 (주인님 결정): 시안 봄버 재킷 자리에 카드의 상품명 · 할인가, 컬러 세 칸은 시안 순서대로 검정 · 브라운 · 아이보리 -->
     <!-- content-required: 사이즈 · 모델 착용 정보 · 장바구니 수 · 리뷰(닉네임 · 평점 · 글, 8개 모두 시안 문구)는 실제 데이터 필요 -->
     <!-- 해시 id는 창(.product-detail)에 둠: 주소로 열 때 브라우저가 창에 바로 포커스를 줌 (배경 dim에 두면 포커스가 풀림) -->
     <div class="dim detail-dim">
@@ -986,14 +986,57 @@
             <!-- 사진: 세로로 이어진 사진을 창 안에서 위아래로 넘겨 봄 (키보드는 사진 칸에 포커스 후 화살표), 왼쪽 썸네일 · 컬러 칸을 누르면 그 사진으로
                  피팅룸이 열려도 사진 · 썸네일은 그대로 써서 피팅룸 코디와 비교해 봄 (가려지는 정보 · 닫기만 막힘 — main.js) -->
             <div class="detail-gallery">
+                <!-- 시안 .gallery-track 299:1172의 11칸 순서 그대로: 모델 착용 4장 → 상품 3색 → 가까이 찍은 4장 (모두 1024×1536 누끼, 첫 장만 바로 받고 나머지는 보일 때)
+                     data-color = 코트 색 (썸네일 코트 줄 · 컬러 칸), data-look = 모델 차림 (black = 검정 코트 차림, brown = 브라운 코트 차림 → 썸네일 모델 착용 줄) -->
                 <div class="gallery-track" tabindex="0" role="region" aria-label="상품 사진">
-                    <img src="images/women-coat/long-coat/detail/long-coat-01-black.webp" alt="여자 롱코트 검정" width="1024" height="1536" data-color="black">
-                    <img src="images/women-coat/long-coat/detail/long-coat-01-ivory.webp" alt="여자 롱코트 아이보리" width="1024" height="1536" data-color="ivory">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-model-black-1.webp" alt="모델 착용: 검정 롱코트 · 하늘색 셔츠 · 검정 바지 · 검정 로퍼" width="1024" height="1536" data-color="black" data-look="black">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-model-black-2.webp" alt="모델 착용(다른 자세): 검정 롱코트 · 하늘색 셔츠 · 검정 바지 · 검정 로퍼" width="1024" height="1536" loading="lazy" data-color="black" data-look="black">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-model-brown-1.webp" alt="모델 착용: 브라운 롱코트 · 검정 셔츠 · 그레이 바지 · 브라운 로퍼" width="1024" height="1536" loading="lazy" data-color="brown" data-look="brown">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-model-brown-2.webp" alt="모델 착용(다른 자세): 브라운 롱코트 · 검정 셔츠 · 그레이 바지 · 브라운 로퍼" width="1024" height="1536" loading="lazy" data-color="brown" data-look="brown">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-ivory.webp" alt="여자 롱코트 아이보리" width="1024" height="1536" loading="lazy" data-color="ivory">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-black.webp" alt="여자 롱코트 검정" width="1024" height="1536" loading="lazy" data-color="black">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-brown.webp" alt="여자 롱코트 브라운" width="1024" height="1536" loading="lazy" data-color="brown">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-ivory-collar.webp" alt="롱코트 아이보리 깃 · 안감 가까이" width="1024" height="1536" loading="lazy" data-color="ivory">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-brown-pocket.webp" alt="롱코트 브라운 주머니 · 단추 가까이" width="1024" height="1536" loading="lazy" data-color="brown">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-black-collar.webp" alt="롱코트 검정 깃 · 안감 가까이" width="1024" height="1536" loading="lazy" data-color="black">
+                    <img src="images/women-coat/long-coat/detail/long-coat-01-black-pocket.webp" alt="롱코트 검정 주머니 · 단추 가까이" width="1024" height="1536" loading="lazy" data-color="black">
                 </div>
-                <ul class="gallery-thumbs">
-                    <li><button type="button" class="gallery-thumb" data-color="black" aria-current="true"><img src="images/women-coat/long-coat/detail/long-coat-01-black.webp" alt="검정 사진" width="1024" height="1536"></button></li>
-                    <li><button type="button" class="gallery-thumb" data-color="ivory" aria-current="false"><img src="images/women-coat/long-coat/detail/long-coat-01-ivory.webp" alt="아이보리 사진" width="1024" height="1536"></button></li>
-                </ul>
+                <!-- 썸네일: 시안 .gallery-thumbs 299:1143 (갤러리 안 x 50 · y 223) — 피팅룸 옷 칸과 같은 칸(70×106, 사진 66×100)이 사이 10으로 세로로
+                     접힌 줄에는 고른 칸 하나만 보이고, 누르면 오른쪽으로 펼쳐짐(0.3s 등속) → 고르면 그 사진으로 옮기고 접힘 · 넘겨 보면 가운데 사진에 맞춰 바뀜 (main.js) -->
+                <div class="gallery-thumbs">
+                    <!-- 코트 색: 고르면 그 색의 첫 사진 (검정 → 모델 검정, 아이보리 → 상품 사진, 브라운 → 모델 브라운) -->
+                    <ul aria-label="코트 색">
+                        <li class="side-item" data-part="coat">
+                            <ul class="side-options">
+                                <li><button type="button" class="side-option" data-color="black" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/coat-black.webp" alt="코트 검정" width="200" height="300"></button></li>
+                                <li><button type="button" class="side-option" data-color="ivory" aria-pressed="false"><img src="images/fitting/side/coat-ivory.webp" alt="코트 아이보리" width="200" height="300"></button></li>
+                                <li><button type="button" class="side-option" data-color="brown" aria-pressed="false"><img src="images/fitting/side/coat-brown.webp" alt="코트 브라운" width="200" height="300"></button></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- 모델 착용: 시안 ul.model-wear 299:1189 — 모델 사진 속 셔츠 · 바지 · 로퍼, 옷마다 두 벌(data-look: 검정 코트 차림 · 브라운 코트 차림), 사진 오른쪽 위에 '모델 착용' 꼬리표
+                         고르면 그 옷을 입은 모델 사진으로 옮기고 세 줄 · 코트 줄 · 컬러 칸이 그 차림으로 (시안에서 숨긴 셔츠 흰색 · 바지 하늘색 · 로퍼 카키는 모델이 안 입어서 뺌) -->
+                    <ul class="model-wear" aria-label="모델 착용">
+                        <li class="side-item" data-part="shirt">
+                            <ul class="side-options">
+                                <li><button type="button" class="side-option" data-color="skyblue" data-look="black" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/shirt-skyblue.webp" alt="셔츠 하늘색" width="200" height="300"><span class="wear-tag">모델 착용</span></button></li>
+                                <li><button type="button" class="side-option" data-color="black" data-look="brown" aria-pressed="false"><img src="images/fitting/side/shirt-black.webp" alt="셔츠 검정" width="200" height="300"><span class="wear-tag">모델 착용</span></button></li>
+                            </ul>
+                        </li>
+                        <li class="side-item" data-part="pants">
+                            <ul class="side-options">
+                                <li><button type="button" class="side-option" data-color="black" data-look="black" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/pants-black.webp" alt="바지 검정" width="200" height="300"><span class="wear-tag">모델 착용</span></button></li>
+                                <li><button type="button" class="side-option" data-color="gray" data-look="brown" aria-pressed="false"><img src="images/fitting/side/pants-gray.webp" alt="바지 그레이" width="200" height="300"><span class="wear-tag">모델 착용</span></button></li>
+                            </ul>
+                        </li>
+                        <li class="side-item" data-part="loafers">
+                            <ul class="side-options">
+                                <li><button type="button" class="side-option" data-color="black" data-look="black" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/loafers-black.webp" alt="로퍼 검정" width="200" height="300"><span class="wear-tag">모델 착용</span></button></li>
+                                <li><button type="button" class="side-option" data-color="brown" data-look="brown" aria-pressed="false"><img src="images/fitting/side/loafers-brown.webp" alt="로퍼 브라운" width="200" height="300"><span class="wear-tag">모델 착용</span></button></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
             </div>
 
             <div class="detail-info">
@@ -1009,6 +1052,7 @@
                             <span class="option-label" id="detail-color-label">컬러</span>
                             <ul class="color-list">
                                 <li><button type="button" class="color-chip black" data-color="black" aria-pressed="true">검정</button></li>
+                                <li><button type="button" class="color-chip brown" data-color="brown" aria-pressed="false">브라운</button></li>
                                 <li><button type="button" class="color-chip ivory" data-color="ivory" aria-pressed="false">아이보리</button></li>
                             </ul>
                         </div>

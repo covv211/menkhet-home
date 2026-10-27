@@ -5,6 +5,7 @@
    - 히어로 Swiper: 한 장씩 옆으로 1.5s 등속, 자동 넘김 (동작 줄이기여도 넘김 그대로 — 주인님 지정)
    - 랭킹 · 나라별 룩 · 여자 코트 Swiper, 프로모션 두 줄 흐름
    - 여자 코트 상품 상세 창: 롱코트 01 카드를 누르면 페이지 위에 열림 (주소 해시 · 뒤로 가기와 맞춤, 0.3s 페이드는 style.css)
+   - 상세 창 썸네일: 코트 색 줄 + 모델 착용 세 줄(셔츠 · 바지 · 로퍼), 피팅룸 옷 칸처럼 누르면 펼쳐지고 고르면 그 사진으로, 넘겨 보면 가운데 사진에 맞춰 바뀜
    - 상세 창의 '피팅룸으로 이동': 다른 페이지로 가지 않고 창 오른쪽 끝에서 피팅룸(fitting-room.html?embed=1 iframe)이 밀려 들어옴 (0.3s 등속은 style.css)
    - 상세 창의 리뷰 Swiper: 한 장씩 3s 등속으로 넘어가고 3s 쉬며 끝없이 돎, 창이 열려 있고 피팅룸이 덮지 않을 때만 (마우스를 올리거나 키보드로 오면 멈춤) */
 
@@ -287,8 +288,9 @@ if (detail) {
     }
 
     // 창 안에서 Tab이 멈추는 곳 (가려진 칸은 inert라 빠짐): 피팅룸이 열리면 사진 칸 · 썸네일 · 피팅룸 iframe(받는 동안은 숨어 있어서 빼고), 닫히면 iframe 빼고 전부
+    // 접힌 썸네일 줄은 고른 칸만(고르지 않은 칸은 tabindex -1 — 아래 markExpanded) → 피팅룸에서 Shift+Tab으로 나올 때 숨은 칸(마지막 줄의 고르지 않은 칸)에 포커스를 주다 멈추지 않게
     function tabItems() {
-        return [...panel.querySelectorAll(FOCUSABLE)].filter((item) => !item.closest('[inert]') && (item !== fittingFrame || item.classList.contains('ready')));
+        return [...panel.querySelectorAll(FOCUSABLE)].filter((item) => !item.closest('[inert]') && !item.matches('[tabindex="-1"]') && (item !== fittingFrame || item.classList.contains('ready')));
     }
 
     // 피팅룸 첫 칸에서 Shift+Tab · 마지막 칸에서 Tab → 피팅룸 앞 · 뒤 칸(썸네일 · 사진 칸)으로 (피팅룸 안 Tab은 이 페이지로 오지 않아서 fitting-room.js가 알림)
@@ -326,6 +328,7 @@ if (detail) {
         if (!detail.classList.contains('active')) return;
         detail.classList.remove('active');   // 피팅룸보다 먼저 → 아래 closeFitting이 리뷰 자동 넘김을 켰다가 바로 끄지 않게
         closeFitting(false);   // 피팅룸이 열려 있었으면 같이 닫음 (포커스는 아래에서 카드로)
+        closeRow(false);   // 펼친 썸네일 줄도 접어 둠 → 다시 열면 처음처럼 접힌 모습
         pageParts.forEach((part) => { part.inert = false; });
         syncReview();   // 닫힌 창의 리뷰는 넘기지 않음 (발열 줄이기)
         if (location.hash === hash) {
@@ -373,12 +376,13 @@ if (detail) {
 
     detail.querySelector('.btn-close').addEventListener('click', closeDetail);
 
-    // Esc로 닫고(피팅룸이 열려 있으면 피팅룸부터), Tab은 창 안 마지막 → 처음(Shift+Tab은 반대)으로 돌림
+    // Esc로 닫고(펼친 썸네일 줄 → 피팅룸 → 상세 창 순서로 하나씩), Tab은 창 안 마지막 → 처음(Shift+Tab은 반대)으로 돌림
     // 포커스가 피팅룸 iframe 안에 있을 땐 키가 이 페이지로 오지 않음 → Esc · Tab은 fitting-room.js가 맡고, 피팅룸 끝에서 Tab을 넘기면 위 tabOutOfFitting
     document.addEventListener('keydown', (e) => {
         if (!detail.classList.contains('active')) return;
         if (e.key === 'Escape') {
-            if (fitting.classList.contains('active')) closeFitting(true, true);
+            if (openItem) closeRow(true);   // 접고 그 줄의 고른 칸으로 포커스
+            else if (fitting.classList.contains('active')) closeFitting(true, true);
             else closeDetail();
             return;
         }
@@ -397,35 +401,118 @@ if (detail) {
         }
     });
 
-    /* 사진 고르기: 컬러 칸 · 썸네일을 누르면 그 컬러 사진으로 바로 옮김(부드러운 스크롤 없이), 넘겨 보면 보이는 사진의 썸네일이 진해짐 */
+    /* 사진 고르기: 컬러 칸 · 썸네일에서 고르면 그 사진으로 바로 옮김(부드러운 스크롤 없이)
+       사진마다 data-color(코트 색) · 모델 사진은 data-look(모델 차림 = 모델이 입은 코트 색: black · brown)
+       썸네일은 피팅룸 옷 칸(fitting-room.js)과 같은 방식: 접힌 줄에는 고른 칸 하나만 보이고, 누르면 펼침 → 다른 칸을 고르면 옮기고 접음 (고른 칸을 다시 누르면 접기만)
+         · 코트 줄 → 그 색의 첫 사진 (검정 → 모델 검정 1, 아이보리 → 아이보리 상품 사진, 브라운 → 모델 브라운 1)
+         · 모델 착용 줄(셔츠 · 바지 · 로퍼) → 그 옷을 입은 차림의 첫 모델 사진, 세 줄 · 코트 줄 · 컬러 칸이 모두 그 차림으로
+       한 번에 한 줄만 열림: 바깥을 누르거나 다른 곳으로 포커스가 가면 닫힘, Esc → 닫고 그 줄의 고른 칸으로 포커스 (위 keydown)
+       넘겨 보면 가운데 사진에 맞춰 코트 줄 · 모델 착용 줄만 바뀜 (컬러 칸은 직접 고를 때만) */
     const track = detail.querySelector('.gallery-track');
     const shots = [...track.querySelectorAll('img')];
-    const thumbs = detail.querySelectorAll('.gallery-thumb');
+    const coatRow = gallery.querySelector('.side-item[data-part="coat"]');
+    const wearRows = [...gallery.querySelectorAll('.model-wear .side-item')];   // 셔츠 · 바지 · 로퍼
     const colorChips = detail.querySelectorAll('.color-chip');
     const sizeChips = detail.querySelectorAll('.size-chip');
+    let openItem = null;   // 펼친 썸네일 줄
+    let seenShot = shots[0];   // 썸네일이 맞춰 둔 사진 (넘기는 동안 같은 사진이면 다시 맞추지 않음)
 
-    function markThumb(color) {
-        thumbs.forEach((thumb) => thumb.setAttribute('aria-current', String(thumb.dataset.color === color)));
+    // 줄을 여닫는 건 고른 칸 버튼 하나 → aria-expanded는 그 버튼에만 (fitting-room.js와 같음)
+    // 접힌 줄의 고르지 않은 칸은 Tab에서 바로 뺌 (style.css visibility는 0.3s 접힌 뒤에야 숨어서, 그 사이 Tab이 숨는 칸에 멈추지 않게)
+    function markExpanded(item, open) {
+        item.querySelectorAll('.side-option').forEach((button) => {
+            const chosen = button.getAttribute('aria-pressed') === 'true';
+            if (chosen) button.setAttribute('aria-expanded', String(open));
+            else button.removeAttribute('aria-expanded');
+            if (chosen || open) button.removeAttribute('tabindex');
+            else button.tabIndex = -1;
+        });
     }
 
-    function showColor(color) {
-        colorChips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip.dataset.color === color)));
-        track.scrollTop = shots.find((shot) => shot.dataset.color === color).offsetTop;
-        markThumb(color);
+    function closeRow(focusChosen) {
+        if (!openItem) return;
+        const item = openItem;
+        openItem = null;
+        item.classList.remove('active');
+        markExpanded(item, false);
+        if (focusChosen) item.querySelector('.side-option[aria-pressed="true"]').focus();
     }
+
+    function openRow(item) {
+        closeRow(false);
+        openItem = item;
+        item.classList.add('active');
+        markExpanded(item, true);
+    }
+
+    // 줄에 보일 칸을 바꿈: aria-pressed · 접혔을 때 보일 칸 --index (펼친 줄이면 aria-expanded도 새로 고른 칸으로)
+    // 접힌 줄에서 포커스가 있던 칸이 숨게 되면 새로 고른 칸으로 포커스를 옮김 → 넘겨 보다 줄이 바뀌어도 포커스가 body로 빠지지 않게 (키보드로 왔으면 테두리도 그대로)
+    function pick(item, option) {
+        const options = [...item.querySelectorAll('.side-option')];
+        const focused = document.activeElement;
+        const hiding = item !== openItem && focused !== option && options.includes(focused);
+        options.forEach((button) => button.setAttribute('aria-pressed', String(button === option)));
+        item.style.setProperty('--index', options.indexOf(option));
+        markExpanded(item, item === openItem);
+        if (hiding) option.focus({ preventScroll: true, focusVisible: focused.matches(':focus-visible') });
+    }
+
+    // 사진 한 장 → 썸네일: 코트 줄은 사진의 코트 색, 모델 착용 줄은 사진의 차림 (모델 사진이 아니면 코트 색과 같은 차림, 아이보리처럼 없으면 그대로)
+    function matchThumbs(shot) {
+        seenShot = shot;
+        pick(coatRow, coatRow.querySelector(`.side-option[data-color="${shot.dataset.color}"]`));
+        const look = shot.dataset.look || shot.dataset.color;
+        wearRows.forEach((item) => {
+            const option = item.querySelector(`.side-option[data-look="${look}"]`);
+            if (option) pick(item, option);
+        });
+    }
+
+    // 직접 고른 사진으로 옮기고 컬러 칸 · 썸네일을 그 사진에 맞춤
+    function showShot(shot) {
+        colorChips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip.dataset.color === shot.dataset.color)));
+        track.scrollTop = shot.offsetTop;
+        matchThumbs(shot);
+    }
+
+    const firstShot = (key, value) => shots.find((shot) => shot.dataset[key] === value);
 
     colorChips.forEach((chip) => {
-        chip.addEventListener('click', () => showColor(chip.dataset.color));
+        chip.addEventListener('click', () => showShot(firstShot('color', chip.dataset.color)));
     });
 
-    thumbs.forEach((thumb) => {
-        thumb.addEventListener('click', () => showColor(thumb.dataset.color));
+    [coatRow, ...wearRows].forEach((item) => {
+        markExpanded(item, false);   // 처음부터 접힌 줄의 고르지 않은 칸은 Tab에서 뺌
+        item.addEventListener('click', (e) => {
+            const option = e.target.closest('.side-option');
+            if (!option) return;
+            if (openItem !== item) {
+                openRow(item);
+                return;
+            }
+            if (option.getAttribute('aria-pressed') !== 'true') showShot(option.dataset.look ? firstShot('look', option.dataset.look) : firstShot('color', option.dataset.color));
+            closeRow(false);
+        });
     });
 
-    // 갤러리 가운데 높이에 걸친 사진 = 지금 보는 사진 (컬러 선택은 그대로 둠)
+    // 바깥을 누르면 펼친 줄을 접음
+    document.addEventListener('click', (e) => {
+        if (openItem && !openItem.contains(e.target)) closeRow(false);
+    });
+
+    // Tab으로 줄 밖에 포커스가 가도 접음 (Safari는 버튼을 눌러도 포커스가 옮겨 가지 않아서 focusout 대신 focusin으로 봄 — fitting-room.js와 같음)
+    document.addEventListener('focusin', (e) => {
+        if (openItem && !openItem.contains(e.target)) closeRow(false);
+    });
+
+    // 피팅룸 iframe 안을 누르면 클릭 · 포커스가 이 페이지로 오지 않음 → 창(window)에서 포커스가 빠질 때 접음
+    window.addEventListener('blur', () => closeRow(false));
+
+    // 갤러리 가운데 높이에 걸친 사진 = 지금 보는 사진 → 썸네일만 맞춤 (컬러 선택은 그대로 둠)
     track.addEventListener('scroll', () => {
         const middle = track.scrollTop + track.clientHeight / 2;
-        markThumb(shots.findLast((shot) => shot.offsetTop <= middle).dataset.color);
+        const shot = shots.findLast((item) => item.offsetTop <= middle);
+        if (shot !== seenShot) matchThumbs(shot);
     }, { passive: true });
 
     // 사이즈는 하나만 고름 (장바구니가 연결되면 고른 값을 같이 보냄)
