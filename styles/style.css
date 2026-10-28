@@ -1554,21 +1554,6 @@ footer hr {
     left: calc(20 * var(--px));
 }
 
-/* 옷 칸(피팅룸) · 썸네일 줄(상품 상세 창 .gallery-thumbs): 평소엔 30%로 옅게, 마우스를 올리면 100% (0.3s 등속, 2026-10-28 주인님 지정)
-   키보드로 들어온 칸이 있거나 펼친 줄이 있는 동안도 100% → 고르는 중에 옅어지지 않게 */
-.side-items,
-.gallery-thumbs {
-    opacity: .3;
-    transition: opacity .3s linear;
-}
-
-.side-items:hover,
-.side-items:has(:focus-visible, .side-item.active),
-.gallery-thumbs:hover,
-.gallery-thumbs:has(:focus-visible, .side-item.active) {
-    opacity: 1;
-}
-
 .side-item {
     width: calc(70 * var(--px));
     overflow: hidden;
@@ -1604,13 +1589,24 @@ footer hr {
     padding: calc(3 * var(--px)) calc(2 * var(--px));   /* 시안 side-option: 사진 66×100이 칸 안 (2, 3) */
     border: 0;
     background: none;
+    opacity: .3;   /* 평소엔 옅게 → 아래 마우스를 올린 칸만 100% */
     cursor: pointer;
+    transition: opacity .3s linear;
+}
+
+/* 옷 칸(피팅룸) · 썸네일(상품 상세 창 코트 줄 · 모델 착용 줄): 마우스를 올린 칸 하나만 100% (0.3s 등속)
+   2026-10-28 주인님 지정 — 처음엔 줄 전체가 함께 밝아졌는데 같은 날 옷 하나씩으로 바꿈
+   키보드로 들어온 칸 · 펼친 줄의 고른 칸도 100% → 펼쳐서 고르는 동안 지금 고른 색이 보이게 */
+.side-option:hover,
+.side-option:focus-visible,
+.side-item.active .side-option[aria-pressed="true"] {
+    opacity: 1;
 }
 
 /* 접힌 칸의 다른 색: 다 접힌 뒤 숨김 → Tab · 스크린리더에는 입은 색만 (펼칠 땐 바로 보임) */
 .side-item:not(.active) .side-option[aria-pressed="false"] {
     visibility: hidden;
-    transition: visibility 0s linear .3s;
+    transition: opacity .3s linear, visibility 0s linear .3s;   /* 옅어지는 0.3s는 그대로 두고 숨김만 늦춤 */
 }
 
 .side-option:focus-visible {
