@@ -971,8 +971,8 @@
     </main>
 
     <!-- 상품 상세 창: 시안 146:889 — 여자 코트 페이지 위를 반투명 어두운 배경(dim)으로 덮고 가운데 1750×900 창을 띄움 (다른 페이지로 가지 않음), 여자 롱코트 01 카드를 누르면 열림 (여닫기 · 사진 고르기 · 피팅룸은 main.js)
-         내용은 롱코트 01 (주인님 결정): 시안 봄버 재킷 자리에 카드의 상품명 · 할인가, 컬러 세 칸은 시안 순서대로 검정 · 브라운 · 아이보리 -->
-    <!-- content-required: 사이즈 · 모델 착용 정보 · 장바구니 수 · 리뷰(닉네임 · 평점 · 글, 8개 모두 시안 문구)는 실제 데이터 필요 -->
+         내용은 롱코트 01 사진 · 썸네일 + 시안 2026-10-28 수정본의 정보 칸 (제목 · 가격은 시안 문구 그대로 → 카드의 상품명 · 가격과 다름), 시안에서 리뷰 목록은 빠짐 (평점 옆 '리뷰 남기기'만) -->
+    <!-- content-required: 제목 · 가격 · 평점 · 혜택 · 실측 · 모델 착용 정보는 시안 문구라 실제 데이터 필요 -->
     <!-- 해시 id는 창(.product-detail)에 둠: 주소로 열 때 브라우저가 창에 바로 포커스를 줌 (배경 dim에 두면 포커스가 풀림) -->
     <div class="dim detail-dim">
         <div class="product-detail" id="detail-long-coat-01" role="dialog" aria-modal="true" aria-labelledby="detail-long-coat-01-title" tabindex="-1">
@@ -1008,7 +1008,7 @@
                         </li>
                     </ul>
                     <!-- 모델 착용: 시안 ul.model-wear 299:1189 — 모델 사진 속 셔츠 · 바지 · 로퍼, 옷마다 두 벌(data-look: 검정 코트 차림 · 브라운 코트 차림), 사진 오른쪽 위에 '추천' 꼬리표
-                         고르면 그 옷을 입은 모델 사진으로 옮기고 세 줄 · 코트 줄 · 컬러 칸이 그 차림으로 (시안에서 숨긴 셔츠 흰색 · 바지 하늘색 · 로퍼 카키는 모델이 안 입어서 뺌) -->
+                         고르면 그 옷을 입은 모델 사진으로 옮기고 세 줄 · 코트 줄이 그 차림으로, 고른 컬러 옵션은 그대로 (시안에서 숨긴 셔츠 흰색 · 바지 하늘색 · 로퍼 카키는 모델이 안 입어서 뺌) -->
                     <ul class="model-wear" aria-label="모델 착용">
                         <li class="side-item" data-part="shirt">
                             <ul class="side-options">
@@ -1032,121 +1032,108 @@
                 </div>
             </div>
 
+            <!-- 상품 정보: 시안 .detail-info 650 (위 50 · 오른쪽 70 · 왼쪽 30 여백, 2026-10-28 수정) — 머리(브랜드 · 제목 · 평점) → 가격 → 혜택 → 실측 · 옵션 → 버튼, 덩어리 사이 30 -->
             <div class="detail-info">
                 <div class="product-summary">
                     <div class="product-head">
-                        <h2 class="title" id="detail-long-coat-01-title">여자 롱코트</h2>
-                        <p class="price-box"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
+                        <p class="brand">MENKHET</p>
+                        <h2 class="title" id="detail-long-coat-01-title">오버사이즈 여자 롱 코트 블랙 앤 화이트 가져가세요 최고의 아이템입니다.</h2>
+                        <!-- 평점 + 리뷰 남기기 (리뷰 쓰기 페이지가 정해지면 연결, 지금은 동작 없음) -->
+                        <div class="review-summary">
+                            <p class="rating"><span class="blind">평점</span><span class="score">4.5</span></p>
+                            <p class="review-title"><span>리뷰 남기기</span><i class="chevron" aria-hidden="true"></i></p>
+                        </div>
                     </div>
 
-                    <!-- 옵션: 컬러는 고르면 그 사진으로 이동, 사이즈는 하나만 고름 -->
-                    <div class="product-options">
-                        <div class="option-color" role="group" aria-labelledby="detail-color-label">
-                            <span class="option-label" id="detail-color-label">컬러</span>
-                            <ul class="color-list">
-                                <li><button type="button" class="color-chip black" data-color="black" aria-pressed="true">검정</button></li>
-                                <li><button type="button" class="color-chip brown" data-color="brown" aria-pressed="false">브라운</button></li>
-                                <li><button type="button" class="color-chip ivory" data-color="ivory" aria-pressed="false">아이보리</button></li>
-                            </ul>
+                    <!-- 가격: 정가(가운데 줄) 위에 할인율 + 판매가 (시안이 2026-10-28 혜택 위로 올림) -->
+                    <div class="price-box">
+                        <del class="cost"><span class="blind">정가 </span>100,000 원</del>
+                        <p class="sale-price"><span class="sale">10%<span class="blind"> 할인</span></span> <strong class="price"><span class="blind">판매가 </span>90,000 원</strong></p>
+                    </div>
+
+                    <!-- 혜택: 이름 110 + 사이 40 + 내용 400, 줄 사이 7
+                         안내(!) 버튼 · 쿠폰 글자는 안내 · 쿠폰 내용이 정해지면 연결 (지금은 동작 없음), 안내 아이콘은 다른 사이트 그림 대신 새로 그린 것 (images/icons/info.svg) -->
+                    <dl class="benefit-list">
+                        <div class="benefit">
+                            <dt>신규 가입 혜택</dt>
+                            <dd>
+                                <p class="benefit-text">신규 회원 축하!</p>
+                                <p class="benefit-note"><button type="button" class="coupon">신규 회원 10% 할인 쿠폰</button><button type="button" class="btn-info">신규 회원 쿠폰 안내</button></p>
+                            </dd>
                         </div>
-                        <div class="option-size" role="group" aria-labelledby="detail-size-label">
-                            <span class="option-label" id="detail-size-label">사이즈</span>
-                            <ul class="size-list">
-                                <li><button type="button" class="size-chip" aria-pressed="false">S</button></li>
-                                <li><button type="button" class="size-chip" aria-pressed="false">M</button></li>
-                                <li><button type="button" class="size-chip" aria-pressed="false">L</button></li>
-                                <li><button type="button" class="size-chip" aria-pressed="false">XL</button></li>
-                            </ul>
+                        <div class="benefit">
+                            <dt>카드 혜택</dt>
+                            <dd><p class="benefit-text">카드 결제시 최대 12개월 무이자!<button type="button" class="btn-info">카드 무이자 안내</button></p></dd>
+                        </div>
+                        <div class="benefit">
+                            <dt>배송 정보</dt>
+                            <dd><p class="benefit-text">30,000 원&nbsp; 이상 결제시 무료 배송<button type="button" class="btn-info">무료 배송 안내</button></p></dd>
+                        </div>
+                    </dl>
+
+                    <div class="product-options">
+                        <!-- 실측: 코트 그림 140×134 + 실측표 408 (머리줄 옅은 파란 바탕 + 파란 선, 줄마다 아래 회색 선) → 모델 착용 정보
+                             코트 그림은 시안 그림(다른 사이트 그림) 대신 새로 그린 것 (model/coat-size-drawing) -->
+                        <div class="size-info">
+                            <div class="size-chart">
+                                <img class="size-drawing" src="images/women-coat/long-coat/detail/size-drawing.svg" alt="롱코트 실측 위치: 어깨, 가슴단면, 소매, 총장" width="140" height="134">
+                                <table class="size-table">
+                                    <caption>의복 실측값은&nbsp; ·&nbsp; ±2cm</caption>
+                                    <thead>
+                                        <tr><th scope="col">사이즈</th><th scope="col">어깨</th><th scope="col">가슴단면</th><th scope="col">가슴둘레</th><th scope="col">소매</th><th scope="col">총장</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><th scope="row">S</th><td>39</td><td>52</td><td>104</td><td>59</td><td>108</td></tr>
+                                        <tr><th scope="row">M</th><td>40</td><td>54</td><td>108</td><td>60</td><td>110</td></tr>
+                                        <tr><th scope="row">L</th><td>41</td><td>57</td><td>114</td><td>61</td><td>113</td></tr>
+                                        <tr><th scope="row">XL</th><td>42</td><td>61</td><td>122</td><td>62</td><td>116</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <p class="size-guide">모델 키(172cm) 몸무게(55kg) 기준 사이즈 M 착용</p>
                         </div>
+
+                        <!-- 컬러 · 사이즈 고르기 (시안 Component 1 · 2): 칸 550×34, 누르면 칸 아래로 목록이 0.3s 등속으로 펼쳐져 아래 버튼 위에 겹침
+                             컬러를 고르면 칸에 그 색이 나오고 그 색의 첫 사진으로 옮김 · 사이즈 목록은 고른 컬러의 S · M · L · XL ('블랙 S' — 시안은 블랙만, 브라운 · 아이보리도 같은 꼴로) — 여닫기 · 고르기는 main.js -->
+                        <div class="option-selects">
+                            <div class="option-select" data-option="color">
+                                <button type="button" class="toggle" aria-expanded="false" aria-controls="detail-color-list"><span class="value">컬러 선택</span></button>
+                                <ul class="option-list" id="detail-color-list" hidden>
+                                    <li><button type="button" class="option" data-color="black" aria-pressed="false"><span class="chip black" aria-hidden="true"></span>검정</button></li>
+                                    <li><button type="button" class="option" data-color="brown" aria-pressed="false"><span class="chip brown" aria-hidden="true"></span>브라운</button></li>
+                                    <li><button type="button" class="option" data-color="ivory" aria-pressed="false"><span class="chip ivory" aria-hidden="true"></span>아이보리</button></li>
+                                </ul>
+                            </div>
+                            <div class="option-select" data-option="size">
+                                <button type="button" class="toggle" aria-expanded="false" aria-controls="detail-size-list"><span class="value">사이즈 선택</span></button>
+                                <!-- 컬러를 고르면 그 색의 사이즈 네 줄로 바뀜 -->
+                                <ul class="option-list" id="detail-size-list" hidden>
+                                    <li class="hint" tabindex="-1">컬러를 먼저 선택해주세요</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- 장바구니 담기 · 바로구매는 장바구니 · 주문 페이지가 정해지면 연결 (지금은 동작 없음) -->
+                    <!-- 장바구니 담기 · 바로 구매하기 · 선물하기 (185 · 180 · 185, 사이 없이 붙음): 장바구니 · 주문 · 선물 페이지가 정해지면 연결 (지금은 동작 없음) -->
                     <div class="product-actions">
                         <div class="btn-group">
                             <button type="button" class="btn-cart">장바구니 담기</button>
                             <button type="button" class="btn-buy">바로 구매하기</button>
+                            <button type="button" class="btn-gift">선물하기</button>
                         </div>
-                        <p class="cart-status"><span class="like-count">1,005</span> 장바구니에 담겨 있어요</p>
-                    </div>
-
-                    <a class="btn-fitting-room" href="fitting-room.html"><span class="label">피팅룸으로 이동</span><i class="chevron" aria-hidden="true"></i></a>
-                </div>
-
-                <!-- 리뷰: 카드 180이 사이 30으로 가로로 이어진 Swiper — 한 장씩 3s 등속으로 넘어가고 3s 쉬며 8장이 끝없이 돎, 목록 폭 570에서 셋째 카드가 오른쪽에서 잘려 보임 (시안)
-                     마우스를 올리거나 키보드로 목록에 오면 멈춤 · 끌기 · 휠 · 목록에 포커스를 두고 ←/→로도 넘김 (main.js) · 리뷰 쓰기는 쓰기 페이지가 정해지면 연결 -->
-                <!-- asset-required: 리뷰어 프로필 사진 (지금은 회색 원) -->
-                <div class="review">
-                    <h3 class="blind">리뷰</h3>
-                    <p class="review-title"><span>리뷰 쓰기</span><i class="chevron" aria-hidden="true"></i></p>
-                    <div class="swiper review-slider" tabindex="0" role="region" aria-label="리뷰 목록">
-                        <ul class="swiper-wrapper review-list">
-                            <li class="swiper-slide review-card">
-                                <div class="review-head">
-                                    <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
-                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
-                                </div>
-                                <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
-                            </li>
-                            <li class="swiper-slide review-card">
-                                <div class="review-head">
-                                    <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
-                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
-                                </div>
-                                <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
-                            </li>
-                            <li class="swiper-slide review-card">
-                                <div class="review-head">
-                                    <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
-                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
-                                </div>
-                                <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
-                            </li>
-                            <li class="swiper-slide review-card">
-                                <div class="review-head">
-                                    <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
-                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
-                                </div>
-                                <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
-                            </li>
-                            <li class="swiper-slide review-card">
-                                <div class="review-head">
-                                    <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
-                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
-                                </div>
-                                <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
-                            </li>
-                            <li class="swiper-slide review-card">
-                                <div class="review-head">
-                                    <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
-                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
-                                </div>
-                                <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
-                            </li>
-                            <li class="swiper-slide review-card">
-                                <div class="review-head">
-                                    <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
-                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
-                                </div>
-                                <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
-                            </li>
-                            <li class="swiper-slide review-card">
-                                <div class="review-head">
-                                    <p class="reviewer"><span class="avatar" aria-hidden="true"></span><span class="nickname">Ramiel-06</span></p>
-                                    <p class="rating"><span class="label">평점</span> <span class="score">4.5</span></p>
-                                </div>
-                                <p class="review-text">의상은 레퍼런스의 색상, 원단 질감, 핏, 길이, 디테일을 그대로 유지해. 옷이 아바타 체형에 맞게 실제로 입은 것</p>
-                            </li>
-                        </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- 닫기: 시안에 없어 더함 (피팅룸 닫기와 같은 모양) · Esc로도 닫힘, 창 밖 어두운 곳을 눌러도 닫히지 않음 (주인님 지정) -->
+            <!-- 닫기: 시안 button.btn-close 272:1157 (50×50, 피팅룸 닫기와 같은 모양) · Esc로도 닫힘, 창 밖 어두운 곳을 눌러도 닫히지 않음 (주인님 지정) -->
             <button type="button" class="btn-close">상품 상세 닫기</button>
 
-            <!-- 피팅룸: '피팅룸으로 이동'을 누르면 창 오른쪽 끝에서 700×900 피팅룸이 밀려 들어와 창 오른쪽(x 1050)에 겹침 (시안 프로토타입 146:942 → 231:1372 오버레이)
-                 내용은 fitting-room.html?embed=1 하나를 처음 열 때 iframe으로 넣고, 닫으면 새로 읽어 두어 다시 열면 처음부터 (main.js) · JS가 없으면 링크대로 피팅룸 페이지로 감 -->
+            <!-- 피팅룸 열기: 시안 341:2229 (2026-10-28 주인님이 '피팅룸으로 이동' 버튼 대신 넣음) — 창 오른쪽 끝 안쪽(x 1694 · y 312) 46×276 칸, 흰 바탕에 파란 '<', 칸 전체 투명도 40%
+                 누르면 창 오른쪽 끝에서 피팅룸이 밀려 들어와 이 칸을 덮음 (main.js) · JS가 없으면 링크대로 피팅룸 페이지로 감 -->
+            <a class="btn-fitting-room" href="fitting-room.html">피팅룸으로 이동</a>
+
+            <!-- 피팅룸: 창 오른쪽 끝에서 700×900 피팅룸이 밀려 들어와 창 오른쪽(x 1050)에 겹침 (시안 프로토타입 341:2229 → 231:1372 오버레이)
+                 내용은 fitting-room.html?embed=1 하나를 처음 열 때 iframe으로 넣고, 닫으면 새로 읽어 두어 다시 열면 처음부터 (main.js) -->
             <div class="fitting-popup"></div>
         </div>
     </div>

@@ -18,7 +18,7 @@ body {
     background: var(--surface-white);   /* 시안 PC 프레임 배경 (누끼 사진 뒤가 흰색이어야 시안과 같음) */
 }
 
-/* Swiper 넘김은 모두 등속 (히어로 · 랭킹 · 나라별 룩 · 여자 코트 · 상품 상세 리뷰, 주인님 지정) */
+/* Swiper 넘김은 모두 등속 (히어로 · 랭킹 · 나라별 룩 · 여자 코트, 주인님 지정) */
 .swiper {
     --swiper-wrapper-transition-timing-function: linear;
 }
@@ -1690,7 +1690,7 @@ footer hr {
     line-height: calc(20 * var(--px));   /* 시안 글 상자 20 (150%) */
 }
 
-/* 칸 25×25 네 개를 폭 150 양끝에 맞춤 (사이 약 16.7) — 상품 상세 창 .size-list와 이름이 같아서 사이즈 칸 안으로 한정 */
+/* 칸 25×25 네 개를 폭 150 양끝에 맞춤 (사이 약 16.7) — 같은 style.css를 쓰는 다른 페이지와 부딪히지 않게 사이즈 칸 안으로 한정 */
 .size-panel .size-list {
     display: flex;
     justify-content: space-between;
@@ -1750,7 +1750,7 @@ footer hr {
     line-height: calc(15 * var(--px));   /* 시안 글 상자 15 */
 }
 
-/* 장바구니 담기 · 바로 구매하기 70×20 (사이 10) — 상품 상세 창 버튼(200×44)과 이름이 같아서 크기 · 글자를 여기서 다시 잡음 */
+/* 장바구니 담기 · 바로 구매하기 70×20 (사이 10) — 상품 상세 창 버튼(.product-actions)과 이름이 같아서 사이즈 칸 안으로 한정 */
 .size-actions {
     display: flex;
     gap: calc(10 * var(--px));
@@ -1764,12 +1764,15 @@ footer hr {
     padding: 0;
     border: 0;
     box-shadow: inset 0 0 0 .5px var(--button-stroke-focus);   /* 시안 선 0.5 — border .5px는 1배 화면에서 1px로 올려 그려져 굵어 보임, 그림자는 반 픽셀을 옅게 그림 */
+    background: none;
+    color: var(--body-default);
+    cursor: pointer;
     font-size: calc(10 * var(--px));   /* Caption-xsm/regular */
     font-weight: var(--caption-xsm-regular-weight);
     line-height: calc(12 * var(--px));
 }
 
-/* ── 닫기 50×50: 창 오른쪽 위 (상품 상세 창은 60×60 — 아래 .product-detail .btn-close) ── */
+/* ── 닫기 50×50: 창 오른쪽 위 (상품 상세 창도 같은 크기 — 아래 .product-detail .btn-close는 button 기본 테두리만 지움) ── */
 .btn-close {
     position: absolute;
     top: 0;
@@ -1781,7 +1784,7 @@ footer hr {
 }
 
 /* ══════════ 상품 상세 창 (women-coat.html) ══════════
-   - 시안 146:889: 어두운 배경(dim) 가운데 1750×900 창 = 사진 갤러리 1100 + 상품 정보 600 (사이 50)
+   - 시안 146:889: 어두운 배경(dim) 가운데 1750×900 창 = 사진 갤러리 1100 + 상품 정보 650 (2026-10-28 수정 — 사이 없음, 리뷰 목록은 빠지고 오른쪽 끝에 피팅룸 열기 칸)
    - dim은 반투명이라 뒤의 여자 코트 페이지가 어둡게 비침 → 다른 페이지가 아니라 페이지 위에 띄운 창 (주인님 지정)
    - 피팅룸처럼 페이지와 같은 비율(폭 1920 기준)로 줄고, 화면 높이가 모자랄 때만 위아래 20px을 남기고 더 줄어듦 (가운데 정렬 · 여백은 피팅룸 .dim을 같이 씀)
    - 여자 롱코트 01 카드(#detail-long-coat-01)를 누르면 열림: 여닫기 · 사진 고르기 · 피팅룸은 main.js, JS가 없으면 :target으로만 열림 (닫기는 뒤로 가기)
@@ -1816,11 +1819,10 @@ footer hr {
     scrollbar-gutter: stable;
 }
 
-/* ── 창 1750×900: 갤러리(왼쪽) + 상품 정보(오른쪽) ── */
+/* ── 창 1750×900: 갤러리 1100(왼쪽) + 상품 정보 650(오른쪽), 사이 없음 ── */
 .product-detail {
     position: relative;
     display: flex;
-    gap: calc(50 * var(--px));
     width: calc(1750 * var(--px));
     height: calc(900 * var(--px));
     background: var(--surface-white);
@@ -1895,322 +1897,428 @@ footer hr {
     white-space: nowrap;
 }
 
-/* ── 상품 정보 600: 위 40 · 오른쪽 30 여백, 요약(제목 · 가격 · 옵션 · 버튼 · 피팅룸) → 리뷰, 덩어리 사이 40 ── */
+/* ── 상품 정보 650: 위 50 · 오른쪽 70 · 왼쪽 30 여백 (시안 2026-10-28 수정), 머리 → 가격 → 혜택 → 실측 · 옵션 → 버튼, 덩어리 사이 30 ── */
 .detail-info {
     flex: none;
-    width: calc(600 * var(--px));
-    padding: calc(40 * var(--px)) calc(30 * var(--px)) 0 0;
+    width: calc(650 * var(--px));
+    padding: calc(50 * var(--px)) calc(70 * var(--px)) 0 calc(30 * var(--px));
+}
+
+.product-summary {
+    display: flex;
+    flex-direction: column;
+    gap: calc(30 * var(--px));
+}
+
+/* 머리: 브랜드 → 제목(두 줄) → 평점 · 리뷰 남기기, 사이 10 */
+.product-head {
+    display: flex;
+    flex-direction: column;
+    gap: calc(10 * var(--px));
+}
+
+.product-head .brand {
+    color: var(--on-color-description);   /* 시안 변수 그대로 (on-color/description #5a5959) */
+    font-size: calc(15 * var(--px));   /* Body-sm/regular */
+    font-weight: var(--body-sm-regular-weight);
+    line-height: calc(18 * var(--px));   /* 시안 글 상자 18 */
 }
 
 .product-detail .title {
-    color: var(--surface-dark);   /* 시안 변수 그대로 (글자에 surface/dark #454545) */
+    width: calc(500 * var(--px));   /* 시안 글 상자 폭 500 → 두 줄로 나뉨 */
+    color: var(--gray-1000);
     font-size: calc(30 * var(--px));   /* H1/semibold */
     font-weight: var(--h1-semibold-weight);
-    line-height: calc(36 * var(--px));   /* 시안 글 상자 36 (AUTO = normal은 줄인 화면에서 26처럼 반올림돼 아래가 위로 밀림) */
+    line-height: calc(39 * var(--px));   /* 시안 줄 간격 130% */
 }
 
+.review-summary {
+    display: flex;
+    align-items: center;
+    gap: calc(15 * var(--px));
+    color: var(--gray-800);
+    font-size: calc(20 * var(--px));   /* H3/regular */
+    font-weight: var(--h3-regular-weight);
+    line-height: calc(24 * var(--px));   /* 시안 글 상자 24 */
+}
+
+/* 채운 별 24 + 점수 (시안 Star style=filled, 사이 4) */
+.review-summary .rating {
+    display: flex;
+    align-items: center;
+    gap: calc(4 * var(--px));
+}
+
+.review-summary .rating::before {
+    content: "";
+    width: calc(24 * var(--px));
+    height: calc(24 * var(--px));
+    background: url(../images/icons/star-review.svg) no-repeat center / contain;
+}
+
+/* 리뷰 남기기: 아래 1px 선(gray/600) + 갈매기표 8×14 (시안 높이 25 = 글자 24 + 선 1) */
+.review-title {
+    display: flex;
+    align-items: center;
+    gap: calc(8 * var(--px));
+    border-bottom: 1px solid var(--gray-600);
+}
+
+.review-title .chevron {
+    width: calc(8 * var(--px));
+    height: calc(14 * var(--px));
+    background: url(../images/icons/chevron-review.svg) no-repeat center / contain;
+}
+
+/* ── 가격: 정가(가운데 줄) 위, 할인율 + 판매가 아래 (사이 2) ── */
 .price-box {
     display: flex;
+    flex-direction: column;
+    gap: calc(2 * var(--px));
+}
+
+.price-box .cost {
+    color: var(--body-description);
+    font-size: calc(18 * var(--px));   /* H4/regular */
+    font-weight: var(--h4-regular-weight);
+    line-height: calc(21 * var(--px));   /* 시안 글 상자 21 */
+}
+
+.price-box .sale-price {
+    display: flex;
+    align-items: center;
     gap: calc(8 * var(--px));
-    margin-top: calc(25 * var(--px));
-    font-size: calc(24 * var(--px));   /* H2/line/bold · H2/line/medium */
-    line-height: var(--h2-line-medium-line-height);
+    font-size: calc(24 * var(--px));   /* H2/line/bold · H2/semibold */
 }
 
 .price-box .sale {
     color: var(--brand-blue);
     font-weight: var(--h2-line-bold-weight);
+    line-height: calc(36 * var(--px));   /* 시안 줄 간격 150% */
 }
 
 .price-box .price {
     color: var(--body-default);
-    font-weight: var(--h2-line-medium-weight);
+    font-weight: var(--h2-line-semibold-weight);
+    line-height: calc(29 * var(--px));   /* 시안 글 상자 29 */
 }
 
-/* ── 옵션: 컬러 · 사이즈 (칸 50×44, 사이 15) ── */
-.product-options {
-    margin-top: calc(40 * var(--px));
-}
-
-.option-size {
-    margin-top: calc(15 * var(--px));
-}
-
-.option-label {
-    display: block;
-    color: var(--body-link);
-    font-size: calc(16 * var(--px));   /* Body-md/line/regular */
-    font-weight: var(--body-md-line-regular-weight);
-    line-height: var(--body-md-line-regular-line-height);
-}
-
-/* 사이즈 목록은 피팅룸 사이즈 칸(.size-panel .size-list)과 이름이 같아서 창 안 것만 따로 잡음 */
-.color-list,
-.product-detail .size-list {
+/* ── 혜택: 이름 110 + 사이 40 + 내용 400, 줄 사이 7 (첫 줄은 내용이 두 줄이라 위에 맞춤, 나머지는 가운데) ── */
+.benefit-list {
     display: flex;
-    gap: calc(15 * var(--px));
-    margin-top: calc(10 * var(--px));
+    flex-direction: column;
+    gap: calc(7 * var(--px));
 }
 
-.color-chip,
-.size-chip {
-    display: block;
-    width: calc(50 * var(--px));
-    height: calc(44 * var(--px));
-    border: 0;
-    cursor: pointer;
-}
-
-.color-chip {
-    font-size: 0;   /* 색 이름은 스크린리더만 읽음 */
-}
-
-.color-chip.black {
-    background: #2f2e2f;   /* 시안 .color-chip.black (변수 없음) */
-}
-
-.color-chip.brown {
-    background: #4a3931;   /* 시안 .color-chip.brown 146:920 (변수 없음) */
-}
-
-.color-chip.ivory {
-    background: #dbcebc;   /* 시안 .color-chip.ivory 299:1315 (변수 없음) */
-    box-shadow: inset 0 0 0 1px var(--border-default);   /* 흰 창 위에서 칸 가장자리가 보이게 */
-}
-
-/* 고른 컬러: 칸 밖에 흰 틈 2 + 진한 선 2 (시안에 선택 모양이 없어 사이즈 칸 선택색으로 맞춤) */
-.color-chip[aria-pressed="true"] {
-    box-shadow: 0 0 0 calc(2 * var(--px)) var(--surface-white), 0 0 0 calc(4 * var(--px)) var(--button-stroke-select);
-}
-
-.color-chip.ivory[aria-pressed="true"] {
-    box-shadow: inset 0 0 0 1px var(--border-default), 0 0 0 calc(2 * var(--px)) var(--surface-white), 0 0 0 calc(4 * var(--px)) var(--button-stroke-select);
-}
-
-.size-chip {
-    background: var(--surface-subtle);
-    color: var(--body-default);
-    font-size: calc(20 * var(--px));   /* H3/regular */
-    font-weight: var(--h3-regular-weight);
-    line-height: var(--h3-regular-line-height);
-}
-
-/* 고른 사이즈 (피팅룸 사이즈 칸과 같은 선택 색) */
-.size-chip[aria-pressed="true"] {
-    background: var(--button-fill-select);
-    color: var(--on-color-text);
-}
-
-.size-guide {
-    margin-top: calc(10 * var(--px));
-    color: var(--body-placeholder);
-    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
-    font-weight: var(--body-xsm-regular-weight);
-    line-height: calc(17 * var(--px));   /* 시안 글 상자 17 (normal은 16으로 그려져 아래가 1 올라감) */
-}
-
-/* ── 장바구니 담기 · 바로 구매하기 (200×44, 사이 15) + 장바구니 수 ── */
-.product-actions {
-    margin-top: calc(40 * var(--px));
-}
-
-.btn-group {
-    display: flex;
-    gap: calc(15 * var(--px));
-}
-
-.btn-cart,
-.btn-buy {
-    width: calc(200 * var(--px));
-    height: calc(44 * var(--px));
-    border: 1px solid var(--button-stroke-focus);
-    background: none;
-    color: var(--body-default);
-    font-size: calc(17 * var(--px));   /* Body-lg/medium · Body-lg/semibold */
-    line-height: var(--body-lg-medium-line-height);
-    cursor: pointer;
-}
-
-.btn-cart {
-    font-weight: var(--body-lg-medium-weight);
-}
-
-.btn-buy {
-    font-weight: var(--body-lg-semibold-weight);
-}
-
-.cart-status {
+.benefit {
     display: flex;
     align-items: center;
-    gap: calc(8 * var(--px));
-    margin-top: calc(10 * var(--px));
-    color: var(--body-link);
-    font-size: calc(18 * var(--px));   /* H4/regular */
-    font-weight: var(--h4-regular-weight);
-    line-height: var(--h4-regular-line-height);
+    gap: calc(40 * var(--px));
 }
 
-/* 채운 하트 24 + 수 (시안 like number 컴포넌트) */
-.like-count {
+.benefit:first-child {
+    align-items: flex-start;
+}
+
+.benefit dt {
+    flex: none;
+    width: calc(110 * var(--px));
+    padding: calc(5 * var(--px)) 0;
+    color: var(--gray-800);
+    font-size: calc(17 * var(--px));   /* Body-lg/semibold */
+    font-weight: var(--body-lg-semibold-weight);
+    line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
+}
+
+.benefit dd {
+    width: calc(400 * var(--px));
+}
+
+/* 혜택 글 + 안내(!) 18 (사이 5) */
+.benefit-text {
     display: flex;
     align-items: center;
     gap: calc(5 * var(--px));
-    color: var(--body-default);
-    font-size: calc(15 * var(--px));   /* Body-sm/line/regular */
-    line-height: var(--body-sm-line-regular-line-height);
+    padding: calc(3 * var(--px)) 0;
+    color: var(--gray-1000);
+    font-size: calc(15 * var(--px));   /* Body-sm/semibold */
+    font-weight: var(--body-sm-semibold-weight);
+    line-height: calc(18 * var(--px));   /* 시안 글 상자 18 */
 }
 
-.like-count::before {
-    content: "";
-    width: calc(24 * var(--px));
-    height: calc(24 * var(--px));
-    background: url(../images/icons/heart-like.svg) no-repeat center / contain;
-}
-
-/* ── 피팅룸으로 이동: 테두리 칸 안에 파란 글자 + 갈매기표 ── */
-.btn-fitting-room {
+/* 신규 회원 쿠폰 줄: 밑줄 글자 12 + 안내(!) */
+.benefit-note {
     display: flex;
     align-items: center;
-    gap: calc(10 * var(--px));
-    width: fit-content;
-    height: calc(62 * var(--px));   /* 테두리까지 시안 62 (1px 테두리는 줄지 않아서 높이로 정함 → 줄인 화면에서도 아래 리뷰 자리가 맞음) */
-    margin-top: calc(40 * var(--px));
-    padding: calc(12 * var(--px)) calc(40 * var(--px));
-    border: 1px solid var(--button-stroke-focus);
-    color: var(--brand-blue);
-    font-size: calc(30 * var(--px));   /* H1/semibold */
-    font-weight: var(--h1-semibold-weight);
-    line-height: var(--h1-semibold-line-height);
+    gap: calc(5 * var(--px));
+    padding: calc(2 * var(--px)) 0;
 }
 
-.btn-fitting-room .chevron {
-    width: calc(15 * var(--px));
-    height: calc(24 * var(--px));
-    background: url(../images/icons/chevron-fitting-room.svg) no-repeat center / contain;
+.benefit-note .coupon {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--gray-700);
+    font-size: calc(12 * var(--px));   /* Caption-md/regular */
+    font-weight: var(--caption-md-regular-weight);
+    line-height: calc(14 * var(--px));   /* 시안 글 상자 14 */
+    text-decoration: underline;
+    cursor: pointer;
 }
 
-/* ── 리뷰: 리뷰 쓰기 + 카드 180 가로 Swiper (사이 30, 목록 폭 570에서 셋째 카드가 오른쪽에서 잘려 보임 · 한 장씩 3s 등속 자동 넘김은 main.js) ── */
-.review {
-    margin-top: calc(40 * var(--px));
-}
-
-.review-title {
-    display: flex;
-    align-items: center;
-    gap: calc(8 * var(--px));
-    width: fit-content;
-    height: calc(41 * var(--px));   /* 테두리까지 시안 41 (피팅룸 버튼과 같은 이유) */
-    padding: calc(5 * var(--px)) calc(20 * var(--px));
-    border: 1px solid var(--button-stroke-focus);
-    color: var(--gray-900);
-    font-size: calc(24 * var(--px));   /* H2/medium */
-    font-weight: var(--h2-medium-weight);
-    line-height: var(--h2-medium-line-height);
-}
-
-.review-title .chevron {
-    width: calc(11 * var(--px));
-    height: calc(18 * var(--px));
-    background: url(../images/icons/chevron-review.svg) no-repeat center / contain;
-}
-
-/* 목록 폭 570 = 정보 칸 내용 폭, 넘치는 카드는 잘라서 셋째 카드가 오른쪽 끝에 걸쳐 보임 (시안 clipsContent) */
-.review-slider {
-    z-index: 0;   /* Swiper 기본 1이면 피팅룸(z-index 없음)보다 위에 그려져 리뷰가 피팅룸을 뚫고 보임 → 0이면 문서 순서대로 피팅룸이 덮음 */
-    margin-top: calc(20 * var(--px));
-    overflow: hidden;
-}
-
-/* 카드 사이 30은 Swiper가 카드 오른쪽 여백으로 붙임 (main.js, 목록 폭의 %) */
-.review-list {
-    display: flex;   /* Swiper CSS를 못 받아도 가로로 이어지게 */
-}
-
-/* Swiper를 못 받았을 때(.swiper-initialized 없음)만 예전처럼 가로 스크롤 + 사이 30 (휠 가로 넘김은 main.js) */
-.review-slider:not(.swiper-initialized) {
-    overflow-x: auto;
-    scrollbar-width: none;   /* 시안에 스크롤 막대가 없음, 세 번째 카드가 잘려 보여서 더 있는 걸 알 수 있음 */
-}
-
-.review-slider:not(.swiper-initialized)::-webkit-scrollbar {
-    display: none;
-}
-
-.review-slider:not(.swiper-initialized) .review-list {
-    gap: calc(30 * var(--px));
-}
-
-.review-card {
+/* 안내(!) 18×18: 다른 사이트에서 받은 '?' 아이콘 대신 새로 그린 '!' (색은 원래 그림과 비슷한 gray-150 · 400 · 600) */
+.btn-info {
     flex: none;
-    width: calc(180 * var(--px));
-    color: var(--body-link);
-    font-size: calc(20 * var(--px));   /* H3/regular (닉네임 · 평점 · 글 모두) */
-    font-weight: var(--h3-regular-weight);
-    line-height: var(--h3-regular-line-height);
+    width: calc(18 * var(--px));
+    height: calc(18 * var(--px));
+    padding: 0;
+    border: 0;
+    background: url(../images/icons/info.svg) no-repeat center / contain;
+    font-size: 0;
+    cursor: pointer;
 }
 
-.review-head {
+/* ── 실측 · 옵션: 실측(그림 + 표 → 모델 착용 정보) → 컬러 · 사이즈 칸, 사이 10 ── */
+.product-options {
     display: flex;
-    align-items: center;
-    gap: calc(15 * var(--px));
+    flex-direction: column;
+    gap: calc(10 * var(--px));
 }
 
-.reviewer,
-.review-card .rating {
+.size-info {
     display: flex;
-    align-items: center;
-}
-
-.reviewer {
+    flex-direction: column;
     gap: calc(3 * var(--px));
 }
 
-/* 프로필 사진 자리 24 (사진이 없어 회색 원) */
-.reviewer .avatar {
-    width: calc(24 * var(--px));
-    height: calc(24 * var(--px));
-    border-radius: 50%;
-    background: var(--gray-300);
+/* 코트 그림 140×134 + 표 408 (사이 2, 시안 흰 바탕) */
+.size-chart {
+    display: flex;
+    align-items: flex-start;
+    gap: calc(2 * var(--px));
+    background: var(--surface-white);
 }
 
-/* 시안 폭 75에서 넘치는 닉네임은 … */
-.reviewer .nickname {
-    width: calc(75 * var(--px));
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.size-drawing {
+    flex: none;
+    width: calc(140 * var(--px));
+    height: calc(134 * var(--px));
 }
 
-.review-card .rating {
-    gap: calc(4 * var(--px));
+/* 칸 6개 × 68 · 머리줄 21(옅은 파란 바탕 + 아래 파란 선) · 몸줄 22(아래 gray-400 선), 위에 표 이름 */
+.size-table {
+    width: calc(408 * var(--px));
+    border-collapse: separate;   /* 겹친 선 모델은 선을 위아래 줄이 반씩 나눠 가져서 줄 높이가 시안보다 0.5씩 줄어듦 → 선을 칸마다 따로 그림 */
+    border-spacing: 0;
+    table-layout: fixed;
+    color: var(--gray-700);
+    text-align: center;
 }
 
-.review-card .rating .label {
-    width: calc(24 * var(--px));
-    height: calc(24 * var(--px));
-    background: url(../images/icons/star-review.svg) no-repeat center / contain;
-    font-size: 0;
+.size-table caption {
+    padding-bottom: calc(4 * var(--px));
+    color: var(--gray-800);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));   /* 시안 글 상자 17 */
+    text-align: left;
 }
 
-/* 네 줄까지 보이고 넘치면 … (시안 글 상자 높이 105 = 네 줄) */
-.review-text {
-    display: -webkit-box;
-    margin-top: calc(28 * var(--px));
-    overflow: hidden;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
+.size-table th,
+.size-table td {
+    padding: 0;
+    font-size: calc(10 * var(--px));   /* Caption-xsm/regular */
+    font-weight: var(--caption-xsm-regular-weight);
+    line-height: calc(12 * var(--px));   /* 시안 글 상자 12 */
 }
 
-/* ── 닫기 60×60: 창 오른쪽 위 (모양은 피팅룸 .btn-close, 크기만 시안 60으로 · 여기서는 button이라 기본 테두리를 지움) ── */
+.size-table thead th {
+    height: calc(20 * var(--px) + 1px);   /* 아래 선 1까지 시안 21 (선은 줄지 않아서 1px로 더함) */
+    border-bottom: 1px solid var(--brand-blue);
+    background: var(--brand-blue-light);
+    color: var(--gray-800);
+}
+
+.size-table tbody th,
+.size-table td {
+    height: calc(21 * var(--px) + 1px);   /* 아래 선 1까지 시안 22 */
+    border-bottom: 1px solid var(--gray-400);
+}
+
+/* 사이즈 이름 칸만 크게 (Body-xsm/semibold) */
+.size-table tbody th {
+    font-size: calc(14 * var(--px));
+    font-weight: var(--body-xsm-semibold-weight);
+    line-height: calc(17 * var(--px));   /* 시안 글 상자 17 */
+}
+
+/* 모델 착용 정보 (피팅룸 사이즈 칸의 실측 그림 img.size-guide와 이름이 같아서 실측 칸 안으로 한정) */
+.size-info .size-guide {
+    color: var(--body-placeholder);
+    font-size: calc(12 * var(--px));   /* Caption-md/regular */
+    font-weight: var(--caption-md-regular-weight);
+    line-height: calc(14 * var(--px));   /* 시안 글 상자 14 */
+}
+
+/* ── 컬러 · 사이즈 칸 550×34 (사이 10): 테두리 1 gray-500, 글자 왼쪽 10, 갈매기표 20×6은 칸 오른쪽 끝에서 25 안쪽 가운데 ──
+   누르면 칸 아래로 목록이 0.3s 등속으로 펼쳐짐 (시안 SMART_ANIMATE 0.3s linear — 칸이 아래로 커지며 목록이 드러남)
+   시안은 칸이 커지며 아래 덩어리를 밀어내지만, 그러면 사이즈 목록(시안 5줄 188)을 열 때 버튼이 창 아래 끝(900)을 넘음 → 웹은 목록을 아래 칸 · 버튼 위에 겹쳐 띄움 */
+.option-selects {
+    display: flex;
+    flex-direction: column;
+    gap: calc(10 * var(--px));
+}
+
+.option-select {
+    position: relative;
+}
+
+.option-select .toggle {
+    display: block;
+    width: 100%;
+    height: calc(34 * var(--px));
+    padding: 0 0 0 calc(10 * var(--px));
+    border: 1px solid var(--gray-500);
+    background: var(--surface-white) url(../images/icons/chevron-select.svg) no-repeat right calc(14.25 * var(--px)) center / calc(21.5 * var(--px)) auto;   /* 갈매기표 가운데가 안쪽 오른쪽 끝에서 25 */
+    color: var(--gray-700);
+    font-size: calc(18 * var(--px));   /* H4/medium */
+    font-weight: var(--h4-medium-weight);
+    line-height: calc(21 * var(--px));   /* 시안 글 상자 21 */
+    text-align: left;
+    cursor: pointer;
+}
+
+/* 목록: 칸 바로 아래(칸 아래 선 위에 겹쳐 한 상자처럼), 같은 폭 · 같은 테두리, 줄 31
+   열면 위에서 아래로 0.3s 동안 드러나고, 닫으면(hidden — main.js) 0.3s 동안 위로 접힌 뒤 숨김 → 닫힌 목록은 Tab · 스크린리더에서 빠짐 (접히는 동안은 inert라 눌리지도 않음) */
+.option-list {
+    position: absolute;
+    top: calc(100% - 1px);
+    right: 0;
+    left: 0;
+    z-index: 1;   /* 아래 칸 · 버튼 위에 뜨게 */
+    border: 1px solid var(--gray-500);
+    border-top: 0;
+    background: var(--surface-white);
+    color: var(--gray-700);
+    font-size: calc(18 * var(--px));   /* H4/medium */
+    font-weight: var(--h4-medium-weight);
+    line-height: calc(21 * var(--px));   /* 시안 글 상자 21 */
+    clip-path: inset(0);
+    transition: clip-path .3s linear, visibility 0s;
+}
+
+.option-list[hidden] {
+    display: block;   /* hidden의 기본 display: none을 풀어야 접히는 게 보임 */
+    visibility: hidden;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path .3s linear, visibility 0s linear .3s;
+}
+
+/* 줄 하나: 왼쪽 10 + (컬러는 색 칸 21 + 사이 10) + 이름 */
+.option-list .option,
+.option-list .hint {
+    display: flex;
+    align-items: center;
+    gap: calc(10 * var(--px));
+    width: 100%;
+    height: calc(31 * var(--px));
+    padding: 0 0 0 calc(10 * var(--px));
+}
+
+.option-list .option {
+    border: 0;
+    background: none;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+/* 마우스를 올린 줄 · 고른 줄: 옅은 회색 바탕 (시안에 상태가 없어 피팅룸 몸 정보 목록과 같게) */
+.option-list .option:hover,
+.option-list .option[aria-pressed="true"] {
+    background: var(--surface-subtle);
+}
+
+.option-list .option:focus-visible {
+    outline-offset: -2px;   /* 줄 밖으로 삐져나오지 않게 안쪽에 그림 */
+}
+
+.option-list .chip {
+    flex: none;
+    width: calc(21 * var(--px));
+    height: calc(21 * var(--px));
+}
+
+.chip.black {
+    background: #2f2e2f;   /* 시안 .color-chip.black (변수 없음) */
+}
+
+.chip.brown {
+    background: #4a3931;   /* 시안 .color-chip.brown (변수 없음) */
+}
+
+.chip.ivory {
+    background: #dbcebc;   /* 시안 .color-chip.ivory (변수 없음) */
+}
+
+/* ── 장바구니 담기 · 바로 구매하기 · 선물하기: 185 · 180 · 185 × 44, 사이 없이 붙음 (550을 꽉 채움) ── */
+.product-actions .btn-group {
+    display: flex;
+}
+
+.product-actions button {
+    flex: none;
+    height: calc(44 * var(--px));
+    padding: 0;
+    border: 0;
+    background: var(--gray-700);
+    color: var(--on-color-text);
+    font-size: calc(17 * var(--px));   /* Body-lg/medium · Body-lg/semibold */
+    font-weight: var(--body-lg-semibold-weight);
+    line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
+    cursor: pointer;
+}
+
+.product-actions .btn-cart {
+    width: calc(185 * var(--px));
+    font-weight: var(--body-lg-medium-weight);
+}
+
+.product-actions .btn-buy {
+    width: calc(180 * var(--px));
+    background: var(--brand-blue);
+}
+
+.product-actions .btn-gift {
+    width: calc(185 * var(--px));
+}
+
+/* ── 닫기 50×50: 창 오른쪽 위 (모양 · 크기는 피팅룸 .btn-close와 같음 · 여기서는 button이라 기본 테두리를 지움) ── */
 .product-detail .btn-close {
-    width: calc(60 * var(--px));
-    height: calc(60 * var(--px));
     border: 0;
     cursor: pointer;
 }
 
-/* ── 피팅룸 700×900: '피팅룸으로 이동'을 누르면 창 오른쪽(x 1050 · y 0)에 겹쳐 뜸 ──
-   - 시안 프로토타입 146:942 → 231:1372: 오버레이 · 수동 위치 · MOVE_IN(오른쪽 끝에서 왼쪽으로) · 0.3s 등속, 뒤를 더 어둡게 하지 않고 바깥을 눌러도 닫히지 않음
+/* ── 피팅룸 열기 46×276: 창 오른쪽 끝 안쪽(x 1694 · y 312, 오른쪽 끝에서 10) 세로 칸, 흰 바탕에 파란 '<'(굵기 8), 칸 전체 투명도 40% (시안 341:2229) ──
+   누르면 피팅룸이 밀려 들어와 이 칸을 덮음 (main.js) */
+.btn-fitting-room {
+    position: absolute;
+    top: calc(312 * var(--px));
+    right: calc(10 * var(--px));
+    width: calc(46 * var(--px));
+    height: calc(276 * var(--px));
+    background: var(--surface-white) url(../images/icons/chevron-fitting-room.svg) no-repeat center / 100% 100%;
+    opacity: .4;
+    font-size: 0;
+}
+
+/* 키보드 포커스일 때만 진하게: 칸 투명도 40%가 포커스 테두리까지 옅게 만들어서 (닫은 피팅룸에서 포커스가 이 칸으로 돌아옴) */
+.btn-fitting-room:focus-visible {
+    opacity: 1;
+}
+
+/* ── 피팅룸 700×900: 창 오른쪽 끝 '<' 칸(.btn-fitting-room)을 누르면 창 오른쪽(x 1050 · y 0)에 겹쳐 뜸 ──
+   - 시안 프로토타입 341:2229 → 231:1372: 오버레이 · 수동 위치 · MOVE_IN(오른쪽 끝에서 왼쪽으로) · 0.3s 등속, 뒤를 더 어둡게 하지 않고 바깥을 눌러도 닫히지 않음
    - 창 밖으로 나간 부분은 clip-path로 잘라 창 오른쪽 끝에서 나오는 것처럼 보임 (밀기 translate와 같은 0.3s 등속이라 자른 선이 늘 창 끝에 붙어 있음)
    - 주인님 맥 '동작 줄이기'가 켜져 있어도 밀려 나오고 들어가는 움직임은 그대로 (주인님 지정, 튕김 없이 등속)
    - 내용은 iframe(fitting-room.html?embed=1, main.js가 처음 열 때 넣음) → 피팅룸 칸이 준비되기 전에는 흰 창만 밀려 나오고 내용은 준비된 뒤 보임 (.ready, 사진은 그 뒤에 받아지는 대로) */
@@ -2218,6 +2326,7 @@ footer hr {
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 2;   /* 펼친 컬러 · 사이즈 목록(z-index 1)이 접히는 0.3s 동안에도 밀려 들어오는 피팅룸 위에 그려지지 않게 */
     width: calc(700 * var(--px));
     height: calc(900 * var(--px));
     background: var(--surface-white);
