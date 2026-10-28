@@ -18,7 +18,7 @@ body {
     background: var(--surface-white);   /* 시안 PC 프레임 배경 (누끼 사진 뒤가 흰색이어야 시안과 같음) */
 }
 
-/* Swiper 넘김은 모두 등속 (히어로 · 랭킹 · 나라별 룩 · 여자 코트, 주인님 지정) */
+/* Swiper 넘김은 모두 등속 (히어로 · 랭킹 · 추천 코디 · 여자 코트, 주인님 지정) */
 .swiper {
     --swiper-wrapper-transition-timing-function: linear;
 }
@@ -312,7 +312,7 @@ header {
     background: linear-gradient(180deg, #16140f 0%, #0a0908 55%, var(--gray-1200) 100%);
 }
 
-/* ── 배경에 녹인 나라 영문명: 가운데(y 500) 기준, 나라마다 1796px 폭에 맞춘 크기 ── */
+/* ── 배경에 녹인 룩 영문 이름: 가운데(y 500) 기준, 장마다 1796px 폭에 맞춘 크기 (Bodoni Moda로 잰 값) ── */
 .hero .cover-title {
     position: absolute;
     top: calc(500 * var(--px));
@@ -333,49 +333,23 @@ header {
 }
 
 .slide-01 .cover-title {
-    --size: 533;
+    --size: 701;
 }
 
 .slide-02 .cover-title {
-    --size: 395;
+    --size: 547;
 }
 
 .slide-03 .cover-title {
-    --size: 583;
+    --size: 460;
 }
 
 .slide-04 .cover-title {
-    --size: 319;
+    --size: 649;
 }
 
-.slide-05 .cover-title,
-.slide-07 .cover-title {
-    --size: 620;
-}
-
-.slide-06 .cover-title {
-    --size: 422;
-}
-
-.slide-08 .cover-title {
-    --size: 511;
-}
-
-.slide-09 .cover-title {
-    --size: 441;
-}
-
-.slide-10 .cover-title {
-    --size: 365;
-}
-
-.slide-11 .cover-title,
-.slide-12 .cover-title {
-    --size: 563;
-}
-
-.slide-13 .cover-title {
-    --size: 254;
+.slide-05 .cover-title {
+    --size: 451;
 }
 
 /* ── 금빛 리본: 왼쪽 아래에서 오른쪽 위로 4° 기울어짐, 모델 뒤에 깔림 ── */
@@ -410,7 +384,7 @@ header {
     bottom: calc(20 * var(--px));
     width: auto;
     translate: -50% 0;
-    filter: drop-shadow(0 calc(30 * var(--px)) calc(60 * var(--px)) color-mix(in srgb, var(--gray-1200) var(--shadow, 45%), transparent));
+    filter: drop-shadow(0 calc(30 * var(--px)) calc(60 * var(--px)) color-mix(in srgb, var(--gray-1200) 45%, transparent));
 }
 
 .hero .model-m {
@@ -421,11 +395,6 @@ header {
 .hero .model-w {
     left: calc(1140.5 * var(--px));
     height: calc(850 * var(--px));
-}
-
-.slide-03,
-.slide-06 {
-    --shadow: 18%;   /* 일본 · 캐나다는 그림자가 옅음 */
 }
 
 /* ── 반짝이: 모든 장에서 같은 자리, 빛 번짐은 크기의 0.6배 ── */
@@ -475,7 +444,7 @@ header {
     --s: 18;
 }
 
-/* ── 나라 이름 · 설명 · 컬렉션 버튼 ── */
+/* ── 룩 이름 · 설명 · 컬렉션 버튼 ── */
 .hero .cover-lines {
     position: absolute;
     top: calc(600 * var(--px));
@@ -489,37 +458,11 @@ header {
 
 .hero .native {
     color: var(--gray-0);
-    font-family: "Noto Serif", serif;
-    font-size: calc(58 * var(--px));
+    font-family: "Noto Serif KR", serif;   /* 룩 제목은 모두 한글 (예전 나라별 고유 표기 글꼴은 뺌) */
+    font-size: calc(64 * var(--px));
     font-weight: 600;
     line-height: calc(80 * var(--px));
     letter-spacing: 0;
-}
-
-.hero .native:lang(ko) {
-    font-family: "Noto Serif KR", serif;
-}
-
-.hero .native:lang(ja) {
-    font-family: "Noto Serif JP", serif;
-}
-
-.hero .native:lang(zh) {
-    font-family: "Noto Serif SC", serif;
-}
-
-.hero .native:lang(hi) {
-    font-family: "Noto Sans Devanagari", sans-serif;
-}
-
-.hero .native:lang(ar) {
-    font-family: "Amiri", serif;
-    font-weight: 700;
-}
-
-.slide-01 .native,
-.slide-03 .native {
-    font-size: calc(64 * var(--px));
 }
 
 .hero .desc {
@@ -578,7 +521,7 @@ header {
     display: none;
 }
 
-/* ── 쪽 번호 01 / 13 ── */
+/* ── 쪽 번호 01 / 05 ── */
 .hero .swiper-pagination {
     top: calc(858 * var(--px));
     bottom: auto;
@@ -619,7 +562,7 @@ header {
     white-space: nowrap;
 }
 
-/* 랭킹 · 나라별 룩 · 프로모션이 같은 제목 묶음: 가운데 정렬, 아래 내용과 40 */
+/* 랭킹 · 추천 코디 · 프로모션이 같은 제목 묶음: 가운데 정렬, 아래 내용과 40 */
 section > .title {
     margin-bottom: calc(40 * var(--px));
     text-align: center;
@@ -695,7 +638,7 @@ section > .title {
     display: none;
 }
 
-/* ══════════ 나라별 룩 ══════════ */
+/* ══════════ 추천 코디 (예전 나라별 룩 — 클래스 이름은 그대로 country-look) ══════════ */
 /* 위아래 50, 제목 묶음과 슬라이드 사이 40 (시안 세로 Auto Layout 50 · 40 · 50) */
 .country-look {
     padding: calc(50 * var(--px)) 0;
@@ -711,14 +654,14 @@ section > .title {
     letter-spacing: var(--h1-line-medium-letter-spacing);
 }
 
-/* ── 슬라이드 한 장: 1920 시안을 화면 가운데에 두고, 국기 배경만 화면 끝까지 늘어남 ── */
+/* ── 슬라이드 한 장: 1920 시안을 화면 가운데에 두고, 옷감 배경만 화면 끝까지 늘어남 ── */
 .country-look .look-item {
     --x0: calc(50% - 960 * var(--px));   /* 시안 x 0 자리 (1920보다 넓은 화면에서도 가운데 정렬) */
     position: relative;
     height: calc(700 * var(--px));
 }
 
-/* 국기를 화면 폭에 꽉 채우고 10%로 옅게 깔아 둠 (시안의 이미지 채우기 FILL = cover) */
+/* 룩의 옷감 사진을 화면 폭에 꽉 채우고 10%로 옅게 깔아 둠 (시안의 이미지 채우기 FILL = cover) — 2026-10-28 국기에서 바꿈 */
 .country-look .look-bg {
     position: absolute;
     top: 0;
@@ -729,16 +672,16 @@ section > .title {
     opacity: .1;
 }
 
-.country-look .korea .look-bg {
-    background-image: url(../images/country-look/korea-flag.webp);
+.country-look .look-01 .look-bg {
+    background-image: url(../images/country-look/look-01-bg.webp);
 }
 
-.country-look .germany .look-bg {
-    background-image: url(../images/country-look/germany-flag.webp);
+.country-look .look-02 .look-bg {
+    background-image: url(../images/country-look/look-02-bg.webp);
 }
 
-.country-look .usa .look-bg {
-    background-image: url(../images/country-look/usa-flag.webp);
+.country-look .look-03 .look-bg {
+    background-image: url(../images/country-look/look-03-bg.webp);
 }
 
 /* ── 모델: x 1152.67, 466.67×700 (원본 2:3 그대로) ── */
@@ -750,7 +693,7 @@ section > .title {
     height: calc(700 * var(--px));
 }
 
-/* ── 나라 이름 · 설명 · 자세히 보기: x 300 · y 455, 사이 간격 20 ── */
+/* ── 룩 이름 · 설명 · 자세히 보기: x 300 · y 455, 사이 간격 20 ── */
 .country-look .look-text {
     position: absolute;
     top: calc(455 * var(--px));
@@ -776,7 +719,7 @@ section > .title {
 }
 
 .country-look .look-desc {
-    white-space: nowrap;   /* 대한민국 첫 줄이 600 폭에 꼭 맞아서 글꼴 차이로 세 줄이 되지 않게 (줄바꿈은 <br>로만) */
+    white-space: nowrap;   /* 가장 긴 첫 줄(글렌체크 블레이저 룩 553)이 600 폭에 가까워서 글꼴 차이로 세 줄이 되지 않게 (줄바꿈은 <br>로만) */
 }
 
 .country-look .btn-more {
@@ -812,78 +755,66 @@ section > .title {
     object-fit: cover;
 }
 
-/* 대한민국 */
-.country-look .korea .card-02 {
+/* 룩 01 케이프 & 랩 원피스 */
+.country-look .look-01 .card-02 {
     --x: 371;
     --y: 72;
 }
 
-.country-look .korea .card-03 {
+.country-look .look-01 .card-03 {
     --x: 525.6;
     --y: 233.2;
     --r: -10.28deg;
 }
 
-.country-look .korea .card-04 {
+.country-look .look-01 .card-04 {
     --x: 617;
     --y: 24;
 }
 
-.country-look .korea .card-05 {
+.country-look .look-01 .card-05 {
     --x: 739;
     --y: 240;
 }
 
-.country-look .korea .card-06 {
-    --x: 844.2;
-    --y: 51.3;
-    --r: 17deg;
-}
-
-.country-look .korea .card-07 {
-    --x: 958.8;
-    --y: 222.6;
-    --r: .56deg;
-}
-
-/* 독일 */
-.country-look .germany .card-02 {
+/* 룩 02 네이비 피코트 룩 (카드 자리는 예전 독일 장 그대로) */
+.country-look .look-02 .card-02 {
     --x: 535.6;
     --y: 267.5;
     --r: -17.39deg;
 }
 
-.country-look .germany .card-03 {
+.country-look .look-02 .card-03 {
     --x: 752;
     --y: 61;
 }
 
-.country-look .germany .card-04 {
+.country-look .look-02 .card-04 {
     --x: 895.9;
     --y: 240.1;
     --r: 16.76deg;
 }
 
-/* 미국 */
-.country-look .usa .card-01 {
+/* 룩 03 글렌체크 블레이저 룩 (카드 자리는 예전 미국 장 그대로) */
+.country-look .look-03 .card-01 {
     --x: 303.4;
     --y: 219.7;
     --r: -19.23deg;
 }
 
-.country-look .usa .card-02 {
+.country-look .look-03 .card-02 {
     --x: 474.8;
     --y: 45.9;
     --r: 19.6deg;
 }
 
-.country-look .usa .card-03 {
+.country-look .look-03 .card-03 {
     --x: 621.4;
     --y: 229.4;
     --r: -17.25deg;
 }
 
-.country-look .usa .card-04 {
+.country-look .look-03 .card-04 {
     --x: 770.2;
     --y: 39.6;
     --r: 10.76deg;
