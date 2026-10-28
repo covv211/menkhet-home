@@ -6,14 +6,15 @@
    - 마네킹 사진은 mannequinPhoto() 한 곳에서 정함
      · 성별 · 키 · 몸무게를 다 골랐고 조합 사진이 없는 체형 → 그 체형의 코디 없는 기본 마네킹 정면(images/fitting/body/<women|men>/<키>/<몸무게>.webp, 흰 티 · 회색 레깅스)
        옷 · 사이즈를 골라도 사진은 그대로, 고른 건 기억해 뒀다가 조합 사진 체형으로 돌아오면 입힘
-     · 그 밖(고르기 전 · 일부만 고름 · 여자 160~165cm · 55~60kg) → 조합 사진 체형(지금은 여자 160~165cm · 55~60kg뿐)
+     · 그 밖 → 조합 사진 체형: 고른 체형에 조합 사진이 있으면 그 체형(지금은 여자 160~165cm의 40~45 · 45~50 · 50~55 · 55~60kg), 고르기 전 · 일부만 고름은 여자 160~165cm · 55~60kg
        체형마다 4종 각 3색(3 × 3 × 3 × 3) = 81가지 조합 사진(코트 M) 중 고른 색의 사진, 코트 사이즈 사진(outfit/…/size/coat-<색>_<사이즈>.webp)이 있는 체형이면 그 차림일 때 고른 사이즈의 코트 사진 (지금은 사이즈 사진 체형 없음)
-   - 지금 사진에서 옷 한 벌 · 사이즈 하나만 바꾼 사진을, 키를 고르면 그 키의 몸무게별 기본 마네킹을 미리 받아 둬서 바로 바뀜
+   - 지금 사진에서 옷 한 벌 · 사이즈 하나만 바꾼 사진을, 키를 고르면 그 키의 몸무게별 사진(기본 마네킹 · 조합 사진 체형은 지금 차림의 조합 사진)을 미리 받아 둬서 바로 바뀜
    - 마네킹 사진은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
    - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
    - 마네킹 사진(683×1024)은 모두 한 규칙으로 맞춤: 사람 키(머리 위 ~ 발끝) = 980px × 키 구간 가운데 값 / 187.5cm, 발끝은 y 1004, 가운데 정렬 → 같은 키 구간은 몸무게를 바꿔도 키가 그대로, 키 구간을 바꾸면 키가 바뀜 (새 사진도 이 규칙으로)
      2026-10-27 기본 마네킹을 주인님 새 model.zip(여자 26 · 남자 36체형, 원본은 model/women · model/men)으로 바꾸며 기준을 177.5 → 187.5cm로(남자 185~190cm가 980)
      같은 날 옛 마네킹의 조합 · 코트 사이즈 사진(여자 165~170cm · 65~70kg 93장)을 지우고 새 마네킹 81조합(여자 160~165cm · 55~60kg, 원본 model/의상_색상조합_정면81_160-165cm_55-60kg_20261027)으로 바꿈
+     2026-10-28 같은 키의 40~45 · 45~50 · 50~55kg 81조합을 더함(주인님 구글 드라이브 model.zip, 원본 model/의상_색상조합_정면81_160-165cm_<몸무게>_20261028) → 여자 160~165cm는 몸무게 네 구간 모두 조합 사진
      조합 사진은 같은 체형 기본 마네킹 원본의 배율 · 위치를 그대로 씀(model/build_mannequins.py) → 기본 마네킹 ↔ 조합 사진을 오가도 머리 · 몸이 같은 자리
    - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄우고 닫을 때마다 새로 읽음(main.js) → 다시 열면 처음부터 · 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, 첫 칸 · 마지막 칸에서 Tab을 넘기면 상세 창 사진 칸으로 가라고 알림
    - 예전 숫자 판정(상품 실측표 data/fitting-items.json · 정확도 칸 · 부위별 여유)과 아래 옷 목록은 수정 시안에서 빠져서 지움 (JSON 파일은 남겨 둠) */
@@ -198,7 +199,7 @@ function choose(name, value) {
     if (name === 'sex') fillList('height', ranges(HEIGHT_RANGE[chosen.sex]));
     if (name !== 'weight') fillList('weight', chosen.height && ranges(WEIGHT_RANGE[chosen.sex][chosen.height]));
     render();
-    changeBody();
+    dress();
 }
 
 /* ── 목록 열고 닫기 (0.5s move in은 style.css) ── */
@@ -249,9 +250,9 @@ sideItems.forEach((item) => {
 const dressMannequin = imageSlot(document.querySelector('.mannequin'));
 let openItem = null;   // 펼친 옷 칸
 
-// 체형별 조합 사진 폴더 (images/fitting/outfit/<성별>/<키>/<몸무게>) → 지금은 주인님이 만든 여자 160~165cm · 55~60kg 81장뿐, 다른 체형은 사진이 생기면 여기에 더함
-const OUTFIT_BODIES = ['women/160-165cm/55-60kg'];
-const DEFAULT_BODY = OUTFIT_BODIES[0];   // 고르기 전 · 일부만 고름은 이 체형으로 보여 줌
+// 체형별 조합 사진 폴더 (images/fitting/outfit/<성별>/<키>/<몸무게>) → 지금은 주인님이 만든 여자 160~165cm 네 구간 각 81장, 다른 체형은 사진이 생기면 여기에 더함
+const OUTFIT_BODIES = ['women/160-165cm/40-45kg', 'women/160-165cm/45-50kg', 'women/160-165cm/50-55kg', 'women/160-165cm/55-60kg'];
+const DEFAULT_BODY = 'women/160-165cm/55-60kg';   // 고르기 전 · 일부만 고름은 이 체형으로 보여 줌 (처음 81조합 체형 — HTML 첫 사진과 같음)
 const BODY_DIR = { female: 'women', male: 'men' };
 // 코디 없는 기본 마네킹 정면이 있는 성별 (images/fitting/body/<성별>/<키>/<몸무게>.webp) → 여자 26 · 남자 36체형 모두 (조합 사진 체형은 조합 사진을 씀)
 const PLAIN_SEXES = ['female', 'male'];
@@ -322,13 +323,13 @@ function preloadNeighbors() {
     });
 }
 
-// 키까지 골랐으면 그 키의 몸무게 구간마다 기본 마네킹 → 몸무게를 고르면 바로 바뀜 (조합 사진 체형은 빼고 4~7장)
+// 키까지 골랐으면 그 키의 몸무게 구간마다 사진 → 몸무게를 고르면 바로 바뀜 (기본 마네킹, 조합 사진 체형은 지금 차림의 조합 사진 — 4~7장)
 function preloadBodies() {
     const { sex, height } = chosen;
     if (!height || !PLAIN_SEXES.includes(sex)) return;
     ranges(WEIGHT_RANGE[sex][height]).forEach((weight) => {
         const body = bodyName(sex, height, weight);
-        if (!OUTFIT_BODIES.includes(body)) preload(plainSrc(body));
+        preload(OUTFIT_BODIES.includes(body) ? sizeSrc(outfit, wornSize, body) || outfitSrc(outfit, body) : plainSrc(body));
     });
 }
 
@@ -342,15 +343,11 @@ function wear(item, option) {
 }
 
 // 지금 몸 · 옷 · 사이즈의 사진으로 마네킹을 바꾸고(같은 사진이면 그대로), 다음에 고를 만한 사진을 미리 받아 둠
+// 몸 정보를 바꿀 때도 여기로 (기본 마네킹 ↔ 조합 사진 체형) → 옷을 바꿀 때도 몸무게별 사진을 다시 받아야 조합 사진 체형이 지금 차림으로 바로 바뀜
 function dress() {
     const { src, alt } = mannequinPhoto();
     dressMannequin(src, alt);
     whenIdle(preloadNeighbors);
-}
-
-// 성별 · 키 · 몸무게를 바꾸면 그 몸의 사진으로 다시 입힘 (기본 마네킹 ↔ 조합 사진 체형, 사진이 같으면 그대로) + 고를 만한 몸무게의 기본 마네킹을 받아 둠
-function changeBody() {
-    dress();
     whenIdle(preloadBodies);
 }
 
