@@ -233,7 +233,7 @@ if (detail) {
     const gallery = panel.querySelector('.detail-gallery');
     const coveredParts = [...panel.children].filter((part) => part !== fitting && part !== gallery);   // 피팅룸이 열리면 inert (정보 · 닫기)
     const FITTING_SRC = `${fittingLink.getAttribute('href')}?embed=1`;   // 링크(JS가 없을 때 가는 피팅룸 페이지)와 같은 파일
-    const FITTING_MOVE = 300;   // 밀려 나가는 시간 (ms, style.css .fitting-popup 0.3s)
+    const FITTING_MOVE = 300;   // 밀려 나가는 시간 (ms, style.css .fitting-sheet 0.3s)
     let fittingFrame = null;   // 처음 열 때 만듦
     let fittingByKey = false;   // 키보드(Enter)로 열었는지
     let fittingReset = 0;   // 닫은 뒤 새로 읽기 타이머
@@ -280,7 +280,7 @@ if (detail) {
             fittingFrame.title = '피팅룸';
             fittingFrame.src = FITTING_SRC;
             fittingFrame.addEventListener('load', frameReady);
-            fitting.append(fittingFrame);
+            fitting.querySelector('.fitting-sheet').append(fittingFrame);   // 밀려 들어오는 판 안에 (자르는 자리는 그대로 — style.css)
         }
         fitting.classList.add('active');
         fitting.inert = false;

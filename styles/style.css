@@ -1386,8 +1386,8 @@ footer hr {
 /* ══════════ 피팅룸 (fitting-room.html) ══════════
    - 수정 시안 231:1372: 어두운 배경(dim) 가운데에 700×900 창. 페이지와 같이 폭 1920 기준 비율로 줄고, 화면 높이가 모자랄 때만 더 줄어듦 (위아래 최소 20px)
    - 위 56: 안내 문구 + 성별 · 키 · 몸무게 칸(누르면 아래로 목록, 고르면 갈매기표 자리에 값) / 아래 700×844: 회색 바탕에 마네킹 + 왼쪽 옷 칸 + 오른쪽 위 사이즈 칸
-   - 옷 칸 펼침 · 마네킹 사진 · 실측 그림 바뀜은 모두 0.3s 등속 (시안 SMART_ANIMATE · DISSOLVE), 맥 '동작 줄이기'여도 그대로 (주인님 지정)
-   - 상품 상세 창의 '피팅룸으로 이동'은 이 페이지를 창 안 iframe으로 띄움 (.embed — 아래 .fitting-page.embed, 밀려 나오는 움직임은 상세 창 쪽 .fitting-popup) */
+   - 옷 칸 펼침 · 마네킹 사진 바뀜은 0.3s 등속 (시안 SMART_ANIMATE · DISSOLVE), 몸 정보 목록 · 고른 값은 0.5s 등속, 맥 '동작 줄이기'여도 그대로 (주인님 지정)
+   - 상품 상세 창 오른쪽 끝 '<' 칸은 이 페이지를 창 안 iframe으로 띄움 (.embed — 아래 .fitting-page.embed, 밀려 나오는 움직임은 상세 창 쪽 .fitting-sheet) */
 
 .fitting-page {
     --px: min(1px, 100vw / 1920, (100dvh - 40px) / 900);   /* 폭은 페이지와 같은 비율, 창 높이 900은 위아래 20px을 남기고 화면에 들어오게 (예전 100dvh / 1080은 위아래 90까지 비워 두느라 브라우저 화면(1920×910 등)에서 창이 84%로 작아짐) */
@@ -1468,17 +1468,17 @@ footer hr {
     position: relative;
 }
 
-/* 몸 정보 칸 안의 바뀜은 0.5s 등속 move in (주인님 지정 — 처음엔 transition .5s 페이드, 같은 날 move in으로 바꿈)
-   목록 · 고른 값 모두 위에서 아래로 밀려 내려오고(닫히거나 비울 땐 위로 올라감), 갈매기표 칸 아래끝 · 칸 위끝에서 잘려 칸 뒤에서 나오는 것처럼 보임. 줄 바탕만 0.5s 페이드 */
+/* 몸 정보 칸 안의 바뀜은 0.5s 등속 (주인님 지정 — 처음엔 transition .5s 페이드, 같은 날 move in으로 바꿈)
+   목록은 위에서 아래로 밀려 내려오고(닫힐 땐 위로 올라감) 갈매기표 칸 아래끝에서 잘려 칸 뒤에서 나오는 것처럼 보임
+   고른 값은 제자리에서 0.5s 페이드 (2026-10-28 주인님 지적 — 값도 위에서 내려오면 올라가는 목록과 엇갈려 숫자가 구르듯 보였음), 줄 바탕도 0.5s 페이드 */
 
 /* 갈매기표 칸: 높이 26, 폭 성별 50 · 키 90 · 몸무게 90 (시안 폭 그대로, 갈매기표 20×6 · 굵기 1.5는 가운데)
-   고른 칸(.chosen — fitting-room.js)은 흰 바탕의 고른 값이 내려와 갈매기표를 덮음 (시안 '선택값' 상자, 목록 줄과 같은 글자) → 앞 칸을 다시 고르면 뒤 칸은 값이 올라가며 갈매기표가 다시 보임 */
+   고른 칸(.chosen — fitting-room.js)은 흰 바탕의 고른 값이 떠오르며 갈매기표를 덮음 (시안 '선택값' 상자, 목록 줄과 같은 글자) → 앞 칸을 다시 고르면 뒤 칸은 값이 옅어지며 갈매기표가 다시 보임 */
 .select .toggle {
     position: relative;
     display: block;
     width: calc(90 * var(--px));
     height: calc(26 * var(--px));
-    overflow: hidden;   /* 칸 위로 올라가 있는 고른 값을 숨김 */
     border: 0;
     background: url(../images/icons/chevron-down.svg) no-repeat center / calc(21.5 * var(--px)) auto;
     color: var(--gray-900);
@@ -1496,7 +1496,7 @@ footer hr {
     line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
 }
 
-/* 고른 값: 칸을 꽉 채운 흰 상자, 고르기 전에는 칸 바로 위(잘려서 안 보임)에 있다가 고르면 내려옴 */
+/* 고른 값: 칸을 꽉 채운 흰 상자, 고르기 전에는 투명했다가 고르면 제자리에서 떠오름 */
 .select .selected {
     position: absolute;
     top: 0;
@@ -1506,23 +1506,30 @@ footer hr {
     display: grid;
     place-items: center;
     background: var(--surface-white);
-    translate: 0 -100%;
-    transition: translate .5s linear;
+    opacity: 0;
+    transition: opacity .5s linear;
 }
 
 .field.chosen .selected {
-    translate: 0 0;
+    opacity: 1;
 }
 
-/* 목록: 갈매기표 칸 바로 아래에 같은 폭, 흰 바탕(시안에 테두리 없음 — 아래 회색 마네킹 칸 위에 뜸), 줄 높이 26에 글자 가운데
-   열면 칸 아래끝에서 0.5s 동안 내려오고, 닫으면(hidden — fitting-room.js) 0.5s 동안 올라간 뒤 숨김 → 닫힌 목록은 Tab · 스크린리더에서 빠짐 (닫히는 동안은 inert라 눌리지도 않음)
-   밀기 translate와 자르기 clip-path가 같은 0.5s 등속이라 자른 선이 늘 칸 아래끝에 붙어 있음 (피팅룸 창이 밀려 나오는 것과 같은 방식) */
-.select-list {
+/* 목록 자리: 갈매기표 칸 바로 아래에 목록 크기만큼 잘라 내는 창 — 자르는 선(칸 아래끝)은 움직이지 않고 안의 목록만 0.5s 등속으로 오르내림
+   예전엔 목록 하나에 밀기(translate)와 자르기(clip-path)를 같이 걸었는데, 브라우저가 밀기만 따로 그려(GPU) 둘이 어긋나는 프레임에
+   목록 숫자가 칸 위로 삐져나와 구르듯 보였음 (2026-10-28 주인님 지적) → 자르기는 이 창의 overflow로 고정 */
+.select-drop {
     position: absolute;
     top: 100%;
     left: 0;
     z-index: 1;   /* 아래 마네킹 칸 위에 뜨게 (몸 정보 줄 전체에 z-index를 주면 창 오른쪽 위 닫기 버튼까지 덮음) */
     min-width: 100%;
+    overflow: clip;   /* hidden이면 스크롤 상자가 돼서, 목록을 열며 줄에 포커스를 줄 때 브라우저가 이 창을 스크롤해 목록이 내려오기 전에 튀어 보임 → clip은 스크롤되지 않음 */
+    pointer-events: none;   /* 닫힌 목록 자리(투명)가 아래 마네킹 칸 · 옷 칸 누르기를 막지 않게 (목록만 받음) */
+}
+
+/* 목록: 같은 폭, 흰 바탕(시안에 테두리 없음 — 아래 회색 마네킹 칸 위에 뜸), 줄 높이 26에 글자 가운데
+   열면 칸 아래끝에서 0.5s 동안 내려오고, 닫으면(hidden — fitting-room.js) 0.5s 동안 올라간 뒤 숨김 → 닫힌 목록은 Tab · 스크린리더에서 빠짐 (닫히는 동안은 inert라 눌리지도 않음) */
+.select-list {
     background: var(--surface-white);
     color: var(--gray-900);
     font-size: calc(15 * var(--px));   /* Body-sm/medium */
@@ -1530,16 +1537,15 @@ footer hr {
     line-height: calc(18 * var(--px));   /* 시안 글 상자 18 */
     text-align: center;
     white-space: nowrap;
-    clip-path: inset(0);
-    transition: translate .5s linear, clip-path .5s linear, visibility 0s;
+    pointer-events: auto;
+    transition: translate .5s linear, visibility 0s;
 }
 
 .select-list[hidden] {
     display: block;   /* hidden의 기본 display: none을 풀어야 올라가는 게 보임 */
     visibility: hidden;
     translate: 0 -100%;
-    clip-path: inset(100% 0 0 0);
-    transition: translate .5s linear, clip-path .5s linear, visibility 0s linear .5s;
+    transition: translate .5s linear, visibility 0s linear .5s;
 }
 
 .select-list .option {
@@ -1617,6 +1623,21 @@ footer hr {
     left: calc(20 * var(--px));
 }
 
+/* 옷 칸(피팅룸) · 썸네일 줄(상품 상세 창 .gallery-thumbs): 평소엔 30%로 옅게, 마우스를 올리면 100% (0.3s 등속, 2026-10-28 주인님 지정)
+   키보드로 들어온 칸이 있거나 펼친 줄이 있는 동안도 100% → 고르는 중에 옅어지지 않게 */
+.side-items,
+.gallery-thumbs {
+    opacity: .3;
+    transition: opacity .3s linear;
+}
+
+.side-items:hover,
+.side-items:has(:focus-visible, .side-item.active),
+.gallery-thumbs:hover,
+.gallery-thumbs:has(:focus-visible, .side-item.active) {
+    opacity: 1;
+}
+
 .side-item {
     width: calc(70 * var(--px));
     overflow: hidden;
@@ -1673,7 +1694,7 @@ footer hr {
     object-fit: contain;
 }
 
-/* ── 사이즈 160×260: 마네킹 칸 오른쪽 위(x 520 · y 20), 흰 바탕 · 안쪽 여백 5 ── */
+/* ── 사이즈 160×95: 마네킹 칸 오른쪽 위(x 520 · y 20), 흰 바탕 · 안쪽 여백 5 — 제목 → 사이즈 칸 → 장바구니 · 바로구매 (2026-10-28 시안에서 실측 그림 · '총장 ±2cm'는 숨김) ── */
 .size-panel {
     position: absolute;
     top: calc(20 * var(--px));
@@ -1685,8 +1706,8 @@ footer hr {
 
 .size-title {
     color: var(--gray-900);
-    font-size: calc(13 * var(--px));   /* Caption-lg/line/regular */
-    font-weight: var(--caption-lg-line-regular-weight);
+    font-size: calc(13 * var(--px));   /* Caption-lg/line/medium (2026-10-28 시안) */
+    font-weight: var(--caption-lg-line-medium-weight);
     line-height: calc(20 * var(--px));   /* 시안 글 상자 20 (150%) */
 }
 
@@ -1712,42 +1733,11 @@ footer hr {
     transition: background-color .3s linear, color .3s linear;   /* 시안 DISSOLVE 0.3s 등속 */
 }
 
-/* 고른 사이즈 (다시 눌러도 그대로) */
+/* 고른 사이즈: 파란 칸 + 흰 글자 (2026-10-28 시안, 다시 눌러도 그대로) */
 .size-panel .size[aria-pressed="true"] {
-    background: var(--button-fill-select);
+    background: var(--brand-blue);
     color: var(--on-color-text);
     cursor: default;
-}
-
-/* 실측 그림 143×160 (images/fitting/size-guide-*.svg), 바뀔 땐 새 그림을 옛 그림 위에 겹쳐 0.3s 등속으로 띄움 (.active는 fitting-room.js)
-   상품 상세 창 글줄 .size-guide와 이름이 같아서 사이즈 칸 안으로 한정 */
-.size-panel .size-guide {
-    display: block;
-    width: calc(143 * var(--px));
-    height: calc(160 * var(--px));
-    margin: calc(5 * var(--px)) auto 0;
-    object-fit: contain;
-    opacity: 0;
-    transition: opacity .3s linear;
-}
-
-.size-panel .size-guide.active {
-    opacity: 1;
-}
-
-.size-panel .size-guide + .size-guide {
-    margin-top: calc(-160 * var(--px));
-}
-
-/* 총장 ±2cm: 실측 그림 왼쪽 아래 빈자리에 겹침 (시안 x 10 · y 205) */
-.size-note {
-    position: absolute;
-    top: calc(205 * var(--px));
-    left: calc(10 * var(--px));
-    color: var(--body-description);
-    font-size: calc(10 * var(--px));   /* Caption-xsm/regular */
-    font-weight: var(--caption-xsm-regular-weight);
-    line-height: calc(15 * var(--px));   /* 시안 글 상자 15 */
 }
 
 /* 장바구니 담기 · 바로 구매하기 70×20 (사이 10) — 상품 상세 창 버튼(.product-actions)과 이름이 같아서 사이즈 칸 안으로 한정 */
@@ -1763,7 +1753,7 @@ footer hr {
     height: calc(20 * var(--px));
     padding: 0;
     border: 0;
-    box-shadow: inset 0 0 0 .5px var(--button-stroke-focus);   /* 시안 선 0.5 — border .5px는 1배 화면에서 1px로 올려 그려져 굵어 보임, 그림자는 반 픽셀을 옅게 그림 */
+    box-shadow: inset 0 0 0 .5px var(--gray-600);   /* 시안 선 0.5 gray/600 — border .5px는 1배 화면에서 1px로 올려 그려져 굵어 보임, 그림자는 반 픽셀을 옅게 그림 */
     background: none;
     color: var(--body-default);
     cursor: pointer;
@@ -2152,7 +2142,7 @@ footer hr {
     line-height: calc(17 * var(--px));   /* 시안 글 상자 17 */
 }
 
-/* 모델 착용 정보 (피팅룸 사이즈 칸의 실측 그림 img.size-guide와 이름이 같아서 실측 칸 안으로 한정) */
+/* 모델 착용 정보 (예전 피팅룸 실측 그림 img.size-guide와 같은 이름 — 다른 화면과 부딪히지 않게 실측 칸 안으로 한정) */
 .size-info .size-guide {
     color: var(--body-placeholder);
     font-size: calc(12 * var(--px));   /* Caption-md/regular */
@@ -2319,9 +2309,10 @@ footer hr {
 
 /* ── 피팅룸 700×900: 창 오른쪽 끝 '<' 칸(.btn-fitting-room)을 누르면 창 오른쪽(x 1050 · y 0)에 겹쳐 뜸 ──
    - 시안 프로토타입 341:2229 → 231:1372: 오버레이 · 수동 위치 · MOVE_IN(오른쪽 끝에서 왼쪽으로) · 0.3s 등속, 뒤를 더 어둡게 하지 않고 바깥을 눌러도 닫히지 않음
-   - 창 밖으로 나간 부분은 clip-path로 잘라 창 오른쪽 끝에서 나오는 것처럼 보임 (밀기 translate와 같은 0.3s 등속이라 자른 선이 늘 창 끝에 붙어 있음)
+   - 자리(.fitting-popup)는 움직이지 않고 overflow로 창 오른쪽 끝에서 자르고, 안의 흰 판(.fitting-sheet)만 밀려 들어옴 → 창 오른쪽 끝에서 나오는 것처럼 보임
+     예전엔 판 하나에 밀기(translate)와 자르기(clip-path)를 같이 걸었는데, 브라우저가 밀기만 따로 그려(GPU) 둘이 어긋나는 프레임에 아래 '<' 칸 · 정보 칸이 틈으로 비쳤음 (2026-10-28 주인님 지적)
    - 주인님 맥 '동작 줄이기'가 켜져 있어도 밀려 나오고 들어가는 움직임은 그대로 (주인님 지정, 튕김 없이 등속)
-   - 내용은 iframe(fitting-room.html?embed=1, main.js가 처음 열 때 넣음) → 피팅룸 칸이 준비되기 전에는 흰 창만 밀려 나오고 내용은 준비된 뒤 보임 (.ready, 사진은 그 뒤에 받아지는 대로) */
+   - 내용은 iframe(fitting-room.html?embed=1, main.js가 처음 열 때 판 안에 넣음) → 피팅룸 칸이 준비되기 전에는 흰 판만 밀려 나오고 내용은 준비된 뒤 보임 (.ready, 사진은 그 뒤에 받아지는 대로) */
 .fitting-popup {
     position: absolute;
     top: 0;
@@ -2329,18 +2320,27 @@ footer hr {
     z-index: 2;   /* 펼친 컬러 · 사이즈 목록(z-index 1)이 접히는 0.3s 동안에도 밀려 들어오는 피팅룸 위에 그려지지 않게 */
     width: calc(700 * var(--px));
     height: calc(900 * var(--px));
-    background: var(--surface-white);
-    translate: 100% 0;
-    clip-path: inset(0 100% 0 0);
+    overflow: clip;   /* hidden이면 스크롤 상자가 돼서, 키보드로 열 때 피팅룸 안으로 포커스를 주면 브라우저가 이 자리를 스크롤해 판이 한 번에 60%쯤 튀어 들어옴 → clip은 스크롤되지 않음 */
+    pointer-events: none;   /* 판이 다 나간 자리(투명)가 닫히는 0.3s 동안 아래 정보 칸 누르기를 막지 않게 (판만 받음) */
     visibility: hidden;
-    transition: translate .3s linear, clip-path .3s linear, visibility 0s linear .3s;   /* 닫을 땐 다 나간 뒤 숨김 */
+    transition: visibility 0s linear .3s;   /* 닫을 땐 판이 다 나간 뒤 숨김 */
 }
 
 .fitting-popup.active {
-    translate: 0 0;
-    clip-path: inset(0);
     visibility: visible;
     transition-delay: 0s;
+}
+
+.fitting-sheet {
+    height: 100%;
+    background: var(--surface-white);
+    pointer-events: auto;
+    translate: 100% 0;
+    transition: translate .3s linear;
+}
+
+.fitting-popup.active .fitting-sheet {
+    translate: 0 0;
 }
 
 .fitting-frame {

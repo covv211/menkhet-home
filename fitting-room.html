@@ -29,10 +29,12 @@
                         <span class="label" id="sex-label">성별</span>
                         <div class="select">
                             <button type="button" class="toggle" aria-labelledby="sex-label sex-selected" aria-expanded="false" aria-controls="sex-list"><span class="selected" id="sex-selected"></span></button>
-                            <ul class="select-list" id="sex-list" hidden>
-                                <li><button type="button" class="option" data-value="female" aria-pressed="false">여자</button></li>
-                                <li><button type="button" class="option" data-value="male" aria-pressed="false">남자</button></li>
-                            </ul>
+                            <div class="select-drop">
+                                <ul class="select-list" id="sex-list" hidden>
+                                    <li><button type="button" class="option" data-value="female" aria-pressed="false">여자</button></li>
+                                    <li><button type="button" class="option" data-value="male" aria-pressed="false">남자</button></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="field height">
@@ -40,9 +42,11 @@
                         <div class="select">
                             <button type="button" class="toggle" aria-labelledby="height-label height-selected" aria-expanded="false" aria-controls="height-list"><span class="selected" id="height-selected"></span></button>
                             <!-- 성별을 고르면 그 성별의 키 구간으로 바뀜 -->
-                            <ul class="select-list" id="height-list" hidden>
-                                <li class="hint" tabindex="-1">성별을 먼저 골라 주세요</li>
-                            </ul>
+                            <div class="select-drop">
+                                <ul class="select-list" id="height-list" hidden>
+                                    <li class="hint" tabindex="-1">성별을 먼저 골라 주세요</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="field weight">
@@ -50,9 +54,11 @@
                         <div class="select">
                             <button type="button" class="toggle" aria-labelledby="weight-label weight-selected" aria-expanded="false" aria-controls="weight-list"><span class="selected" id="weight-selected"></span></button>
                             <!-- 키를 고르면 그 키에 맞는 몸무게 구간으로 바뀜 -->
-                            <ul class="select-list" id="weight-list" hidden>
-                                <li class="hint" tabindex="-1">키를 먼저 골라 주세요</li>
-                            </ul>
+                            <div class="select-drop">
+                                <ul class="select-list" id="weight-list" hidden>
+                                    <li class="hint" tabindex="-1">키를 먼저 골라 주세요</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +104,8 @@
                     </ul>
                 </div>
 
-                <!-- 사이즈: 칸을 고르면 아래 실측 그림이 그 사이즈로 바뀌고, 코트 사이즈 사진이 있는 차림이면 마네킹 코트도 바뀜 (처음은 M, 시안에서 숨긴 '추천' 꼬리표는 넣지 않음) -->
+                <!-- 사이즈: 칸을 고르면 고른 칸이 파랗게, 코트 사이즈 사진이 있는 차림이면 마네킹 코트도 바뀜 (처음은 M, 시안에서 숨긴 '추천' 꼬리표는 넣지 않음)
+                     실측 그림 · '총장 ±2cm'는 시안에서 숨겨서 뺌 (2026-10-28 주인님 수정, 그림 SVG는 git 이력 · model/shirt-size-guides에 있음) -->
                 <div class="size-panel" role="group" aria-labelledby="size-title">
                     <p class="size-title" id="size-title"><span class="name">봄버 재킷</span><span class="blind"> 사이즈</span></p>
                     <ul class="size-list">
@@ -107,8 +114,6 @@
                         <li><button type="button" class="size" data-size="l" aria-pressed="false">L</button></li>
                         <li><button type="button" class="size" data-size="xl" aria-pressed="false">XL</button></li>
                     </ul>
-                    <img class="size-guide active" src="images/fitting/size-guide-m.svg" alt="M(66) 실측: 어깨 39.5cm, 가슴단면 49cm, 허리단면 45cm, 총장 63.5cm, 소매길이 59cm, 소매통 17.5cm" width="143" height="160">
-                    <p class="size-note">총장 ±2cm</p>
                     <!-- 장바구니 · 바로구매: 연결할 곳이 정해지기 전이라 동작 없음 (상품 상세 창 버튼과 같음) -->
                     <div class="size-actions">
                         <button type="button" class="btn-cart">장바구니 담기</button>

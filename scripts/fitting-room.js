@@ -9,7 +9,7 @@
      · 그 밖(고르기 전 · 일부만 고름 · 여자 160~165cm · 55~60kg) → 조합 사진 체형(지금은 여자 160~165cm · 55~60kg뿐)
        체형마다 4종 각 3색(3 × 3 × 3 × 3) = 81가지 조합 사진(코트 M) 중 고른 색의 사진, 코트 사이즈 사진(outfit/…/size/coat-<색>_<사이즈>.webp)이 있는 체형이면 그 차림일 때 고른 사이즈의 코트 사진 (지금은 사이즈 사진 체형 없음)
    - 지금 사진에서 옷 한 벌 · 사이즈 하나만 바꾼 사진을, 키를 고르면 그 키의 몸무게별 기본 마네킹을 미리 받아 둬서 바로 바뀜
-   - 사진 · 실측 그림은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
+   - 마네킹 사진은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
    - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
    - 마네킹 사진(683×1024)은 모두 한 규칙으로 맞춤: 사람 키(머리 위 ~ 발끝) = 980px × 키 구간 가운데 값 / 187.5cm, 발끝은 y 1004, 가운데 정렬 → 같은 키 구간은 몸무게를 바꿔도 키가 그대로, 키 구간을 바꾸면 키가 바뀜 (새 사진도 이 규칙으로)
      2026-10-27 기본 마네킹을 주인님 새 model.zip(여자 26 · 남자 36체형, 원본은 model/women · model/men)으로 바꾸며 기준을 177.5 → 187.5cm로(남자 185~190cm가 980)
@@ -70,11 +70,11 @@ function ranges([from, to]) {
     return list;
 }
 
-/* ── 사진 한 자리(마네킹 · 실측 그림) 바꾸기 ──
+/* ── 사진 한 자리(마네킹) 바꾸기 ──
    새 사진을 다 받은 뒤 지금 사진 바로 뒤에 넣고 0.3s 등속으로 띄움(.active는 style.css) → 다 뜨면 아래 사진을 지움
    빨리 연달아 고르면 마지막에 고른 사진만 띄움 */
 function imageSlot(first) {
-    const name = first.classList[0];   // 'mannequin' · 'size-guide'
+    const name = first.classList[0];   // 'mannequin'
     let top = first;   // 지금 맨 위 사진
     let wanted = first.getAttribute('src');
 
@@ -133,6 +133,7 @@ ORDER.forEach((name) => {
 
 const chosen = { sex: null, height: null, weight: null };   // 처음엔 아무것도 고르지 않음
 let openName = null;   // 열린 목록의 칸 이름
+const fades = {};   // 칸 이름 → 지금 도는 값 바꿈 글자 페이드 (WAAPI)
 
 // 목록 줄 하나: 값 버튼 (고른 줄은 aria-pressed="true")
 function optionItem(value, text) {
@@ -155,7 +156,7 @@ function fillList(name, values) {
 
 // 고른 값 → 갈매기표 자리 글자 · 목록의 고른 줄 표시
 // 고른 칸은 .chosen → 갈매기표가 사라지고 값만 보임, 비운 칸(처음 · 앞 칸을 다시 골라 비운 뒤 칸)은 갈매기표로 돌아감 (style.css)
-// 비운 칸의 옛 값은 바로 지우지 않고 0.5s 동안 위로 올라간 뒤 지움 → 올라가는 동안 아래 갈매기표가 드러남 (그 0.5s 동안은 칸 이름에 옛 값이 남음)
+// 비운 칸의 옛 값은 바로 지우지 않고 0.5s 동안 옅어진 뒤 지움 → 옅어지는 동안 아래 갈매기표가 드러남 (그 0.5s 동안은 칸 이름에 옛 값이 남음)
 function render() {
     ORDER.forEach((name) => {
         const { field, list, selected } = fields[name];
@@ -168,7 +169,10 @@ function render() {
         const old = selected.textContent;
         if (text) {
             selected.textContent = text;
-            if (old && old !== text) selected.animate({ translate: ['0 -100%', '0 0'] }, { duration: 500, easing: 'linear' });   // 다른 값으로 바꾸면 새 값이 위에서 0.5s 동안 다시 내려옴 (move in)
+            if (old && old !== text) {
+                if (fades[name]) fades[name].cancel();   // 0.5s 안에 또 바꾸면 지난 페이드를 먼저 지움 → 아래에서 반쯤 옅은 색을 끝 색으로 읽지 않게 (상자 투명도 transition은 그대로)
+                fades[name] = selected.animate([{ color: 'transparent' }, { color: getComputedStyle(selected).color }], { duration: 500, easing: 'linear' });   // 다른 값으로 바꾸면 새 값 글자만 제자리에서 0.5s 동안 떠오름 (흰 상자는 그대로라 갈매기표가 비치지 않음)
+            }
         } else if (old) {
             setTimeout(() => clearSelected(name), 600);   // 움직임이 끝나지 않는 경우(탭 숨김 등)에도 지움
         }
@@ -176,7 +180,7 @@ function render() {
     });
 }
 
-// 다 올라간 비운 칸의 옛 값을 지움 (그 사이 다시 골랐으면 그대로)
+// 다 옅어진 비운 칸의 옛 값을 지움 (그 사이 다시 골랐으면 그대로)
 function clearSelected(name) {
     const { field, selected } = fields[name];
     if (!field.classList.contains('chosen')) selected.textContent = '';
@@ -394,25 +398,17 @@ sideItems.forEach((item) => {
 });
 
 /* ══════════ 사이즈 ══════════ */
-const SIZE_GUIDE_ALT = {   // 실측 그림 대체 글 (그림 속 치수 그대로)
-    s: 'S(55) 실측: 어깨 38cm, 가슴단면 44.5cm, 허리단면 40.5cm, 총장 62cm, 소매길이 58cm, 소매통 16.5cm',
-    m: 'M(66) 실측: 어깨 39.5cm, 가슴단면 49cm, 허리단면 45cm, 총장 63.5cm, 소매길이 59cm, 소매통 17.5cm',
-    l: 'L(77) 실측: 어깨 41cm, 가슴단면 53cm, 허리단면 49cm, 총장 65cm, 소매길이 60cm, 소매통 18.5cm',
-    xl: 'XL(88) 실측: 어깨 42.5cm, 가슴단면 58cm, 허리단면 54cm, 총장 66.5cm, 소매길이 61cm, 소매통 19.5cm',
-};
+// 실측 그림 · '총장 ±2cm'는 2026-10-28 시안에서 숨겨서 뺌 → 사이즈 칸은 고른 칸 표시 + 코트 사이즈 사진(있는 체형만)
 const sizeChips = [...document.querySelectorAll('.size-panel .size')];
 let wornSize = sizeChips.find((chip) => chip.getAttribute('aria-pressed') === 'true').dataset.size;   // 고른 사이즈, 처음 값은 HTML의 aria-pressed="true"(M)
-const showSizeGuide = imageSlot(document.querySelector('.size-guide'));
-const guideSrc = (size) => `images/fitting/size-guide-${size}.svg`;
 
-// 고른 칸만 진하게, 실측 그림은 0.3s 등속으로 바뀜 (고른 칸을 다시 누르면 그대로)
-// 마네킹도 다시 입힘 → 사이즈 사진 차림이면 코트가 그 사이즈로, 아니면 사진이 그대로라 실측 그림만 바뀜
+// 고른 칸만 파랗게 (고른 칸을 다시 누르면 그대로)
+// 마네킹도 다시 입힘 → 사이즈 사진 차림이면 코트가 그 사이즈로, 아니면 사진이 그대로
 sizeChips.forEach((chip) => {
     chip.addEventListener('click', () => {
         if (chip.getAttribute('aria-pressed') === 'true') return;
         sizeChips.forEach((button) => button.setAttribute('aria-pressed', String(button === chip)));
         wornSize = chip.dataset.size;
-        showSizeGuide(guideSrc(wornSize), SIZE_GUIDE_ALT[wornSize]);
         dress();
     });
 });
@@ -485,8 +481,5 @@ document.querySelector('.btn-close').addEventListener('click', (e) => {
 // defer 스크립트라 HTML은 다 읽은 뒤, 메시지는 이 파일의 이벤트를 다 건 다음에 도착함
 if (EMBED) parent.postMessage({ type: 'menkhet-fitting-ready' }, location.origin);
 
-// 다 그린 뒤 한가할 때: 한 벌 · 사이즈 하나만 바꾼 마네킹 사진 11장 · 나머지 실측 그림 3장
-addEventListener('load', () => whenIdle(() => {
-    preloadNeighbors();
-    sizeChips.forEach((chip) => preload(guideSrc(chip.dataset.size)));
-}));
+// 다 그린 뒤 한가할 때: 한 벌 · 사이즈 하나만 바꾼 마네킹 사진 11장
+addEventListener('load', () => whenIdle(preloadNeighbors));
