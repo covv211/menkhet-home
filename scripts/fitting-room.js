@@ -132,6 +132,9 @@ ORDER.forEach((name) => {
     };
 });
 
+// 칸 안 움직임 시간 = style.css .body-fields의 --move (2026-10-29 주인님 지정 .3s — 바꿀 땐 CSS 한 곳만 고치면 여기도 따라감)
+const MOVE = getComputedStyle(document.querySelector('.body-fields')).getPropertyValue('--move').trim();
+const MOVE_MS = parseFloat(MOVE) * (MOVE.endsWith('ms') ? 1 : 1000) || 300;
 const chosen = { sex: null, height: null, weight: null };   // 처음엔 아무것도 고르지 않음
 let openName = null;   // 열린 목록의 칸 이름
 const fades = {};   // 칸 이름 → 지금 도는 값 바꿈 글자 페이드 (WAAPI)
@@ -157,7 +160,7 @@ function fillList(name, values) {
 
 // 고른 값 → 갈매기표 자리 글자 · 목록의 고른 줄 표시
 // 고른 칸은 .chosen → 갈매기표가 사라지고 값만 보임, 비운 칸(처음 · 앞 칸을 다시 골라 비운 뒤 칸)은 갈매기표로 돌아감 (style.css)
-// 비운 칸의 옛 값은 바로 지우지 않고 0.5s 동안 옅어진 뒤 지움 → 옅어지는 동안 아래 갈매기표가 드러남 (그 0.5s 동안은 칸 이름에 옛 값이 남음)
+// 비운 칸의 옛 값은 바로 지우지 않고 옅어진 뒤 지움 → 옅어지는 동안 아래 갈매기표가 드러남 (그동안은 칸 이름에 옛 값이 남음)
 function render() {
     ORDER.forEach((name) => {
         const { field, list, selected } = fields[name];
@@ -170,12 +173,12 @@ function render() {
         const old = selected.textContent;
         if (text) {
             selected.textContent = text;
-            if (old && old !== text) {
-                if (fades[name]) fades[name].cancel();   // 0.5s 안에 또 바꾸면 지난 페이드를 먼저 지움 → 아래에서 반쯤 옅은 색을 끝 색으로 읽지 않게 (상자 투명도 transition은 그대로)
-                fades[name] = selected.animate([{ color: 'transparent' }, { color: getComputedStyle(selected).color }], { duration: 500, easing: 'linear' });   // 다른 값으로 바꾸면 새 값 글자만 제자리에서 0.5s 동안 떠오름 (흰 상자는 그대로라 갈매기표가 비치지 않음)
+            if (old !== text) {
+                if (fades[name]) fades[name].cancel();   // 페이드 중에 또 바꾸면 지난 페이드를 먼저 지움 → 아래에서 반쯤 옅은 색을 끝 색으로 읽지 않게
+                fades[name] = selected.animate([{ color: 'transparent' }, { color: getComputedStyle(selected).color }], { duration: MOVE_MS, easing: 'linear' });   // 처음 고를 때 · 다른 값으로 바꿀 때 모두 새 값 글자만 제자리에서 떠오름 (흰 상자는 바로 덮으므로 갈매기표가 비치지 않음 — style.css)
             }
         } else if (old) {
-            setTimeout(() => clearSelected(name), 600);   // 움직임이 끝나지 않는 경우(탭 숨김 등)에도 지움
+            setTimeout(() => clearSelected(name), MOVE_MS + 100);   // 움직임이 끝나지 않는 경우(탭 숨김 등)에도 지움
         }
         field.classList.toggle('chosen', text !== '');
     });
@@ -190,7 +193,7 @@ ORDER.forEach((name) => {
     fields[name].selected.addEventListener('transitionend', () => clearSelected(name));
 });
 
-// 바꾼 칸 뒤의 목록만 다시 만듦 → 지금 고른 목록은 줄이 그대로라 고른 줄 바탕도 0.5s 페이드 (새로 만든 줄은 페이드 없이 바로 바뀜)
+// 바꾼 칸 뒤의 목록만 다시 만듦 → 지금 고른 목록은 줄이 그대로라 고른 줄 바탕도 페이드 (새로 만든 줄은 페이드 없이 바로 바뀜)
 // 성별을 바꾸면 키가 비므로 몸무게 목록은 '키를 먼저 골라 주세요'로 돌아감
 function choose(name, value) {
     if (chosen[name] === value) return;
@@ -202,8 +205,8 @@ function choose(name, value) {
     dress();
 }
 
-/* ── 목록 열고 닫기 (0.5s move in은 style.css) ── */
-// 닫는 목록은 올라가는 0.5s 동안에도 보이므로 inert → 그 사이 누르거나 Tab으로 들어가지 않게
+/* ── 목록 열고 닫기 (move in은 style.css) ── */
+// 닫는 목록은 올라가는 동안에도 보이므로 inert → 그 사이 누르거나 Tab으로 들어가지 않게
 function closeList(focusToggle) {
     if (!openName) return;
     const { list, toggle } = fields[openName];

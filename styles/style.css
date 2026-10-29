@@ -85,11 +85,14 @@ header {
     width: calc(170 * var(--px));
 }
 
+/* 2 · 3차 목록은 윗단계 목록 밑으로 1px 겹쳐 들어감 (폭 · 글자 들여쓰기도 1px 늘려 보이는 자리는 그대로)
+   폭이 127.5처럼 소수인 화면(1440 · 1280, 윈도 125% 배율 등)에선 두 목록 끝이 같은 반 픽셀에서 반씩 옅게 그려져
+   맞닿은 자리에 가는 세로 틈이 생기고 뒤의 히어로가 비쳤음 (2026-10-29 주인님 지적, 1920처럼 정수 폭에선 안 보임) */
 .sub .drop {
     position: absolute;
     top: 0;
-    left: 100%;
-    width: calc(170 * var(--px));
+    left: calc(100% - 1px);
+    width: calc(170 * var(--px) + 1px);
 }
 
 /* 누르면 0.3s 등속으로 펼쳐지고, 닫을 땐 거꾸로 접힘 (주인님 지정): 1차 목록은 위에서 아래로, 2 · 3차 목록은 왼쪽에서 오른쪽으로
@@ -171,10 +174,11 @@ header {
     line-height: calc(41 * var(--px));   /* 시안 글 상자 41 → 줄 높이 61 (normal은 40으로 그려져 줄이 60이 되고 목록 아래로 갈수록 어긋남) */
     letter-spacing: var(--placeholder-medium-regular-letter-spacing);
     white-space: nowrap;   /* '이벤트'·'액세서리'는 시안에서도 오른쪽 여백을 넘어 한 줄로 둠 */
+    margin-bottom: -1px;   /* 아래 칸 밑으로 1px 겹침 (아래 여백도 1px 늘려 줄 간격은 그대로) → 윈도 125% 배율처럼 칸 경계가 반 픽셀에 걸려도 칸 사이 가로 틈이 안 생김 */
 }
 
 .sub .menu {
-    padding: calc(10 * var(--px)) calc(40 * var(--px)) calc(10 * var(--px)) calc(60 * var(--px));
+    padding: calc(10 * var(--px)) calc(40 * var(--px)) calc(10 * var(--px) + 1px) calc(60 * var(--px));
     border: 0;
     text-align: left;
     cursor: pointer;
@@ -183,7 +187,7 @@ header {
 /* 2차 목록 안의 여닫는 버튼(코트 · 신발 · 액세서리)도 2 · 3차 링크와 같은 안쪽 여백 */
 .sub .drop a,
 .sub .drop .menu {
-    padding: calc(10 * var(--px)) 0 calc(10 * var(--px)) calc(30 * var(--px));
+    padding: calc(10 * var(--px)) 0 calc(10 * var(--px) + 1px) calc(30 * var(--px) + 1px);   /* + 1px: 아래 · 왼쪽으로 1px 겹친 만큼 */
 }
 
 /* 메뉴 글자에 마우스를 올리면 2px 밑줄이 왼쪽부터 0.3s 등속으로 그어짐 (키보드 포커스도 같게, 동작 줄이기여도 그대로) */
@@ -1366,6 +1370,7 @@ footer hr {
 }
 
 .body-fields {
+    --move: .3s;   /* 칸 안 움직임 시간 (목록 여닫기 · 고른 값 페이드 · 줄 바탕) — fitting-room.js도 이 값을 읽음 → 바꿀 땐 여기 한 곳만 */
     display: flex;
     gap: calc(15 * var(--px));
     margin-top: calc(6 * var(--px));
@@ -1399,12 +1404,12 @@ footer hr {
     position: relative;
 }
 
-/* 몸 정보 칸 안의 바뀜은 0.5s 등속 (주인님 지정 — 처음엔 transition .5s 페이드, 같은 날 move in으로 바꿈)
+/* 몸 정보 칸 안의 바뀜은 --move(0.3s) 등속 (주인님 지정 — 처음엔 transition .5s 페이드, 같은 날 move in으로 바꿈, 2026-10-29 .3s로)
    목록은 위에서 아래로 밀려 내려오고(닫힐 땐 위로 올라감) 갈매기표 칸 아래끝에서 잘려 칸 뒤에서 나오는 것처럼 보임
-   고른 값은 제자리에서 0.5s 페이드 (2026-10-28 주인님 지적 — 값도 위에서 내려오면 올라가는 목록과 엇갈려 숫자가 구르듯 보였음), 줄 바탕도 0.5s 페이드 */
+   고른 값은 제자리에서 페이드 (2026-10-28 주인님 지적 — 값도 위에서 내려오면 올라가는 목록과 엇갈려 숫자가 구르듯 보였음), 줄 바탕도 페이드 */
 
 /* 갈매기표 칸: 높이 26, 폭 성별 50 · 키 90 · 몸무게 90 (시안 폭 그대로, 갈매기표 20×6 · 굵기 1.5는 가운데)
-   고른 칸(.chosen — fitting-room.js)은 흰 바탕의 고른 값이 떠오르며 갈매기표를 덮음 (시안 '선택값' 상자, 목록 줄과 같은 글자) → 앞 칸을 다시 고르면 뒤 칸은 값이 옅어지며 갈매기표가 다시 보임 */
+   고른 칸(.chosen — fitting-room.js)은 흰 바탕의 고른 값이 갈매기표를 덮음 (시안 '선택값' 상자, 목록 줄과 같은 글자) → 앞 칸을 다시 고르면 뒤 칸은 값이 옅어지며 갈매기표가 다시 보임 */
 .select .toggle {
     position: relative;
     display: block;
@@ -1427,7 +1432,10 @@ footer hr {
     line-height: calc(20 * var(--px));   /* 시안 글 상자 20 */
 }
 
-/* 고른 값: 칸을 꽉 채운 흰 상자, 고르기 전에는 투명했다가 고르면 제자리에서 떠오름 */
+/* 고른 값: 칸을 꽉 채운 흰 상자, 고르기 전에는 투명함
+   고르면 흰 상자는 바로 갈매기표를 덮고 글자만 제자리에서 페이드 (fitting-room.js)
+   2026-10-29 주인님 지적 — 예전엔 상자째 떠올라서 처음 고를 때 갈매기표가 글자 위에 잔상처럼 비쳤음
+   비울 땐(앞 칸을 다시 고름) 아래 transition대로 상자째 옅어지며 갈매기표가 드러남 */
 .select .selected {
     position: absolute;
     top: 0;
@@ -1438,14 +1446,15 @@ footer hr {
     place-items: center;
     background: var(--surface-white);
     opacity: 0;
-    transition: opacity .5s linear;
+    transition: opacity var(--move) linear;
 }
 
 .field.chosen .selected {
     opacity: 1;
+    transition: none;   /* 고를 땐 상자가 바로 불투명 → 갈매기표가 비치지 않음 */
 }
 
-/* 목록 자리: 갈매기표 칸 바로 아래에 목록 크기만큼 잘라 내는 창 — 자르는 선(칸 아래끝)은 움직이지 않고 안의 목록만 0.5s 등속으로 오르내림
+/* 목록 자리: 갈매기표 칸 바로 아래에 목록 크기만큼 잘라 내는 창 — 자르는 선(칸 아래끝)은 움직이지 않고 안의 목록만 등속으로 오르내림
    예전엔 목록 하나에 밀기(translate)와 자르기(clip-path)를 같이 걸었는데, 브라우저가 밀기만 따로 그려(GPU) 둘이 어긋나는 프레임에
    목록 숫자가 칸 위로 삐져나와 구르듯 보였음 (2026-10-28 주인님 지적) → 자르기는 이 창의 overflow로 고정 */
 .select-drop {
@@ -1459,7 +1468,7 @@ footer hr {
 }
 
 /* 목록: 같은 폭, 흰 바탕(시안에 테두리 없음 — 아래 회색 마네킹 칸 위에 뜸), 줄 높이 26에 글자 가운데
-   열면 칸 아래끝에서 0.5s 동안 내려오고, 닫으면(hidden — fitting-room.js) 0.5s 동안 올라간 뒤 숨김 → 닫힌 목록은 Tab · 스크린리더에서 빠짐 (닫히는 동안은 inert라 눌리지도 않음) */
+   열면 칸 아래끝에서 내려오고, 닫으면(hidden — fitting-room.js) 올라간 뒤 숨김 → 닫힌 목록은 Tab · 스크린리더에서 빠짐 (닫히는 동안은 inert라 눌리지도 않음) */
 .select-list {
     background: var(--surface-white);
     color: var(--gray-900);
@@ -1469,14 +1478,14 @@ footer hr {
     text-align: center;
     white-space: nowrap;
     pointer-events: auto;
-    transition: translate .5s linear, visibility 0s;
+    transition: translate var(--move) linear, visibility 0s;
 }
 
 .select-list[hidden] {
     display: block;   /* hidden의 기본 display: none을 풀어야 올라가는 게 보임 */
     visibility: hidden;
     translate: 0 -100%;
-    transition: translate .5s linear, visibility 0s linear .5s;
+    transition: translate var(--move) linear, visibility 0s linear var(--move);
 }
 
 .select-list .option {
@@ -1488,7 +1497,7 @@ footer hr {
     background: none;
     color: inherit;
     cursor: pointer;
-    transition: background-color .5s linear;
+    transition: background-color var(--move) linear;
 }
 
 /* 마우스를 올린 줄 · 고른 줄: 옅은 회색 바탕 (시안에 상태가 없어 사이즈 칸 기본색으로) */
