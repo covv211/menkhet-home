@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patua+One&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css" integrity="sha384-IFb872aCXZQb6BKRUHmGn0YHKnFl4ylZjkgVRRyMTEQ5bjo/H6xFUiLJm6opOO66" crossorigin="anonymous">
     <!-- ?v=날짜(같은 날 또 고치면 뒤에 b · c …): CSS · JS · 아이콘을 고치면 같이 올림 → GitHub Pages가 파일을 10분씩 캐시해서 새 HTML에 예전 CSS가 섞여 깨져 보이던 것 막음 (2026-10-29) -->
-    <link rel="stylesheet" href="styles/default.css?v=1029d">
-    <link rel="stylesheet" href="styles/token.css?v=1029d">
-    <link rel="stylesheet" href="styles/style.css?v=1029d">
+    <link rel="stylesheet" href="styles/default.css?v=1029e">
+    <link rel="stylesheet" href="styles/token.css?v=1029e">
+    <link rel="stylesheet" href="styles/style.css?v=1029e">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js" integrity="sha384-JiF4eFN9V3I2Fry7TzFM3XKdq0P3abiVxpOeHjGz4cwvas+uNg6pFWVmuD6MKXqG" crossorigin="anonymous" defer></script>
-    <script src="scripts/main.js?v=1029d" defer></script>
+    <script src="scripts/main.js?v=1029e" defer></script>
 </head>
 
 <body>
@@ -777,7 +777,7 @@
     </main>
 
     <!-- 상품 상세 창: 시안 146:889 — 여자 코트 페이지 위를 반투명 어두운 배경(dim)으로 덮고 가운데 1750×900 창을 띄움 (다른 페이지로 가지 않음), 여자 롱코트 01 카드를 누르면 열림 (여닫기 · 사진 고르기 · 피팅룸은 main.js)
-         내용은 롱코트 01 사진 · 썸네일 + 시안 2026-10-28 수정본의 정보 칸 (제목 · 가격은 시안 문구 그대로 → 카드의 상품명 · 가격과 다름), 시안에서 리뷰 목록은 빠짐 (평점 옆 '리뷰 남기기'만) -->
+         내용은 롱코트 01 사진 · 썸네일 + 시안 2026-10-28 수정본의 정보 칸 (제목 · 가격은 시안 문구 그대로 → 카드의 상품명 · 가격과 다름), 시안에서 리뷰 목록은 빠짐 (평점 옆 '리뷰'만) -->
     <!-- content-required: 제목 · 가격 · 평점 · 혜택 · 실측 · 모델 착용 정보는 시안 문구라 실제 데이터 필요 -->
     <!-- 해시 id는 창(.product-detail)에 둠: 주소로 열 때 브라우저가 창에 바로 포커스를 줌 (배경 dim에 두면 포커스가 풀림) -->
     <div class="dim detail-dim">
@@ -838,16 +838,16 @@
                 </div>
             </div>
 
-            <!-- 상품 정보: 시안 .detail-info 650 (위 50 · 오른쪽 70 · 왼쪽 30 여백, 2026-10-28 수정) — 머리(브랜드 · 제목 · 평점) → 가격 → 혜택 → 실측 · 옵션 → 버튼, 덩어리 사이 30 -->
+            <!-- 상품 정보: 시안 .detail-info 650 (위 50 · 좌우 50 여백, 2026-10-29 수정) — 머리(브랜드 · 제목 · 평점) → 가격 → 혜택 → 실측 · 옵션 → 버튼, 덩어리 사이 45 -->
             <div class="detail-info">
                 <div class="product-summary">
                     <div class="product-head">
                         <p class="brand">MENKHET</p>
                         <h2 class="title" id="detail-long-coat-01-title">오버사이즈 여자 롱 코트 블랙 앤 화이트 가져가세요 최고의 아이템입니다.</h2>
-                        <!-- 평점 + 리뷰 남기기 (리뷰 쓰기 페이지가 정해지면 연결, 지금은 동작 없음) -->
+                        <!-- 평점 + 리뷰 (리뷰 페이지가 정해지면 연결, 지금은 동작 없음) -->
                         <div class="review-summary">
                             <p class="rating"><span class="blind">평점</span><span class="score">4.5</span></p>
-                            <p class="review-title"><span>리뷰 남기기</span><i class="chevron" aria-hidden="true"></i></p>
+                            <p class="review-title"><span>리뷰</span><i class="chevron" aria-hidden="true"></i></p>
                         </div>
                     </div>
 
@@ -931,10 +931,10 @@
                 </div>
             </div>
 
-            <!-- 닫기: 시안 button.btn-close 272:1157 (50×50, 피팅룸 닫기와 같은 모양) · Esc로도 닫힘, 창 밖 어두운 곳을 눌러도 닫히지 않음 (주인님 지정) -->
+            <!-- 닫기: 시안 button.btn-close 272:1157 (50×50 가는 X, 피팅룸 닫기는 40×40) · Esc로도 닫힘, 창 밖 어두운 곳을 눌러도 닫히지 않음 (주인님 지정) -->
             <button type="button" class="btn-close">상품 상세 닫기</button>
 
-            <!-- 피팅룸 열기: 시안 341:2229 (2026-10-28 주인님이 '피팅룸으로 이동' 버튼 대신 넣음) — 창 오른쪽 끝 안쪽(x 1694 · y 312) 46×276 칸, 흰 바탕에 파란 '<', 칸 전체 투명도 40%
+            <!-- 피팅룸 열기: 시안 341:2229 (2026-10-28 주인님이 '피팅룸으로 이동' 버튼 대신 넣음) — 창 오른쪽 끝 안쪽(x 1700 · y 392) 46×116 칸, 흰 바탕에 회색 '<' (2026-10-29 수정)
                  누르면 창 오른쪽 끝에서 피팅룸이 밀려 들어와 이 칸을 덮음 (main.js) · JS가 없으면 링크대로 피팅룸 페이지로 감 -->
             <a class="btn-fitting-room" href="fitting-room.html">피팅룸으로 이동</a>
 
