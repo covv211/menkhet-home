@@ -82,13 +82,19 @@ header {
     cursor: pointer;
 }
 
-/* 1차 메뉴는 헤더 바로 아래 왼쪽 끝, 2·3차 메뉴는 바로 윗단계 목록 오른쪽에 그 목록의 위끝을 맞춰 붙음
-   (.sub · li에 position을 주지 않아 1차 목록은 고정된 header가 기준, 2 · 3차 목록은 누른 항목이 아니라 목록 위끝이 기준 — 시안도 2·3차 목록 모두 윗단계 목록 위끝에 맞춤) */
+/* 1차 메뉴는 헤더 바로 아래 왼쪽 끝, 2·3차 메뉴는 누른 항목 오른쪽에 그 항목의 위끝을 맞춰 붙음
+   (2026-10-29 주인님 지정 — 예전엔 윗단계 목록 위끝에 붙어 아래쪽 항목을 누르면 목록이 엉뚱하게 위에서 열렸음)
+   - .sub에는 position을 주지 않아 1차 목록은 고정된 header가 기준, li에 position을 줘서 2 · 3차 목록은 누른 항목이 기준
+   - 화면 아래로 넘치는 목록은 main.js가 넘친 만큼만 위로 올림 (헤더가 고정이라 스크롤로 아래를 볼 수 없음) */
 .sub > ul {
     position: absolute;
     top: calc(100% + 1px);   /* header 기준 100%는 아래선 위끝(84) → 선 밑 85부터 (시안 .sub y 85) */
     left: 0;
     width: calc(271 * var(--px));
+}
+
+.sub li {
+    position: relative;
 }
 
 /* 2 · 3차 목록은 윗단계 목록 밑으로 1px 겹쳐 들어감 (폭 · 글자 들여쓰기도 1px 늘려 보이는 자리는 그대로)
@@ -1087,7 +1093,7 @@ footer hr {
 /* ── 상품 카드 400×551: 위 50 · 사진 266.67×400 · 아래 50 + 정보 51(이름 줄만 보이고 가격 줄은 잘림) ── */
 .coat-section .product-item {
     height: calc(551 * var(--px));
-    overflow: hidden;
+    overflow: clip;   /* hidden이면 숨은 가격 줄 높이만큼 안이 스크롤될 수 있어서, 포커스가 돌아올 때 카드 속이 위로 밀렸음 (2026-10-29 주인님 지적) → 아예 굴러가지 않게 */
     background: var(--gray-150);   /* 사진 둘레 회색 */
     box-shadow: 0 calc(4 * var(--px)) calc(6 * var(--px)) rgba(0, 0, 0, .1);   /* 시안 drop shadow 0 4 6, 검정 10% (부품 원본은 0 0 6, 페이지의 카드 40개가 모두 0 4 6으로 덮어씀) */
     transition: height .3s linear;
@@ -1099,8 +1105,9 @@ footer hr {
     height: calc(602 * var(--px));
 }
 
+/* flow-root: 사진 위 여백 50이 링크 밖으로 빠져나가 링크가 카드보다 50 아래로 밀리지 않게 (밀리면 상세 창을 닫고 포커스가 돌아올 때 카드 속이 50 굴러 올라감) */
 .coat-section .product-item > a {
-    display: block;
+    display: flow-root;
     height: 100%;
 }
 
