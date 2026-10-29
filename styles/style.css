@@ -9,7 +9,7 @@
 
 :root {
     --px: min(1px, 100vw / 1920);
-    scroll-padding-top: calc(120 * var(--px));   /* 고정 헤더(110) 밑으로 섹션 이동: #cape 등으로 갈 때 섹션 위끝이 시안처럼 y 120에 옴 */
+    scroll-padding-top: calc(84 * var(--px));   /* 고정 헤더(85) 밑으로 섹션 이동: #cape 등으로 갈 때 섹션 위끝이 시안처럼 y 84에 옴 (2026-10-29 시안, 예전 110 헤더 땐 120) */
 }
 
 body {
@@ -24,7 +24,9 @@ body {
 }
 
 /* ══════════ 헤더 ══════════ */
-/* 스크롤해도 화면 위에 고정 (주인님 지정) */
+/* 스크롤해도 화면 위에 고정 (주인님 지정)
+   2026-10-29 시안(380:3596): 높이 85(위아래 17 + 로고 50 + 아래선 1), 햄버거 · 검색 | 글자 로고 | 로그인 · 아이콘 3개를 양끝 정렬
+   → 왼쪽 묶음(211)이 오른쪽(180)보다 넓어 로고는 시안처럼 x 888.5(가운데보다 15.5 오른쪽)에 옴 */
 header {
     position: fixed;
     top: 0;
@@ -34,55 +36,59 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: calc(110 * var(--px));
-    border-bottom: 1px solid var(--gray-300);
+    padding: calc(17 * var(--px)) calc(60 * var(--px));
+    border-bottom: 1px solid var(--gray-200);
     background: var(--surface-white);
 }
 
-.logo {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    translate: -50% -50%;
-}
-
+/* 글자 로고 MENKHET / OFFICIAL (시안 logo 컴포넌트 379:2070 — Patua One, 자간 11.5269 · 대문자, 폭 174 가운데 정렬, 두 줄 사이 5) */
 .logo a,
-.logo img {
-    display: block;
+.footer-logo a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(5 * var(--px));
+    width: calc(174 * var(--px));
+    color: var(--body-default);
+    font-family: "Patua One", serif;
+    font-size: calc(23 * var(--px));
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: calc(11.5269 * var(--px));
+    text-align: center;
+    text-indent: calc(11.5269 * var(--px));   /* 브라우저는 마지막 글자 뒤에도 자간을 붙여 글자가 자간의 반만큼 왼쪽으로 쏠림 → 앞에 같은 만큼 띄워 시안처럼 가운데 */
+    text-transform: uppercase;
 }
 
-.logo img {
-    width: calc(367 * var(--px));
-    height: auto;
+.logo .sub-name,
+.footer-logo .sub-name {
+    font-size: calc(14 * var(--px));
 }
 
 .gnb {
     display: flex;
     align-items: center;
+    gap: calc(28 * var(--px));
 }
 
 /* ── 전체 메뉴 (.sub) ── */
-.sub {
-    position: relative;
-}
-
 .big-menu {
     display: block;
-    width: calc(170 * var(--px));
-    height: calc(80 * var(--px));
+    width: calc(24 * var(--px));
+    height: calc(24 * var(--px));
     border: 0;
-    background: var(--icon-white) url(../images/icons/menu.svg) no-repeat calc(60 * var(--px)) calc(15 * var(--px)) / calc(70 * var(--px)) auto;   /* 위 15: 시안 막대 y 29.5~74.5 (선 굵기가 선 위쪽으로 그려져 칸 가운데보다 2.5 위) */
+    background: url(../images/icons/menu.svg) no-repeat center / contain;
     font-size: 0;
     cursor: pointer;
 }
 
-/* 1차 메뉴는 햄버거 바로 아래, 2·3차 메뉴는 바로 윗단계 목록 오른쪽에 그 목록의 위끝을 맞춰 붙음
-   (li에 position을 주지 않아 누른 항목이 아니라 목록 위끝이 기준 — 시안도 2·3차 목록 모두 윗단계 목록 위끝에 맞춤) */
+/* 1차 메뉴는 헤더 바로 아래 왼쪽 끝, 2·3차 메뉴는 바로 윗단계 목록 오른쪽에 그 목록의 위끝을 맞춰 붙음
+   (.sub · li에 position을 주지 않아 1차 목록은 고정된 header가 기준, 2 · 3차 목록은 누른 항목이 아니라 목록 위끝이 기준 — 시안도 2·3차 목록 모두 윗단계 목록 위끝에 맞춤) */
 .sub > ul {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 1px);   /* header 기준 100%는 아래선 위끝(84) → 선 밑 85부터 (시안 .sub y 85) */
     left: 0;
-    width: calc(170 * var(--px));
+    width: calc(271 * var(--px));
 }
 
 /* 2 · 3차 목록은 윗단계 목록 밑으로 1px 겹쳐 들어감 (폭 · 글자 들여쓰기도 1px 늘려 보이는 자리는 그대로)
@@ -92,12 +98,12 @@ header {
     position: absolute;
     top: 0;
     left: calc(100% - 1px);
-    width: calc(170 * var(--px) + 1px);
+    width: calc(271 * var(--px) + 1px);
 }
 
 /* 누르면 0.3s 등속으로 펼쳐지고, 닫을 땐 거꾸로 접힘 (주인님 지정): 1차 목록은 위에서 아래로, 2 · 3차 목록은 왼쪽에서 오른쪽으로
    - 목록(ul)째 자르면 오른쪽에 붙은 다음 단계 목록까지 잘려서, 목록 안 칸(버튼 · 링크)마다 잘라서 펼침
-   - 자르는 범위를 칸 위아래로 1px씩 넓힘: 칸 높이가 60.5처럼 소수라 칸 경계에서 딱 자르면 칸 사이에 가는 틈이 보임
+   - 자르는 범위를 칸 위아래로 1px씩 넓힘: 칸 높이가 59.3처럼 소수라 칸 경계에서 딱 자르면 칸 사이에 가는 틈이 보임
    - visibility는 접히는 0.3s가 끝난 뒤 바뀌어 닫힌 메뉴엔 포커스가 들어가지 않게 */
 .sub > ul,
 .sub .drop {
@@ -163,22 +169,23 @@ header {
     outline-offset: -3px;
 }
 
+/* 칸 271 × 79 (2026-10-29 시안 380:3684 — 예전 170 × 61) */
 .sub .menu,
 .sub .drop a {
     display: block;
     width: 100%;
     background: var(--icon-white);
-    color: var(--gray-800);
-    font-size: calc(34 * var(--px));   /* placeholder/medium/regular */
-    font-weight: var(--placeholder-medium-regular-weight);
-    line-height: calc(41 * var(--px));   /* 시안 글 상자 41 → 줄 높이 61 (normal은 40으로 그려져 줄이 60이 되고 목록 아래로 갈수록 어긋남) */
-    letter-spacing: var(--placeholder-medium-regular-letter-spacing);
-    white-space: nowrap;   /* '이벤트'·'액세서리'는 시안에서도 오른쪽 여백을 넘어 한 줄로 둠 */
+    color: var(--gray-700);
+    font-size: calc(24 * var(--px));   /* H2/medium (title/h2) */
+    font-weight: var(--h2-medium-weight);
+    line-height: calc(29 * var(--px));   /* 시안 글 상자 29 → 줄 높이 79 (위아래 25) */
+    letter-spacing: var(--h2-medium-letter-spacing);
+    white-space: nowrap;
     margin-bottom: -1px;   /* 아래 칸 밑으로 1px 겹침 (아래 여백도 1px 늘려 줄 간격은 그대로) → 윈도 125% 배율처럼 칸 경계가 반 픽셀에 걸려도 칸 사이 가로 틈이 안 생김 */
 }
 
 .sub .menu {
-    padding: calc(10 * var(--px)) calc(40 * var(--px)) calc(10 * var(--px) + 1px) calc(60 * var(--px));
+    padding: calc(25 * var(--px)) calc(40 * var(--px)) calc(25 * var(--px) + 1px) calc(60 * var(--px));
     border: 0;
     text-align: left;
     cursor: pointer;
@@ -187,7 +194,7 @@ header {
 /* 2차 목록 안의 여닫는 버튼(코트 · 신발 · 액세서리)도 2 · 3차 링크와 같은 안쪽 여백 */
 .sub .drop a,
 .sub .drop .menu {
-    padding: calc(10 * var(--px)) 0 calc(10 * var(--px) + 1px) calc(30 * var(--px) + 1px);   /* + 1px: 아래 · 왼쪽으로 1px 겹친 만큼 */
+    padding: calc(25 * var(--px)) 0 calc(25 * var(--px) + 1px) calc(50 * var(--px) + 1px);   /* + 1px: 아래 · 왼쪽으로 1px 겹친 만큼 */
 }
 
 /* 메뉴 글자에 마우스를 올리면 2px 밑줄이 왼쪽부터 0.3s 등속으로 그어짐 (키보드 포커스도 같게, 동작 줄이기여도 그대로) */
@@ -218,18 +225,16 @@ header {
 }
 
 /* ── 검색 ── */
+/* 시안 검색창 컴포넌트(379:2067): 돋보기 24 + 사이 10 + 안내 글 16 (글 폭 125 → 묶음 159) */
 #search {
     display: flex;
     align-items: center;
     gap: calc(10 * var(--px));
-    width: calc(500 * var(--px));
-    padding: calc(15 * var(--px)) calc(20 * var(--px)) calc(15 * var(--px)) calc(10 * var(--px));
-    background: var(--surface-white);
 }
 
 #search button {
-    width: calc(50 * var(--px));
-    height: calc(50 * var(--px));
+    width: calc(24 * var(--px));
+    height: calc(24 * var(--px));
     border: 0;
     background: url(../images/icons/search.svg) no-repeat center / contain;
     font-size: 0;
@@ -237,14 +242,14 @@ header {
 }
 
 #search input {
-    width: calc(410 * var(--px));
-    height: calc(50 * var(--px));
+    width: calc(125 * var(--px));
+    height: calc(24 * var(--px));
     border: 0;
     background: none;
     color: var(--body-default);
-    font-size: calc(34 * var(--px));   /* placeholder/medium/regular */
-    font-weight: var(--placeholder-medium-regular-weight);
-    letter-spacing: var(--placeholder-medium-regular-letter-spacing);
+    font-size: calc(16 * var(--px));   /* 글자 스타일 없음: Regular 16 · 자간 -0.4 */
+    font-weight: 400;
+    letter-spacing: -0.4px;
     appearance: none;
 }
 
@@ -252,12 +257,20 @@ header {
     color: var(--body-placeholder);
 }
 
-/* ── 사용자 메뉴 ── */
+/* 크롬은 빈 칸에서도 지우기(×) 단추 자리를 비워 둬서 폭 125에 안내 글 '…하세요'의 '요'가 잘림 → 단추를 뺌 (시안에도 없음) */
+#search input::-webkit-search-cancel-button {
+    display: none;
+}
+
+/* ── 사용자 메뉴: 로그인 + 사이 47 + 아이콘 24 세 개(사이 10), 아래끝 맞춤 ── */
 .user-menu {
     display: flex;
-    align-items: center;
-    gap: calc(20 * var(--px));   /* scale/20 */
-    padding-right: calc(60 * var(--px));
+    align-items: flex-end;
+    gap: calc(10 * var(--px));
+}
+
+.user-menu li:first-child {
+    margin-right: calc(37 * var(--px));   /* 로그인과 아이콘 사이 47 = gap 10 + 37 */
 }
 
 .user-menu a {
@@ -265,18 +278,17 @@ header {
 }
 
 .user-menu .go-login {
-    padding: calc(7 * var(--px)) calc(10 * var(--px));
     color: var(--body-link);
-    font-size: calc(30 * var(--px));   /* H1/medium (title/h1) */
-    font-weight: var(--h1-medium-weight);
-    line-height: var(--h1-medium-line-height);
+    font-size: calc(16 * var(--px));   /* Medium 16 (body/medium) */
+    font-weight: 500;
+    line-height: normal;
 }
 
 .user-menu .go-mypage,
 .user-menu .go-wish,
 .user-menu .go-cart {
-    width: calc(50 * var(--px));
-    height: calc(50 * var(--px));
+    width: calc(24 * var(--px));
+    height: calc(24 * var(--px));
     background: no-repeat center / contain;
     font-size: 0;
 }
@@ -401,7 +413,7 @@ header {
     height: calc(850 * var(--px));
 }
 
-/* ── 반짝이: 모든 장에서 같은 자리, 빛 번짐은 크기의 0.6배 ── */
+/* ── 반짝이: 모든 장에서 같은 자리, 빛 번짐은 크기의 0.6배 (2026-10-29 시안 1번 장에서 룩 이름과 겹치던 05번이 빠짐 → 다섯 장 모두 뺌) ── */
 .hero .sparkles i {
     position: absolute;
     top: calc(var(--y) * var(--px));
@@ -436,87 +448,84 @@ header {
     --s: 16;
 }
 
-.hero .spark-05 {
-    --x: 300;
-    --y: 470;
-    --s: 14;
-}
-
 .hero .spark-06 {
     --x: 1650;
     --y: 760;
     --s: 18;
 }
 
-/* ── 룩 이름 · 설명 · 컬렉션 버튼 ── */
+/* ── 룩 이름 · 설명 · 컬렉션 버튼: x 260, 세로 가운데 (2026-10-29 시안 1번 장 379:2197 — 다섯 장 모두 같은 틀로) ── */
+/* 이름 50 + 18 + 설명 56 = 124, 버튼까지 80, 버튼 42 → 묶음 246이 y 417 ~ 663 */
 .hero .cover-lines {
     position: absolute;
-    top: calc(600 * var(--px));
+    top: 50%;
     left: calc(260 * var(--px));
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: calc(18 * var(--px));
-    width: calc(560 * var(--px));
+    translate: 0 -50%;
 }
 
 .hero .native {
     color: var(--gray-0);
     font-family: "Noto Serif KR", serif;   /* 룩 제목은 모두 한글 (예전 나라별 고유 표기 글꼴은 뺌) */
-    font-size: calc(64 * var(--px));
-    font-weight: 600;
-    line-height: calc(80 * var(--px));
+    font-size: calc(35 * var(--px));
+    font-weight: 400;
+    line-height: calc(50 * var(--px));   /* 시안 행간 Auto → 글 상자 50 */
     letter-spacing: 0;
+    white-space: nowrap;
 }
 
 .hero .desc {
     color: color-mix(in srgb, var(--gray-0) 78%, transparent);
     font-size: calc(17 * var(--px));   /* body/large */
     line-height: calc(28 * var(--px));
-    letter-spacing: -.01em;
+    letter-spacing: 0;
+    white-space: nowrap;
 }
 
+/* 금색 테두리 · 금색 글자, 크기는 글자에 맞춤 (위아래 11 · 좌우 22 → 143 × 42) */
 .hero .go-collection {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: calc(12 * var(--px));
-    width: calc(200 * var(--px));
-    height: calc(52 * var(--px));
+    margin-top: calc(62 * var(--px));   /* 설명과 80 = gap 18 + 62 */
+    padding: calc(11 * var(--px)) calc(22 * var(--px));
     border: 1px solid var(--gold-300);
     border-radius: calc(26 * var(--px));
-    color: var(--gray-0);
+    color: var(--gold-300);
     font-size: calc(15 * var(--px));   /* body/small */
     font-weight: 500;
-    letter-spacing: .04em;
+    line-height: normal;
+    letter-spacing: 0;
 }
 
 .hero .go-collection .arrow {
     width: calc(18 * var(--px));
     height: calc(10 * var(--px));
-    background: url(../images/icons/arrow-wh.svg) no-repeat center / contain;
+    background: url(../images/icons/arrow-gold.svg) no-repeat center / contain;
 }
 
-/* ── 이전 · 다음 버튼 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용) ── */
+/* ── 이전 · 다음 버튼 70×70: 양끝에서 10, 세로 가운데 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용) ── */
 .hero .swiper-button-prev,
 .hero .swiper-button-next {
-    top: calc(455 * var(--px));
-    width: calc(170 * var(--px));
-    height: calc(170 * var(--px));
+    top: calc(505 * var(--px));
+    width: calc(70 * var(--px));
+    height: calc(70 * var(--px));
     margin-top: 0;
     border: 0;
-    border-radius: 50%;
-    background: no-repeat center / calc(71 * var(--px)) auto;
-    opacity: .2;
+    background: no-repeat center / contain;
 }
 
 .hero .swiper-button-prev {
-    left: calc(60 * var(--px));
+    left: calc(10 * var(--px));
     background-image: url(../images/icons/chevron-left.svg);
 }
 
 .hero .swiper-button-next {
-    right: calc(60 * var(--px));
+    right: calc(10 * var(--px));
     background-image: url(../images/icons/chevron-right.svg);
 }
 
@@ -525,24 +534,19 @@ header {
     display: none;
 }
 
-/* ── 쪽 번호 01 / 05 ── */
+/* ── 쪽 번호 01 / 05: 룩 이름 위 x 260 · y 352, 테두리 없는 글자만 (2026-10-29 시안 — 예전 리본 아래 알약) ── */
 .hero .swiper-pagination {
-    top: calc(858 * var(--px));
+    top: calc(352 * var(--px));
     bottom: auto;
     left: calc(260 * var(--px));
-    width: calc(124 * var(--px));
-    height: calc(40 * var(--px));
-    border: 1px solid color-mix(in srgb, var(--gray-0) 45%, transparent);
-    border-radius: calc(20 * var(--px));
-    background: color-mix(in srgb, var(--gray-1200) 32%, transparent);
-    backdrop-filter: blur(calc(10 * var(--px)));
-    -webkit-backdrop-filter: blur(calc(10 * var(--px)));
+    width: auto;
     color: var(--gray-0);
     font-family: "Bodoni Moda", "Times New Roman", serif;
     font-size: calc(18 * var(--px));
     font-style: italic;
-    line-height: calc(38 * var(--px));
+    line-height: normal;
     letter-spacing: .04em;
+    text-align: left;
 }
 
 .hero .swiper-pagination .total {
@@ -566,39 +570,57 @@ header {
     white-space: nowrap;
 }
 
-/* 랭킹 · 추천 코디 · 프로모션이 같은 제목 묶음: 가운데 정렬, 아래 내용과 40 */
+/* 랭킹 · MD PICK · 인스타그램(@MENKHET.official)이 같은 제목 묶음: 가운데 정렬, 제목 46 + 14 + 설명 21 = 81, 아래 내용과 50
+   섹션끼리는 200씩 띄움 (히어로 아래 · 섹션 사이 · 푸터 위 모두 200 — 2026-10-29 시안 380:3622) */
 section > .title {
-    margin-bottom: calc(40 * var(--px));
+    margin-bottom: calc(50 * var(--px));
     text-align: center;
 }
 
 .section-title {
     color: var(--on-color-description);
-    font-size: calc(64 * var(--px));   /* Text Style 없음 (Pretendard Bold 64 · 자간 10) */
-    font-weight: 700;
-    line-height: normal;   /* 시안 행간 Auto */
-    letter-spacing: calc(10 * var(--px));
+    font-family: "Noto Serif KR", serif;
+    font-size: calc(32 * var(--px));   /* 글자 스타일 없음: Noto Serif KR Regular 32 · 자간 0 */
+    font-weight: 400;
+    line-height: calc(46 * var(--px));   /* 시안 행간 Auto → 글 상자 46 */
+    letter-spacing: 0;
+}
+
+.section-desc {
+    margin-top: calc(14 * var(--px));
+    color: var(--on-color-description);
+    font-size: calc(18 * var(--px));   /* 글자 스타일 없음: Regular 18 */
+    font-weight: 400;
+    line-height: calc(21 * var(--px));
 }
 
 /* ══════════ 랭킹 ══════════ */
-/* 시안 y 1080~1696: 위아래 50, 제목과 목록 사이 40, 콘텐츠 폭 1620(x 150~1770) 가운데 */
+/* 시안 y 1280~1821: 화살표까지 1761(x 79 ~ 1840) 가운데, 목록 1620은 그 안 x 72 (화살표와 목록 사이 40) */
 .ranking {
-    max-width: calc(1620 * var(--px));
-    padding: calc(50 * var(--px)) 0;
+    max-width: calc(1761 * var(--px));
+    padding-top: calc(200 * var(--px));
 }
 
-/* ── 상품 목록: 한 화면에 5개 (308 × 400, 사이 20은 main.js의 spaceBetween) ── */
+/* ── 상품 목록: 한 화면에 5개 (316 × 410, 사이 10은 main.js의 spaceBetween) ── */
 .ranking-swiper {
     position: relative;
 }
 
+.ranking-slider {
+    width: calc(1620 * var(--px));
+}
+
+/* 회색 칸 316 × 410 가운데에 누끼 사진 235 × 306 (2026-10-29 시안 — 예전엔 사진이 칸을 꽉 채움) */
 .ranking .product-item {
-    height: auto;   /* Swiper 기본 height: 100% 대신 이미지 비율로 높이를 정함 */
-    background: var(--gray-250);
+    height: auto;   /* Swiper 기본 height: 100% 대신 칸 높이로 */
+    background: var(--gray-150);
 }
 
 .ranking .product-item a {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(410 * var(--px));
 }
 
 /* Swiper가 목록 밖을 잘라서 포커스 링이 가려지지 않게 안쪽으로 그림 */
@@ -608,32 +630,29 @@ section > .title {
 
 .ranking .product-item img {
     display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 308 / 400;
-    object-fit: cover;   /* Figma 채우기(FILL): 원본 2000×2600을 308×400 칸에 꽉 차게 */
+    width: calc(235 * var(--px));
+    height: calc(306 * var(--px));
+    object-fit: cover;   /* 원본 620×806이 235×306과 같은 비율 */
 }
 
-/* ── 이전 · 다음 버튼 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용) ── */
+/* ── 이전 · 다음 버튼 32×68: 목록 양옆 40 밖, 목록 위끝에서 166 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용) ── */
 .ranking .swiper-button-prev,
 .ranking .swiper-button-next {
-    top: calc(146 * var(--px));   /* 목록 높이 400의 가운데 */
-    width: calc(51 * var(--px));
-    height: calc(108 * var(--px));
+    top: calc(166 * var(--px));
+    width: calc(32 * var(--px));
+    height: calc(68 * var(--px));
     margin-top: 0;
     border: 0;
-    border-radius: calc(100 * var(--px));
     background: no-repeat center / contain;
-    opacity: .8;
 }
 
 .ranking .swiper-button-prev {
-    left: calc(20 * var(--px));
+    left: 0;
     background-image: url(../images/icons/chevron-ranking-left.svg);
 }
 
 .ranking .swiper-button-next {
-    right: calc(20 * var(--px));
+    right: 0;
     background-image: url(../images/icons/chevron-ranking-right.svg);
 }
 
@@ -642,20 +661,10 @@ section > .title {
     display: none;
 }
 
-/* ══════════ 추천 코디 (예전 나라별 룩 — 클래스 이름은 그대로 country-look) ══════════ */
-/* 위아래 50, 제목 묶음과 슬라이드 사이 40 (시안 세로 Auto Layout 50 · 40 · 50) */
+/* ══════════ MD PICK (예전 나라별 룩 → 추천 코디 — 클래스 이름은 그대로 country-look) ══════════ */
+/* 위 200, 제목 묶음과 슬라이드 사이 50 (2026-10-29 시안 379:2321) */
 .country-look {
-    padding: calc(50 * var(--px)) 0;
-}
-
-/* ── 제목 아래 설명 ── */
-.country-look .section-desc {
-    margin-top: calc(15 * var(--px));
-    color: var(--on-color-description);
-    font-size: calc(30 * var(--px));   /* H1/line/medium */
-    font-weight: var(--h1-line-medium-weight);
-    line-height: var(--h1-line-medium-line-height);
-    letter-spacing: var(--h1-line-medium-letter-spacing);
+    padding-top: calc(200 * var(--px));
 }
 
 /* ── 슬라이드 한 장: 1920 시안을 화면 가운데에 두고, 옷감 배경만 화면 끝까지 늘어남 ── */
@@ -697,46 +706,53 @@ section > .title {
     height: calc(700 * var(--px));
 }
 
-/* ── 룩 이름 · 설명 · 자세히 보기: x 300 · y 455, 사이 간격 20 ── */
+/* 룩 01은 2026-10-29 시안에서 모델만 428×642로 줄어 x 1172 · y 29 (같은 2:3, 위아래 29씩 비움) */
+.country-look .look-01 .look-model {
+    top: calc(29 * var(--px));
+    left: calc(var(--x0) + 1172 * var(--px));
+    width: calc(428 * var(--px));
+    height: calc(642 * var(--px));
+}
+
+/* ── 룩 이름 · 설명 · 자세히 보기: 왼쪽 80 · 아래 80, 폭 432 (2026-10-29 시안 룩 01 379:2328 — 세 장 모두 같은 틀로) ──
+   이름 32 + 14 + 설명 두 줄 → 자세히 보기까지 45 */
 .country-look .look-text {
     position: absolute;
-    top: calc(455 * var(--px));
-    left: calc(var(--x0) + 300 * var(--px));
-    width: calc(600 * var(--px));
+    bottom: calc(80 * var(--px));
+    left: calc(var(--x0) + 80 * var(--px));
+    width: calc(432 * var(--px));
     color: var(--on-color-description);
+    font-weight: 500;
+    letter-spacing: -.01em;   /* 시안 자간 -0.2736 (27.36의 1%) */
 }
 
 .country-look .look-title {
-    font-size: calc(40 * var(--px));   /* H1 big/medium */
-    font-weight: var(--h1-big-medium-weight);
-    line-height: var(--h1-big-medium-line-height);
-    letter-spacing: var(--h1-big-medium-letter-spacing);
-}
-
-.country-look .look-desc,
-.country-look .btn-more {
-    margin-top: calc(20 * var(--px));
-    font-size: calc(30 * var(--px));   /* H1/line/medium */
-    font-weight: var(--h1-line-medium-weight);
-    line-height: var(--h1-line-medium-line-height);
-    letter-spacing: var(--h1-line-medium-letter-spacing);
+    font-size: calc(27 * var(--px));   /* 글자 스타일 없음: Medium 27 */
+    font-weight: 500;   /* h3 기본 굵게를 끔 */
+    line-height: normal;
 }
 
 .country-look .look-desc {
-    white-space: nowrap;   /* 가장 긴 첫 줄(글렌체크 블레이저 룩 553)이 600 폭에 가까워서 글꼴 차이로 세 줄이 되지 않게 (줄바꿈은 <br>로만) */
+    margin-top: calc(14 * var(--px));
+    font-size: calc(21 * var(--px));   /* 글자 스타일 없음: Medium 21 · 행간 170% */
+    line-height: 1.7;
+    white-space: nowrap;   /* 가장 긴 첫 줄(글렌체크 블레이저 룩)이 432 폭을 넘어도 세 줄이 되지 않게 (줄바꿈은 <br>로만) */
 }
 
 .country-look .btn-more {
     display: flex;
     align-items: center;
-    gap: calc(15 * var(--px));
+    gap: calc(10.8 * var(--px));
     width: fit-content;
+    margin-top: calc(45 * var(--px));
+    font-size: calc(20 * var(--px));   /* 글자 스타일 없음: Medium 20 · 행간 130% */
+    line-height: 1.3;
 }
 
 .country-look .btn-more .chevron {
-    width: calc(16 * var(--px));
-    height: calc(22 * var(--px));
-    background: url(../images/icons/chevron-small.svg) no-repeat center / contain;
+    width: calc(11.52 * var(--px));
+    height: calc(15.84 * var(--px));
+    background: url(../images/icons/chevron-small.svg) no-repeat center / contain;   /* 시안 갈매기표 = 예전 16×22를 0.72배로 줄인 것 */
     opacity: .8;
 }
 
@@ -824,36 +840,47 @@ section > .title {
     --r: 10.76deg;
 }
 
-/* ══════════ 프로모션 ══════════ */
+/* ══════════ 인스타그램 @MENKHET.official (예전 프로모션 — 클래스 이름은 그대로 promotion) ══════════ */
+/* 2026-10-29 시안 379:2394: 위 200 · 아래 200(푸터까지), 두 줄이 화면 양끝까지 (예전엔 폭 1800에서 잘림) */
 .promotion {
-    padding: calc(50 * var(--px)) 0;
+    padding: calc(200 * var(--px)) 0;
 }
 
-/* ── 상품 두 줄: 줄 폭 1800 밖으로 넘친 장은 잘림 (시안 ul.promotion-row의 clip을 목록에서 한 번에) ── */
+/* ── 상품 두 줄: 화면 밖으로 넘친 장은 잘림 (시안 ul.promotion-row의 clip을 목록에서 한 번에) ── */
 .promotion-list {
+    container-type: inline-size;   /* 흐름 키프레임이 목록 폭(100cqw)을 기준으로 줄을 가운데에 둠 */
     overflow: hidden;
 }
 
+/* 흐르기 전: 13장을 줄 가운데에 두고 윗줄은 왼쪽으로 45, 아랫줄은 오른쪽으로 45 비껴 둠 (시안 첫 장 x -375 · -285) */
 .promotion-row {
+    --shift: calc(-45 * var(--px));
     display: flex;
-    justify-content: center;   /* 흐르기 전: 13장을 줄 가운데에 두고 양끝 2장씩 잘림 (시안 그대로) */
+    justify-content: center;
+    translate: var(--shift) 0;
 }
 
 .promotion-row + .promotion-row {
-    margin-top: calc(50 * var(--px));
+    --shift: calc(45 * var(--px));
+    margin-top: calc(20 * var(--px));
 }
 
+/* 아주 옅은 회색 칸 180 × 234 가운데에 누끼 사진 110 × 143 (예전엔 사진이 칸을 꽉 채움) */
 .promotion-item {
-    flex: none;   /* 13장(2600)이 줄(1800)보다 길어도 줄어들지 않게 */
+    display: flex;
+    flex: none;   /* 13장(2600)이 화면보다 길어도 줄어들지 않게 */
+    justify-content: center;
+    align-items: center;
     width: calc(180 * var(--px));
+    height: calc(234 * var(--px));
     margin-inline: calc(10 * var(--px));   /* 시안 간격 20을 양쪽 10씩 → 한 장이 차지하는 폭 200, 복제를 붙이면 원래 한 벌이 트랙의 정확히 절반 */
-    background: var(--gray-250);
+    background: var(--gray-100);
 }
 
 .promotion-item img {
     display: block;
-    width: 100%;
-    height: auto;
+    width: calc(110 * var(--px));
+    height: calc(143 * var(--px));
 }
 
 /* ── 흐름: main.js가 13장을 복제해 뒤에 붙이고, 화면에 보일 때만 .active를 붙임 ── */
@@ -875,96 +902,25 @@ section > .title {
     animation-play-state: paused;
 }
 
-/* 시작 = 원래 한 벌(트랙의 50%)을 줄 가운데에 둔 자리 = 흐르기 전 모습, 끝 = 한 벌만큼 왼쪽 → 복제가 시작 자리에 와서 이음매가 안 보임 */
+/* 시작 = 원래 한 벌(트랙의 50%)을 줄 가운데에서 --shift만큼 비킨 자리 = 흐르기 전 모습, 끝 = 한 벌만큼 왼쪽 → 복제가 시작 자리에 와서 이음매가 안 보임 */
 @keyframes promotion-flow {
     from {
-        translate: calc((1800 * var(--px) - 50%) / 2) 0;
+        translate: calc((100cqw - 50%) / 2 + var(--shift)) 0;
     }
 
     to {
-        translate: calc((1800 * var(--px) - 50%) / 2 - 50%) 0;
+        translate: calc((100cqw - 50%) / 2 - 50% + var(--shift)) 0;
     }
 }
 
-/* ══════════ 서비스 바로가기 ══════════ */
-/* 카드 4장(430×645, 간격 26)을 가운데 정렬 → 1920에서 x 61~1859, 위아래 여백 50 */
-.service-links {
-    display: flex;
-    justify-content: center;
-    gap: calc(26 * var(--px));
-    padding: calc(50 * var(--px)) 0;
-}
-
-.service-card {
-    position: relative;
-    display: block;
-    width: calc(430 * var(--px));
-    height: calc(645 * var(--px));
-}
-
-/* 모델 사진은 배경이 투명한 누끼 → 뒤에 비치는 흰색은 페이지 배경(시안 PC 프레임 surface/white) */
-.service-card img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;   /* Figma FILL, 원본도 2:3이라 잘리는 곳 없음 */
-}
-
-/* ── 아래쪽 어둡게: 55%까지 투명 → 100%에서 gray/1100 ── */
-/* Figma는 투명 흰색과 gray/1100을 알파를 곱하지 않고 섞어 중간이 회색으로 밝음 → 브라우저도 같게 중간 정지점 3개를 넣음 (흰 배경에서 Figma 렌더 240 · 198 · 153과 맞춤) */
-.service-card .card-dim {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 55%, rgba(198, 198, 198, .25) 66.25%, rgba(141, 141, 141, .5) 77.5%, rgba(83, 83, 83, .75) 88.75%, var(--gray-1100) 100%);
-}
-
-/* ── 제목 · 바로가기: 250 폭을 카드 가로 가운데에, 아래끝에서 55 위 ── */
-.service-card .card-text {
-    position: absolute;
-    right: 0;
-    bottom: calc(55 * var(--px));
-    left: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: calc(15 * var(--px));
-    width: calc(250 * var(--px));
-    margin-inline: auto;
-    color: var(--on-color-text);
-}
-
-.service-card .card-title {
-    font-size: calc(64 * var(--px));   /* 텍스트 스타일 없음 (Pretendard Medium 64 / 130%) */
-    font-weight: 500;
-    line-height: 130%;
-}
-
-.service-card .btn-go {
-    display: flex;
-    align-items: center;
-    gap: calc(15 * var(--px));
-    font-size: calc(30 * var(--px));   /* H1/line/medium (title/h1) */
-    font-weight: var(--h1-line-medium-weight);
-    line-height: var(--h1-line-medium-line-height);
-    letter-spacing: var(--h1-line-medium-letter-spacing);
-}
-
-.service-card .chevron {
-    width: calc(16 * var(--px));
-    height: calc(22 * var(--px));
-    background: url(../images/icons/chevron-small-wh.svg) no-repeat center / contain;
-    opacity: .8;
-}
-
 /* ══════════ 푸터 ══════════ */
-/* 배경은 화면 끝까지, 내용은 x 60 ~ 1860 (1800) 안에서 위아래 4줄: 로고·메뉴 / 선 / 사업자 정보·고객센터 / 저작권·SNS */
+/* 배경은 화면 끝까지, 내용은 x 60 ~ 1860 (1800) 안에서 위아래 4줄: 로고·메뉴 / 선 / 사업자 정보·고객센터 / 저작권·SNS
+   2026-10-29 시안 380:2924: 검은 바탕(gray-1000)에 흰 글자 · 흰 글자 로고 · 흰 테두리 SNS (예전 리넨 바탕 · 파란 로고) */
 footer {
     padding: calc(72 * var(--px)) 0 calc(64 * var(--px));
     border-top: 1px solid var(--border-default);
-    background: var(--brand-linen);
+    background: var(--gray-1000);
+    color: var(--on-color-text);
 }
 
 /* ── 로고 · 약관 메뉴 ── */
@@ -974,14 +930,8 @@ footer {
     align-items: center;
 }
 
-.footer-logo a,
-.footer-logo img {
-    display: block;
-}
-
-.footer-logo img {
-    width: calc(247 * var(--px));
-    height: auto;
+.footer-logo a {
+    color: var(--on-color-text);
 }
 
 .footer-menu {
@@ -990,14 +940,12 @@ footer {
 }
 
 .footer-menu a {
-    color: var(--gray-700);
     font-size: calc(15 * var(--px));   /* Body-sm/medium (body/small) */
     font-weight: var(--body-sm-medium-weight);
     line-height: var(--body-sm-medium-line-height);
 }
 
 .footer-menu .go-privacy {
-    color: var(--gray-1100);
     font-weight: var(--body-sm-bold-weight);   /* Body-sm/bold: 개인정보처리방침만 굵게 */
 }
 
@@ -1005,7 +953,7 @@ footer hr {
     height: 1px;
     margin: calc(32 * var(--px)) 0;
     border: 0;
-    background: var(--icon-dimmed);
+    background: var(--gray-600);
 }
 
 /* ── 사업자 정보 · 고객센터 ── */
@@ -1021,7 +969,6 @@ footer hr {
 
 .footer-info p,
 .footer-cs p {
-    color: var(--gray-700);
     font-size: calc(14 * var(--px));   /* Body-xsm/regular (body/x-small) */
     font-weight: var(--body-xsm-regular-weight);
     line-height: var(--body-xsm-regular-line-height);
@@ -1041,7 +988,6 @@ footer hr {
 }
 
 .footer-cs .title {
-    color: var(--gray-1000);
     font-size: calc(16 * var(--px));   /* Body-md/semibold (body/medium) */
     font-weight: var(--body-md-semibold-weight);
     line-height: var(--body-md-semibold-line-height);
@@ -1049,7 +995,6 @@ footer hr {
 
 .footer-cs .tel {
     display: block;
-    color: var(--brand-blue);
     font-size: calc(30 * var(--px));   /* H1/bold (title/h1) */
     font-weight: var(--h1-bold-weight);
     line-height: var(--h1-bold-line-height);
@@ -1064,7 +1009,7 @@ footer hr {
 }
 
 .footer-bottom .copyright {
-    color: var(--gray-600);
+    color: var(--body-description);
     font-size: calc(13 * var(--px));   /* Caption-lg/regular (caption/large) */
     font-weight: var(--caption-lg-regular-weight);
     line-height: var(--caption-lg-regular-line-height);
@@ -1075,15 +1020,15 @@ footer hr {
     gap: calc(12 * var(--px));
 }
 
-/* 파란 원 안에 흰 아이콘, 이름은 글자를 숨겨 남김 */
+/* 흰 테두리 원 안에 흰 아이콘 (2026-10-29 시안 — 예전 파란 원), 이름은 글자를 숨겨 남김 */
 .footer-sns a {
     display: flex;
     justify-content: center;
     align-items: center;
     width: calc(44 * var(--px));
     height: calc(44 * var(--px));
+    border: 1px solid var(--icon-white);
     border-radius: 50%;
-    background: var(--brand-blue);
     font-size: 0;
 }
 
@@ -1110,66 +1055,48 @@ footer hr {
 }
 
 /* ══════════ 여자 코트 (women-coat.html) ══════════
-   - 시안 146:2227: 헤더는 메인과 같이 화면 위에 고정(높이 110), 본문은 120 아래에서 시작
-   - 2026-10-27 시안 수정: 섹션 제목이 빠지고 섹션 = 상품 슬라이더 775만 (첫 섹션만 위 100) → 카드 줄 y 282.5 · 1057.5 · 1832.5 · 2607.5, 제목은 스크린리더용 h2(.blind)로만 둠
+   - 시안 146:2227: 헤더는 메인과 같이 화면 위에 고정(높이 85), 본문은 84 아래에서 시작 (2026-10-29 — 예전 110 헤더 땐 120)
+   - 섹션 = 상품 슬라이더 775만 (2026-10-29 시안에서 첫 섹션 위 100도 빠짐) → 카드 줄 y 196 · 971 · 1746 · 2521, 제목은 스크린리더용 h2(.blind)로만 둠
    - 섹션 4개(롱코트 · 케이프 · 트렌치 · 하프코트)는 모양이 같아 클래스 하나로 묶음 (시안 이름 .women's-long-coat-swiper는 ' 때문에 클래스로 못 써서 역할 이름으로 바꿈)
-   - 카드에 마우스를 올리면 1.1배로 커지고 양옆 카드는 20씩 밀려남 (시안 hover 변형 440×715, Smart animate linear 0.3s) */
+   - 카드(시안 컴포넌트 146:1641)는 평소 이름 · 평점만, 마우스를 올리면 아래로 51 늘어나 할인가 · 원가 줄이 나옴 (state=default 551 → state2 602, 0.3s 등속 — 예전 1.1배 커짐 대신) */
 
 .women-coat {
-    padding: calc(120 * var(--px)) 0 calc(100 * var(--px));   /* 아래 100 = 시안 자동 레이아웃 아래 여백 (프레임 높이 4164는 예전 제목 있던 때 그대로 고정돼 있어 따르지 않음) */
+    padding: calc(84 * var(--px)) 0 calc(100 * var(--px));   /* 아래 100 = 시안 프레임 아래 여백 */
     background: var(--surface-white);
 }
 
-/* ── 섹션: 상품 슬라이더만 (높이 775, 첫 섹션은 위 100을 더해 875) ── */
+/* ── 섹션: 상품 슬라이더만 (높이 775) ── */
 .coat-section {
     padding: 0;   /* 폭 1800(슬라이더 x 60~1860)은 공통 .inner */
 }
 
-.coat-section:first-child {
-    padding-top: calc(100 * var(--px));
-}
-
-/* ── 슬라이더: 1800 상자가 카드를 자르고, 카드 4장 폭(1690)의 Swiper는 overflow를 풀어 양옆에 다음 카드가 25씩 보이게 ── */
+/* ── 슬라이더: 1800 상자 가운데에 카드 4장 폭(1690) — 2026-10-29 시안은 목록(ul.product-list)이 1690에서 잘려 양옆 다음 카드가 안 보임 (예전엔 25씩 보임) ── */
 .coat-swiper {
     position: relative;
     overflow: hidden;
-    padding: calc(62.5 * var(--px)) 0;   /* 위아래 여백 = 1.1배 커진 카드(715)와 그림자가 잘리지 않을 자리 */
+    padding: calc(112 * var(--px)) 0;   /* 775 가운데에 카드 551 → 위아래 112 (늘어난 카드 602도 아래 112 안에 들어감) */
 }
 
+/* 높이는 평소 카드 551로 고정하고 옆만 자름 → 마우스로 늘어난 카드(602)가 아래로 삐져나와도 섹션 높이가 바뀌어 아래 섹션이 밀리지 않음 */
 .coat-slider {
     width: calc(1690 * var(--px));   /* 카드 400 × 4 + 간격 30 × 3 (간격은 main.js) */
-    overflow: visible;
+    height: calc(551 * var(--px));
+    overflow: clip visible;
 }
 
-/* ── 상품 카드 400×650: 사진 333×500 + 정보 150 ── */
+/* ── 상품 카드 400×551: 위 50 · 사진 266.67×400 · 아래 50 + 정보 51(이름 줄만 보이고 가격 줄은 잘림) ── */
 .coat-section .product-item {
-    height: calc(650 * var(--px));
+    height: calc(551 * var(--px));
     overflow: hidden;
-    background: var(--gray-250);   /* 사진 양옆 회색 */
+    background: var(--gray-150);   /* 사진 둘레 회색 */
     box-shadow: 0 calc(4 * var(--px)) calc(6 * var(--px)) rgba(0, 0, 0, .1);   /* 시안 drop shadow 0 4 6, 검정 10% (부품 원본은 0 0 6, 페이지의 카드 40개가 모두 0 4 6으로 덮어씀) */
-    transition: scale .3s linear .1s, translate .3s linear .1s;   /* 제자리로 돌아갈 때만 .1s 늦게 → 카드 사이 간격 30을 지나는 동안 먼 카드들이 돌아갔다 다시 밀리며 흔들리지 않게 (커지고 밀릴 때는 아래 규칙에서 바로) */
+    transition: height .3s linear;
 }
 
-/* 마우스를 올린 카드 · 키보드로 포커스한 카드(테두리가 보일 때만)는 1.1배, 마우스를 올린 카드가 있으면 포커스 쪽은 쉼
-   → 마우스로 상세 창을 닫아 카드 링크로 포커스가 돌아와도 커진 채 남지 않고, 포커스 카드와 마우스 카드의 밀기가 겹쳐 간격이 50 · 10으로 틀어지지 않게 */
+/* 마우스를 올린 카드 · 키보드로 포커스한 카드(테두리가 보일 때만)는 602로 늘어나 가격 줄이 보임 (시안 state2) */
 .coat-section .product-item:hover,
-.coat-section .product-list:not(:has(.product-item:hover)) .product-item:has(:focus-visible) {
-    z-index: 1;
-    scale: 1.1;   /* 양옆으로 20씩 커짐 */
-    transition-delay: 0s;
-}
-
-/* 커진 카드의 양옆 카드는 20씩 밀려나 간격 30을 그대로 둠 (시안은 가운데 정렬 목록에서 440으로 바뀐 카드가 양옆을 밀어냄) */
-.coat-section .product-item:has(~ .product-item:hover),
-.coat-section .product-list:not(:has(.product-item:hover)) .product-item:has(~ .product-item :focus-visible) {
-    translate: calc(-20 * var(--px)) 0;
-    transition-delay: 0s;
-}
-
-.coat-section .product-item:hover ~ .product-item,
-.coat-section .product-list:not(:has(.product-item:hover)) .product-item:has(:focus-visible) ~ .product-item {
-    translate: calc(20 * var(--px)) 0;
-    transition-delay: 0s;
+.coat-section .product-item:has(:focus-visible) {
+    height: calc(602 * var(--px));
 }
 
 .coat-section .product-item > a {
@@ -1184,19 +1111,18 @@ footer hr {
 
 .coat-section .product-item img {
     display: block;
-    width: calc(333 * var(--px));
-    height: calc(500 * var(--px));
-    margin-left: calc(34 * var(--px));
+    width: calc(266.667 * var(--px));
+    height: calc(400 * var(--px));
+    margin: calc(50 * var(--px)) auto;
 }
 
-/* 첫 줄은 상품명(왼쪽) · 평점(오른쪽), 원가 · 할인가 줄은 한 줄을 다 씀 */
+/* 첫 줄은 상품명(왼쪽) · 평점(오른쪽), 둘째 줄은 할인율 · 판매가(왼쪽) · 원가(오른쪽, 아래끝 맞춤) — 줄 사이 10 */
 .coat-section .product-info {
     display: grid;
     grid-template-columns: 1fr auto;
-    align-content: start;   /* 남는 높이로 줄 간격이 벌어지지 않게 */
     align-items: center;
-    height: calc(150 * var(--px));
-    padding: calc(20 * var(--px)) calc(34 * var(--px)) 0;
+    row-gap: calc(10 * var(--px));
+    padding: calc(10 * var(--px)) calc(15 * var(--px));
     background: var(--surface-white);
 }
 
@@ -1209,6 +1135,7 @@ footer hr {
 
 .coat-section .rating {
     display: flex;
+    justify-self: end;   /* 오른쪽 칸 폭은 아랫줄 원가가 정해서 더 넓음 → 평점은 칸 오른쪽 끝에 붙임 */
     align-items: center;
     gap: calc(4 * var(--px));
 }
@@ -1227,13 +1154,10 @@ footer hr {
     line-height: var(--h2-medium-line-height);
 }
 
-.coat-section .origin-price,
-.coat-section .sale-price {
-    grid-column: 1 / -1;
-}
-
+/* HTML은 원가 → 할인가 순서(읽는 순서) 그대로, 화면에서는 할인가를 왼쪽 · 원가를 오른쪽에 */
 .coat-section .origin-price {
-    margin-top: calc(10 * var(--px));
+    grid-area: 2 / 2;
+    align-self: end;
     color: var(--body-description);
     font-size: calc(20 * var(--px));   /* H3/regular, 취소선 */
     font-weight: var(--h3-regular-weight);
@@ -1241,9 +1165,9 @@ footer hr {
 }
 
 .coat-section .sale-price {
+    grid-area: 2 / 1;
     display: flex;
     gap: calc(8 * var(--px));
-    margin-top: calc(7 * var(--px));
     font-size: calc(24 * var(--px));   /* H2/line/bold · H2/line/medium */
     line-height: var(--h2-line-medium-line-height);
 }
@@ -1258,58 +1182,24 @@ footer hr {
     font-weight: var(--h2-line-medium-weight);
 }
 
-/* ── 장바구니 · 위시 수: 카드 링크 밖에 두고 할인가 줄(y 597) 오른쪽에 겹침 ── */
-.coat-section .product-util {
-    position: absolute;
-    top: calc(597 * var(--px));
-    right: calc(34 * var(--px));
-    display: flex;
-    align-items: center;
-}
-
-.coat-section .product-util a {
-    width: calc(36 * var(--px));
-    height: calc(36 * var(--px));
-    background: no-repeat center / contain;
-    font-size: 0;
-}
-
-.coat-section .product-util .go-cart {
-    margin-right: calc(10 * var(--px));
-    background-image: url(../images/icons/bag-fill.svg);
-}
-
-.coat-section .product-util .go-wish {
-    background-image: url(../images/icons/heart-fill.svg);
-}
-
-.coat-section .product-util .count {
-    color: var(--gray-900);
-    font-size: calc(24 * var(--px));   /* 글자 스타일 없음: Medium 24 · 행간 150% (H2/line/medium과 같은 값) */
-    font-weight: 500;
-    line-height: 150%;
-}
-
-/* ── 이전 · 다음 버튼 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용) ── */
+/* ── 이전 · 다음 버튼 32×68: 1800 상자 양끝, 세로 가운데 y 353 (Swiper 기본 화살표 글꼴은 끄고 시안의 갈매기표 사용 — 랭킹과 같은 그림) ── */
 .coat-swiper .swiper-button-prev,
 .coat-swiper .swiper-button-next {
-    top: calc(308.5 * var(--px));
-    width: calc(51 * var(--px));
-    height: calc(108 * var(--px));
+    top: calc(353 * var(--px));
+    width: calc(32 * var(--px));
+    height: calc(68 * var(--px));
     margin-top: 0;
     border: 0;
-    border-radius: calc(100 * var(--px));
     background: no-repeat center / contain;
-    opacity: .8;
 }
 
 .coat-swiper .swiper-button-prev {
-    left: calc(20 * var(--px));
+    left: 0;
     background-image: url(../images/icons/chevron-ranking-left.svg);
 }
 
 .coat-swiper .swiper-button-next {
-    right: calc(20 * var(--px));
+    right: 0;
     background-image: url(../images/icons/chevron-ranking-right.svg);
 }
 

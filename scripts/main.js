@@ -107,8 +107,8 @@ if (window.Swiper && hero) {
 }
 
 /* ── 랭킹 Swiper ── */
-const RANKING_PER_VIEW = 5;   // 한 화면에 보이는 상품 수 (시안: 308 × 5 + 사이 20 × 4 = 1620)
-const RANKING_GAP = `${20 / 1620 * 100}%`;   // 상품 사이 20을 목록 폭에 대한 비율로 → 화면이 좁아지면 --px처럼 같이 줄어듦
+const RANKING_PER_VIEW = 5;   // 한 화면에 보이는 상품 수 (2026-10-29 시안: 316 × 5 + 사이 10 × 4 = 1620)
+const RANKING_GAP = `${10 / 1620 * 100}%`;   // 상품 사이 10을 목록 폭에 대한 비율로 → 화면이 좁아지면 --px처럼 같이 줄어듦
 
 if (window.Swiper && document.querySelector('.ranking-slider')) {
     new Swiper('.ranking-slider', {
@@ -180,7 +180,7 @@ if (promotionList) {
 }
 
 /* ── 여자 코트 상품 Swiper (women-coat.html, 섹션 4개가 같은 설정) ── */
-const COAT_PER_VIEW = 4;   // 한 화면에 카드 4장 (양옆 25씩 보이는 카드는 style.css의 overflow: visible)
+const COAT_PER_VIEW = 4;   // 한 화면에 카드 4장 (2026-10-29 시안부터 양옆 다음 카드는 안 보임 — 옆 자르기는 style.css)
 const COAT_VIEW = 1690;   // 슬라이더 폭(시안 px) = 카드 400 × 4 + 간격 30 × 3
 const COAT_GAP = 30;   // 카드 간격(시안 px), 화면 폭에 맞춰 같이 줄도록 슬라이더 폭의 %로 넘김
 const COAT_FIRST = 3;   // 처음 보이는 카드 = 4번째 (시안 목록이 가운데 정렬이라 1~3번째는 왼쪽에 있음)
@@ -189,7 +189,7 @@ if (window.Swiper && document.querySelector('.coat-slider')) {
     document.querySelectorAll('.coat-swiper').forEach((box) => {
         new Swiper(box.querySelector('.coat-slider'), {
             loop: true,
-            loopAdditionalSlides: 1,   // 넘기는 중에도 양옆 25 자리에 카드가 비지 않게 한 장 더 붙여 둠
+            loopAdditionalSlides: 1,   // 넘기는 중에도 양끝 자리에 카드가 비지 않게 한 장 더 붙여 둠
             slidesPerView: COAT_PER_VIEW,
             spaceBetween: `${COAT_GAP / COAT_VIEW * 100}%`,
             initialSlide: COAT_FIRST,

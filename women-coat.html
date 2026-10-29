@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>여자 코트 | MENKHET</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 헤더 글자 로고 글꼴(Patua One) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patua+One&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css" integrity="sha384-IFb872aCXZQb6BKRUHmGn0YHKnFl4ylZjkgVRRyMTEQ5bjo/H6xFUiLJm6opOO66" crossorigin="anonymous">
     <link rel="stylesheet" href="styles/default.css">
     <link rel="stylesheet" href="styles/token.css">
@@ -15,8 +19,6 @@
 
 <body>
     <header>
-        <h1 class="logo"><a href="./"><img src="images/logo.svg" alt="MENKHET" width="367" height="100"></a></h1>
-
         <div class="gnb">
             <!-- 전체 메뉴: 햄버거 → 1차 메뉴 → 2차 메뉴 → 3차 메뉴(코트·신발·액세서리) (main.js가 열고 닫음) -->
             <nav class="sub" aria-label="전체 메뉴">
@@ -260,6 +262,9 @@
             </form>
         </div>
 
+        <!-- 글자 로고 (2026-10-29 시안) -->
+        <h1 class="logo"><a href="./"><span>Menkhet</span> <span class="sub-name">official</span></a></h1>
+
         <ul class="user-menu">
             <li><a class="go-login" href="#">로그인</a></li>
             <li><a class="go-mypage" href="#">마이페이지</a></li>
@@ -270,10 +275,10 @@
 
     <!-- 여자 코트: 헤더 전체 메뉴 > 여자 > 코트의 롱코트 · 트렌치 · 하프코트 · 케이프가 아래 섹션 id로 연결됨 -->
     <!-- 섹션 제목은 시안에서 빠짐(2026-10-27) → 화면에는 안 보이고 스크린리더만 읽는 h2(.blind)로 둠 -->
-    <!-- 카드: a(사진 · 상품 정보) + .product-util(장바구니 · 위시, 링크 안에 링크를 넣지 않으려고 카드 링크 밖에 두고 할인가 줄 오른쪽에 겹침) -->
+    <!-- 카드: a(사진 · 상품 정보) — 평소 이름 · 평점만 보이고 마우스를 올리면 가격 줄이 나옴 (2026-10-29 시안에서 장바구니 · 위시 수가 빠짐) -->
     <main class="women-coat">
         <!-- 여자 롱코트: 상품 10개 (Swiper, 설정은 main.js) -->
-        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·위시 수·상품 링크는 실제 데이터 필요 -->
+        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·상품 링크는 실제 데이터 필요 -->
         <section class="inner coat-section" id="long-coat">
             <h2 class="blind">MENKHET 여자 롱코트</h2>
             <div class="coat-swiper">
@@ -290,11 +295,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -306,11 +306,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -322,11 +317,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -338,11 +328,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -354,11 +339,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -370,11 +350,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -386,11 +361,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -402,11 +372,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -418,11 +383,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -434,11 +394,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                     </ul>
                 </div>
@@ -448,7 +403,7 @@
         </section>
 
         <!-- 여자 케이프: 상품 10개 (Swiper, 설정은 main.js) -->
-        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·위시 수·상품 링크는 실제 데이터 필요 -->
+        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·상품 링크는 실제 데이터 필요 -->
         <section class="inner coat-section" id="cape">
             <h2 class="blind">MENKHET 여자 케이프</h2>
             <div class="coat-swiper">
@@ -464,11 +419,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -480,11 +430,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -496,11 +441,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -512,11 +452,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -528,11 +463,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -544,11 +474,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -560,11 +485,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -576,11 +496,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -592,11 +507,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -608,11 +518,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                     </ul>
                 </div>
@@ -622,7 +527,7 @@
         </section>
 
         <!-- 여자 트렌치: 상품 10개 (Swiper, 설정은 main.js) -->
-        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·위시 수·상품 링크는 실제 데이터 필요 -->
+        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·상품 링크는 실제 데이터 필요 -->
         <section class="inner coat-section" id="trench">
             <h2 class="blind">MENKHET 여자 트렌치</h2>
             <div class="coat-swiper">
@@ -638,11 +543,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -654,11 +554,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -670,11 +565,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -686,11 +576,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -702,11 +587,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -718,11 +598,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -734,11 +609,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -750,11 +620,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -766,11 +631,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -782,11 +642,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                     </ul>
                 </div>
@@ -796,7 +651,7 @@
         </section>
 
         <!-- 여자 하프코트: 상품 10개 (Swiper, 설정은 main.js) -->
-        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·위시 수·상품 링크는 실제 데이터 필요 -->
+        <!-- content-required: 상품명(10개 모두 시안 문구 '여자 롱코트')·가격·평점·상품 링크는 실제 데이터 필요 -->
         <section class="inner coat-section" id="half-coat">
             <h2 class="blind">MENKHET 여자 하프코트</h2>
             <div class="coat-swiper">
@@ -812,11 +667,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -828,11 +678,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -844,11 +689,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -860,11 +700,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -876,11 +711,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -892,11 +722,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -908,11 +733,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -924,11 +744,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -940,11 +755,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                         <li class="swiper-slide product-item">
                             <a href="#">
@@ -956,11 +766,6 @@
                                     <p class="sale-price"><span class="sale">20%</span> <strong class="price">96,000원</strong></p>
                                 </div>
                             </a>
-                            <div class="product-util">
-                                <a class="go-cart" href="#">장바구니</a>
-                                <a class="go-wish" href="#">위시리스트</a>
-                                <span class="count">1,010</span>
-                            </div>
                         </li>
                     </ul>
                 </div>
