@@ -82,10 +82,10 @@ header {
     cursor: pointer;
 }
 
-/* 1차 메뉴는 헤더 바로 아래 왼쪽 끝, 2·3차 메뉴는 누른 항목 오른쪽에 그 항목의 위끝을 맞춰 붙음
-   (2026-10-29 주인님 지정 — 예전엔 윗단계 목록 위끝에 붙어 아래쪽 항목을 누르면 목록이 엉뚱하게 위에서 열렸음)
-   - .sub에는 position을 주지 않아 1차 목록은 고정된 header가 기준, li에 position을 줘서 2 · 3차 목록은 누른 항목이 기준
-   - 화면 아래로 넘치는 목록은 main.js가 넘친 만큼만 위로 올림 (헤더가 고정이라 스크롤로 아래를 볼 수 없음) */
+/* 1차 메뉴는 헤더 바로 아래 왼쪽 끝, 2·3차 메뉴는 바로 윗단계 목록 오른쪽에 그 목록의 위끝을 맞춰 붙음 → 세 목록 모두 헤더 바로 아래에서 시작
+   (.sub · li에 position을 주지 않아 1차 목록은 고정된 header가 기준, 2 · 3차 목록은 누른 항목이 아니라 목록 위끝이 기준
+    — 2026-10-29 한때 누른 항목에 맞췄다가, 아래쪽 목록이 화면 밑으로 내려가 불편하다고 하셔서 같은 날 되돌림)
+   세 목록 모두 높이 900의 흰 판 (2026-10-29 시안 380:3684 다시 수정 — 칸 밑 빈 곳까지 흰색, 판은 아래 ::before) */
 .sub > ul {
     position: absolute;
     top: calc(100% + 1px);   /* header 기준 100%는 아래선 위끝(84) → 선 밑 85부터 (시안 .sub y 85) */
@@ -93,12 +93,17 @@ header {
     width: calc(271 * var(--px));
 }
 
-.sub li {
-    position: relative;
+.sub {
+    --panel: 900;   /* 흰 판 높이 (시안 px) — 1차 펼침 시간 --step도 이 값으로 계산 */
+}
+
+.sub > ul,
+.sub .drop {
+    height: calc(var(--panel) * var(--px));
 }
 
 /* 2 · 3차 목록은 윗단계 목록 밑으로 1px 겹쳐 들어감 (폭 · 글자 들여쓰기도 1px 늘려 보이는 자리는 그대로)
-   폭이 127.5처럼 소수인 화면(1440 · 1280, 윈도 125% 배율 등)에선 두 목록 끝이 같은 반 픽셀에서 반씩 옅게 그려져
+   폭이 203.25처럼 소수인 화면(1440 · 1280, 윈도 125% 배율 등)에선 두 목록 끝이 같은 반 픽셀에서 반씩 옅게 그려져
    맞닿은 자리에 가는 세로 틈이 생기고 뒤의 히어로가 비쳤음 (2026-10-29 주인님 지적, 1920처럼 정수 폭에선 안 보임) */
 .sub .drop {
     position: absolute;
@@ -108,7 +113,7 @@ header {
 }
 
 /* 누르면 0.3s 등속으로 펼쳐지고, 닫을 땐 거꾸로 접힘 (주인님 지정): 1차 목록은 위에서 아래로, 2 · 3차 목록은 왼쪽에서 오른쪽으로
-   - 목록(ul)째 자르면 오른쪽에 붙은 다음 단계 목록까지 잘려서, 목록 안 칸(버튼 · 링크)마다 잘라서 펼침
+   - 목록(ul)째 자르면 오른쪽에 붙은 다음 단계 목록까지 잘려서, 흰 판(::before)과 목록 안 칸(버튼 · 링크)을 따로 같은 속도로 잘라서 펼침
    - 자르는 범위를 칸 위아래로 1px씩 넓힘: 칸 높이가 59.3처럼 소수라 칸 경계에서 딱 자르면 칸 사이에 가는 틈이 보임
    - visibility는 접히는 0.3s가 끝난 뒤 바뀌어 닫힌 메뉴엔 포커스가 들어가지 않게 */
 .sub > ul,
@@ -122,9 +127,37 @@ header {
     visibility: visible;
 }
 
-/* ── 1차: 칸마다 0.3s를 칸 수로 나눠 위 칸부터 차례로 펼침 → 목록 전체가 0.3s 동안 같은 속도로 내려옴 (접을 땐 아래 칸부터) ── */
+/* 닫혔거나 접히는 중(0.3s)인 목록은 클릭을 받지 않음 → 같은 자리에서 새로 열리는 목록이나 뒤 페이지로 클릭이 감
+   (2 · 3차 목록이 모두 같은 자리에 겹쳐서, 다른 1차 메뉴로 바꾼 직후 누르면 접히는 목록의 칸이 눌려 엉뚱한 3차 목록이 열린 채 남았음) */
+.sub:not(.active) > ul,
+.sub li:not(.active) > .drop {
+    pointer-events: none;
+}
+
+/* 흰 판: 목록 상자를 꽉 채우고 칸 밑에 깔림 (칸보다 먼저 그려짐) */
+.sub > ul::before,
+.sub .drop::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: var(--icon-white);
+}
+
+/* ── 1차: 판(900)이 0.3s 동안 같은 속도로 위에서 아래로 펼쳐짐, 칸은 판의 펼침 선이 지날 때 차례로 (접을 땐 판 아래끝부터 거꾸로) ── */
 .sub > ul {
-    --n: 6;   /* 1차 칸 수 */
+    --step: calc(.3s * 79 / var(--panel));   /* 펼침 선이 칸 하나(79 = 위아래 25 + 글 상자 29)를 지나는 시간 */
+}
+
+.sub > ul::before {
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path .3s linear;
+}
+
+.sub.active > ul::before {
+    clip-path: inset(0);
 }
 
 .sub > ul > li:nth-child(2) {
@@ -148,22 +181,24 @@ header {
 }
 
 .sub > ul > li > .menu {
-    clip-path: inset(-1px 0 100% 0);
-    transition: clip-path calc(.3s / var(--n)) linear calc((var(--n) - 1 - var(--i, 0)) * .3s / var(--n));
+    clip-path: inset(-1px 0 calc(100% + 1px) 0);   /* 닫힘: 위로 1px 넓힌 범위까지 다 잘라 빈칸 (100%만 자르면 1440 · 윈도 125% 배율에서 아직 안 펼친 칸 위 1px이 회색 줄로 비쳤음) */
+    transition: clip-path var(--step) linear calc(.3s - (var(--i, 0) + 1) * var(--step));   /* 접을 땐 판 아래끝에서 올라온 선이 이 칸 아래끝에 닿을 때부터 */
 }
 
 .sub.active > ul > li > .menu {
     clip-path: inset(-1px 0);
-    transition-delay: calc(var(--i, 0) * .3s / var(--n));
+    transition-delay: calc(var(--i, 0) * var(--step));
 }
 
-/* ── 2 · 3차: 칸이 모두 같이 왼쪽에서 오른쪽으로 ── */
+/* ── 2 · 3차: 판과 칸이 모두 같이 왼쪽에서 오른쪽으로 ── */
+.sub .drop::before,
 .sub .drop > li > .menu,
 .sub .drop > li > a {
     clip-path: inset(-1px 100% -1px 0);
     transition: clip-path .3s linear;
 }
 
+.sub li.active > .drop::before,
 .sub li.active > .drop > li > .menu,
 .sub li.active > .drop > li > a {
     clip-path: inset(-1px 0);

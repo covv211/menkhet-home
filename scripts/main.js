@@ -1,6 +1,6 @@
 /* ══════════ MENKHET 메인 ══════════
    - index.html · women-coat.html이 같이 씀 → 페이지에 없는 요소는 건너뜀
-   - 헤더 전체 메뉴(.sub): 햄버거 → 1차 → 2차 → 3차 메뉴, 단계마다 하나만 열림 (0.3s 왼쪽→오른쪽 펼침 · 밑줄은 style.css)
+   - 헤더 전체 메뉴(.sub): 햄버거 → 1차 → 2차 → 3차 메뉴, 단계마다 하나만 열림 (1차는 위→아래, 2 · 3차는 왼쪽→오른쪽 0.3s 펼침 · 높이 900 흰 판 · 밑줄은 style.css)
    - 검색: 결과 페이지가 정해지기 전이라 제출만 막음
    - 히어로 Swiper: 한 장씩 옆으로 1.5s 등속, 자동 넘김 (동작 줄이기여도 넘김 그대로 — 주인님 지정)
    - 랭킹 · 추천 코디(예전 나라별 룩) · 여자 코트 Swiper, 프로모션 두 줄 흐름
@@ -12,7 +12,6 @@
 /* ── 헤더 전체 메뉴 ── */
 const sub = document.querySelector('.sub');
 const bigMenu = sub.querySelector('.big-menu');
-const allMenu = sub.querySelector('#all-menu');
 const menuButtons = sub.querySelectorAll('.menu');
 
 // scope 안의 열린 메뉴를 모든 단계까지 닫음 (scope를 안 주면 전체 메뉴 전부)
@@ -29,15 +28,6 @@ function toggleSub(open) {
     if (!open) closeDrops();   // 1차 메뉴를 닫을 때 열린 2 · 3차 메뉴도 같이 닫음
 }
 
-// 펼칠 목록은 누른 항목의 위끝에 맞춰 붙는데(style.css), 화면 아래로 넘쳐 잘리는 목록(아래쪽 1차 메뉴의 2차 목록 등)은 넘친 만큼만 위로 올림
-// (헤더가 고정이라 스크롤로 아래를 볼 수 없음) — 1차 목록 위끝(헤더 밑선)보다 위로는 안 올라감
-function fitDrop(drop) {
-    drop.style.top = '';
-    const box = drop.getBoundingClientRect();
-    const over = box.bottom + 1 - innerHeight;   // + 1: 마지막 칸이 목록 아래로 1px 겹쳐 나와 있음
-    if (over > 0) drop.style.top = `${-Math.min(over, box.top - allMenu.getBoundingClientRect().top)}px`;
-}
-
 bigMenu.addEventListener('click', () => {
     toggleSub(!sub.classList.contains('active'));
 });
@@ -49,15 +39,9 @@ menuButtons.forEach((button) => {
         const item = button.parentElement;
         const open = !item.classList.contains('active');
         closeDrops(item.parentElement);   // 단계마다 하나만 열림
-        if (open) fitDrop(item.querySelector(':scope > .drop'));
         item.classList.toggle('active', open);
         button.setAttribute('aria-expanded', String(open));
     });
-});
-
-// 열린 채로 창 크기가 바뀌면 목록 자리를 다시 맞춤 (2차 → 3차 순서라 3차는 옮겨진 2차 기준)
-addEventListener('resize', () => {
-    sub.querySelectorAll('li.active > .drop').forEach(fitDrop);
 });
 
 // 메뉴 밖을 누르거나 Esc를 누르면 전부 닫음
