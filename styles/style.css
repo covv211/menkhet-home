@@ -77,7 +77,7 @@ header {
     width: calc(24 * var(--px));
     height: calc(24 * var(--px));
     border: 0;
-    background: url(../images/icons/menu.svg) no-repeat center / contain;
+    background: url(../images/icons/menu.svg?v=1029) no-repeat center / contain;
     font-size: 0;
     cursor: pointer;
 }
@@ -236,7 +236,7 @@ header {
     width: calc(24 * var(--px));
     height: calc(24 * var(--px));
     border: 0;
-    background: url(../images/icons/search.svg) no-repeat center / contain;
+    background: url(../images/icons/search.svg?v=1029) no-repeat center / contain;
     font-size: 0;
     cursor: pointer;
 }
@@ -294,15 +294,15 @@ header {
 }
 
 .user-menu .go-mypage {
-    background-image: url(../images/icons/user.svg);
+    background-image: url(../images/icons/user.svg?v=1029);
 }
 
 .user-menu .go-wish {
-    background-image: url(../images/icons/heart.svg);
+    background-image: url(../images/icons/heart.svg?v=1029);
 }
 
 .user-menu .go-cart {
-    background-image: url(../images/icons/bag.svg);
+    background-image: url(../images/icons/bag.svg?v=1029);
 }
 
 /* ══════════ 히어로 ══════════ */
@@ -521,12 +521,12 @@ header {
 
 .hero .swiper-button-prev {
     left: calc(10 * var(--px));
-    background-image: url(../images/icons/chevron-left.svg);
+    background-image: url(../images/icons/chevron-left.svg?v=1029);
 }
 
 .hero .swiper-button-next {
     right: calc(10 * var(--px));
-    background-image: url(../images/icons/chevron-right.svg);
+    background-image: url(../images/icons/chevron-right.svg?v=1029);
 }
 
 .hero .swiper-button-prev::after,
@@ -648,12 +648,12 @@ section > .title {
 
 .ranking .swiper-button-prev {
     left: 0;
-    background-image: url(../images/icons/chevron-ranking-left.svg);
+    background-image: url(../images/icons/chevron-ranking-left.svg?v=1029);
 }
 
 .ranking .swiper-button-next {
     right: 0;
-    background-image: url(../images/icons/chevron-ranking-right.svg);
+    background-image: url(../images/icons/chevron-ranking-right.svg?v=1029);
 }
 
 .ranking .swiper-button-prev::after,
@@ -1195,12 +1195,12 @@ footer hr {
 
 .coat-swiper .swiper-button-prev {
     left: 0;
-    background-image: url(../images/icons/chevron-ranking-left.svg);
+    background-image: url(../images/icons/chevron-ranking-left.svg?v=1029);
 }
 
 .coat-swiper .swiper-button-next {
     right: 0;
-    background-image: url(../images/icons/chevron-ranking-right.svg);
+    background-image: url(../images/icons/chevron-ranking-right.svg?v=1029);
 }
 
 .coat-swiper .swiper-button-prev::after,
