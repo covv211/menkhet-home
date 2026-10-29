@@ -174,7 +174,7 @@ if (window.Swiper && document.querySelector('.look-slider')) {
     });
 }
 
-/* ── 프로모션: 상품 두 줄이 왼쪽으로 계속 흐름 (움직임은 style.css) ── */
+/* ── 프로모션: 상품 두 줄이 서로 반대로 계속 흐름 — 윗줄은 왼쪽 · 아랫줄은 오른쪽 (움직임은 style.css) ── */
 // 줄마다 13장을 복제해 뒤에 붙여 이음매 없이 돌게 함 (복제는 스크린리더에서 숨김)
 // 화면에 보일 때만 흐르게 해서 안 보일 땐 그리기를 쉼 (발열 줄이기), 다시 보이면 시안과 같은 첫 모습부터
 const promotionList = document.querySelector('.promotion-list');
