@@ -11,7 +11,8 @@
        체형마다 롱코트 3색 × S · M · L · XL = 12장(outfit/<체형>/coat-<색>_<사이즈>.webp) 중 고른 색 · 사이즈의 사진
    - 지금 사진에서 코트 색 · 사이즈 하나만 바꾼 사진을, 키를 고르면 그 키의 몸무게별 사진(기본 마네킹 · 코트 사진 체형은 지금 색 · 사이즈)을 미리 받아 둬서 바로 바뀜
    - 마네킹 사진은 0.3s 등속 페이드로 바뀜 (주인님 맥 '동작 줄이기' — 위치는 그대로, 투명도만)
-   - 목록 · 옷 칸은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
+   - 몸 정보 목록은 한 번에 하나만 열림: 바깥을 누르거나 다른 곳으로 Tab → 닫힘, Esc → 닫고 연 칸으로 포커스
+   - 옷 칸은 롱코트 3색이 세로로 다 보이고 누르면 바로 입힘 (2026-10-30 주인님 지정 — 예전엔 입은 색 하나만 보이는 칸을 눌러 오른쪽으로 펼친 뒤 골랐음)
    - 마네킹 사진(683×1024)은 모두 한 규칙으로 맞춤: 사람 키(머리 위 ~ 발끝) = 980px × 키 구간 가운데 값 / 187.5cm, 발끝은 y 1004, 가운데 정렬 → 같은 키 구간은 몸무게를 바꿔도 키가 그대로, 키 구간을 바꾸면 키가 바뀜 (새 사진도 이 규칙으로)
      2026-10-27 기본 마네킹을 주인님 새 model.zip(여자 26 · 남자 36체형, 원본은 model/women · model/men)으로 바꾸며 기준을 177.5 → 187.5cm로(남자 185~190cm가 980)
      같은 날 옛 마네킹의 조합 · 코트 사이즈 사진(여자 165~170cm · 65~70kg 93장)을 지우고 새 마네킹 81조합(여자 160~165cm · 55~60kg, 원본 model/의상_색상조합_정면81_160-165cm_55-60kg_20261027)으로 바꿈
@@ -19,7 +20,7 @@
      조합 사진은 같은 체형 기본 마네킹 원본의 배율 · 위치를 그대로 씀(model/build_mannequins.py) → 기본 마네킹 ↔ 조합 사진을 오가도 머리 · 몸이 같은 자리
      2026-10-29 기본 마네킹 62장을 실사 느낌으로 다시 만듦(Grok, 키 · 몸무게 공식 3D 몸을 사진으로 + 몸통 · 허벅지 폭을 공식에 맞춤, 원본 model/마네킹_실사_20261029)
      81조합 · 셔츠 · 바지 · 로퍼 칸은 지우고 160~165cm 네 체형은 롱코트 3색 × 4사이즈(셔츠 · 바지 · 로퍼는 사진에 고정, 사이즈는 실측표 차이만큼 코트를 늘인 사진)
-   - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄우고 닫을 때마다 새로 읽음(main.js) → 다시 열면 처음부터 · 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록 · 옷 칸이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, 첫 칸 · 마지막 칸에서 Tab을 넘기면 상세 창 사진 칸으로 가라고 알림
+   - 상품 상세 창(women-coat.html)은 이 페이지를 iframe(?embed=1)으로 띄우고 닫을 때마다 새로 읽음(main.js) → 다시 열면 처음부터 · 칸이 준비되면 상세 창에 알리고, 닫기 · Esc(열린 목록이 없을 때)는 페이지를 떠나지 않고 상세 창에 닫으라고 알림, 첫 칸 · 마지막 칸에서 Tab을 넘기면 상세 창 사진 칸으로 가라고 알림
    - 예전 숫자 판정(상품 실측표 data/fitting-items.json · 정확도 칸 · 부위별 여유)과 아래 옷 목록은 수정 시안에서 빠져서 지움 (JSON 파일은 남겨 둠) */
 
 /* ── 상품 상세 창 안에 띄울 때 (fitting-room.html?embed=1) ── */
@@ -254,7 +255,6 @@ sideItems.forEach((item) => {
     outfit[item.dataset.part] = item.querySelector('.side-option[aria-pressed="true"]').dataset.color;
 });
 const dressMannequin = imageSlot(document.querySelector('.mannequin'));
-let openItem = null;   // 펼친 옷 칸
 
 // 체형별 코트 사진 폴더 (images/fitting/outfit/<성별>/<키>/<몸무게>, 롱코트 3색 × 4사이즈 12장) → 지금은 여자 160~165cm 네 구간, 다른 체형은 사진이 생기면 여기에 더함
 const OUTFIT_BODIES = ['women/160-165cm/40-45kg', 'women/160-165cm/45-50kg', 'women/160-165cm/50-55kg', 'women/160-165cm/55-60kg'];
@@ -325,11 +325,9 @@ function preloadBodies() {
     });
 }
 
-// 고른 색 → 칸 표시(aria-pressed · 접혔을 때 보일 칸 --index) · 마네킹 사진 · 대체 글
+// 고른 색 → 칸 표시(aria-pressed — 입은 색만 100%, style.css) · 마네킹 사진 · 대체 글
 function wear(item, option) {
-    const options = [...item.querySelectorAll('.side-option')];
-    options.forEach((button) => button.setAttribute('aria-pressed', String(button === option)));
-    item.style.setProperty('--index', options.indexOf(option));
+    item.querySelectorAll('.side-option').forEach((button) => button.setAttribute('aria-pressed', String(button === option)));
     outfit[item.dataset.part] = option.dataset.color;
     dress();
 }
@@ -343,46 +341,11 @@ function dress() {
     whenIdle(preloadBodies);
 }
 
-// 칸을 여닫는 건 입은 색 버튼 하나 → aria-expanded는 그 버튼에만 (다른 두 색은 고르기만 하는 버튼)
-// 접힌 칸의 다른 색은 Tab에서 바로 뺌 (style.css visibility는 0.3s 접힌 뒤에야 숨어서, 그 사이 Tab이 숨는 색에 멈추지 않게)
-function markExpanded(item, open) {
-    item.querySelectorAll('.side-option').forEach((button) => {
-        const worn = button.getAttribute('aria-pressed') === 'true';
-        if (worn) button.setAttribute('aria-expanded', String(open));
-        else button.removeAttribute('aria-expanded');
-        if (worn || open) button.removeAttribute('tabindex');
-        else button.tabIndex = -1;
-    });
-}
-
-function closeRow(focusChosen) {
-    if (!openItem) return;
-    const item = openItem;
-    openItem = null;
-    item.classList.remove('active');
-    markExpanded(item, false);
-    if (focusChosen) item.querySelector('.side-option[aria-pressed="true"]').focus();
-}
-
-function openRow(item) {
-    closeRow(false);
-    openItem = item;
-    item.classList.add('active');
-    markExpanded(item, true);
-}
-
-// 접힌 칸에는 입은 색 하나만 보임 → 누르면 펼치기, 펼친 칸에서 색을 누르면 입히고 접음 (입은 색을 다시 누르면 그대로 접기만)
+// 3색이 세로로 다 보임 → 누르면 바로 그 색을 입힘 (입은 색을 다시 누르면 그대로)
 sideItems.forEach((item) => {
-    markExpanded(item, false);   // 처음부터 접힌 칸의 다른 색은 Tab에서 뺌
     item.addEventListener('click', (e) => {
         const option = e.target.closest('.side-option');
-        if (!option) return;
-        if (openItem !== item) {
-            openRow(item);
-            return;
-        }
-        if (option.getAttribute('aria-pressed') !== 'true') wear(item, option);
-        closeRow(false);
+        if (option && option.getAttribute('aria-pressed') !== 'true') wear(item, option);
     });
 });
 
@@ -402,32 +365,24 @@ sizeChips.forEach((chip) => {
     });
 });
 
-/* ══════════ 바깥 누르기 · 포커스 · 키보드 (목록 · 옷 칸 공통) ══════════ */
+/* ══════════ 바깥 누르기 · 포커스 · 키보드 (몸 정보 목록) ══════════ */
 // 바깥을 누르면 닫음
 document.addEventListener('click', (e) => {
     if (openName && !fields[openName].field.contains(e.target)) closeList(false);
-    if (openItem && !openItem.contains(e.target)) closeRow(false);
 });
 
 // Tab으로 칸 밖에 포커스가 가면 닫음 (Safari는 버튼을 눌러도 포커스가 옮겨 가지 않아서 focusout 대신 focusin으로 봄)
 document.addEventListener('focusin', (e) => {
     if (openName && !fields[openName].field.contains(e.target)) closeList(false);
-    if (openItem && !openItem.contains(e.target)) closeRow(false);
 });
 
 // 상세 창 안에서는 상세 창 쪽을 누르면(포커스가 iframe 밖으로 나가면) 닫음 — 바깥 누르기가 이 페이지에 오지 않아서
-if (EMBED) {
-    addEventListener('blur', () => {
-        closeList(false);
-        closeRow(false);
-    });
-}
+if (EMBED) addEventListener('blur', () => closeList(false));
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-        if (EMBED && !openName && !openItem) closeEmbed(true);   // 열린 목록 · 옷 칸부터 닫고, 다 닫혀 있으면 피팅룸을 닫음
+        if (EMBED && !openName) closeEmbed(true);   // 열린 목록부터 닫고, 목록이 닫혀 있으면 피팅룸을 닫음
         closeList(true);
-        closeRow(true);
         return;
     }
     // 상세 창 안에서는 피팅룸 끝에서 상세 창 사진 칸으로 넘어감 (피팅룸이 열려도 사진은 비교해 보게 그대로 — 주인님 요청): 닫기 → 사진 칸, 성별에서 Shift+Tab → 썸네일
@@ -470,5 +425,5 @@ document.querySelector('.btn-close').addEventListener('click', (e) => {
 // defer 스크립트라 HTML은 다 읽은 뒤, 메시지는 이 파일의 이벤트를 다 건 다음에 도착함
 if (EMBED) parent.postMessage({ type: 'menkhet-fitting-ready' }, location.origin);
 
-// 다 그린 뒤 한가할 때: 한 벌 · 사이즈 하나만 바꾼 마네킹 사진 11장
+// 다 그린 뒤 한가할 때: 코트 색 · 사이즈 하나만 바꾼 마네킹 사진 5장
 addEventListener('load', () => whenIdle(preloadNeighbors));

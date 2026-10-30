@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>피팅룸 | MENKHET</title>
     <!-- ?v=날짜(같은 날 또 고치면 뒤에 b · c …): CSS · JS · 아이콘을 고치면 같이 올림 → GitHub Pages가 파일을 10분씩 캐시해서 새 HTML에 예전 CSS가 섞여 깨져 보이던 것 막음 (2026-10-29) -->
-    <link rel="stylesheet" href="styles/default.css?v=1030b">
-    <link rel="stylesheet" href="styles/token.css?v=1030b">
-    <link rel="stylesheet" href="styles/style.css?v=1030b">
-    <script src="scripts/fitting-room.js?v=1029g" defer></script>
+    <link rel="stylesheet" href="styles/default.css?v=1030c">
+    <link rel="stylesheet" href="styles/token.css?v=1030c">
+    <link rel="stylesheet" href="styles/style.css?v=1030c">
+    <script src="scripts/fitting-room.js?v=1030c" defer></script>
 </head>
 
 <body class="fitting-page">
@@ -72,12 +72,12 @@
                          코트 사진이 없는 체형(여자 · 남자)을 고르면 코디 없는 기본 마네킹 (fitting-room.js가 바꿈) -->
                     <img class="mannequin active" src="images/fitting/outfit/women/160-165cm/55-60kg/coat-black_m.webp" alt="롱코트 검정 M 사이즈 차림의 마네킹" width="683" height="1024">
 
-                    <!-- 옷 칸: 지금 입은 색의 코트가 보이고, 누르면 오른쪽으로 색 3개가 펼쳐짐 → 색을 고르면 마네킹이 바뀌고 접힘
+                    <!-- 옷 칸: 롱코트 3색을 세로로 늘어놓음 (2026-10-30 주인님 지정 — 예전엔 입은 색 하나만 보이는 칸을 눌러 오른쪽으로 펼침) → 누르면 바로 그 색을 입힘, 입은 색만 진하게
                          셔츠 · 바지 · 로퍼 칸은 2026-10-29 뺌(추천 옷은 마네킹 사진에 고정) -->
-                    <ul class="side-items">
+                    <ul class="side-items" aria-label="롱코트 색">
                         <li class="side-item" data-part="coat">
                             <ul class="side-options">
-                                <li><button type="button" class="side-option" data-color="black" aria-pressed="true" aria-expanded="false"><img src="images/fitting/side/coat-black.webp" alt="코트 검정" width="200" height="300"></button></li>
+                                <li><button type="button" class="side-option" data-color="black" aria-pressed="true"><img src="images/fitting/side/coat-black.webp" alt="코트 검정" width="200" height="300"></button></li>
                                 <li><button type="button" class="side-option" data-color="ivory" aria-pressed="false"><img src="images/fitting/side/coat-ivory.webp" alt="코트 아이보리" width="200" height="300"></button></li>
                                 <li><button type="button" class="side-option" data-color="brown" aria-pressed="false"><img src="images/fitting/side/coat-brown.webp" alt="코트 브라운" width="200" height="300"></button></li>
                             </ul>

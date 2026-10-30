@@ -1258,7 +1258,7 @@ footer hr {
 /* ══════════ 피팅룸 (fitting-room.html) ══════════
    - 수정 시안 231:1372: 어두운 배경(dim) 가운데에 700×900 창. 페이지와 같이 폭 1920 기준 비율로 줄고, 화면 높이가 모자랄 때만 더 줄어듦 (위아래 최소 20px)
    - 위 56: 안내 문구 + 성별 · 키 · 몸무게 칸(누르면 아래로 목록, 고르면 갈매기표 자리에 값) / 아래 700×844: 회색 바탕에 마네킹 + 왼쪽 옷 칸 + 오른쪽 위 사이즈 칸
-   - 옷 칸 펼침 · 마네킹 사진 바뀜은 0.3s 등속 (시안 SMART_ANIMATE · DISSOLVE), 몸 정보 목록 · 고른 값은 0.5s 등속, 맥 '동작 줄이기'여도 그대로 (주인님 지정)
+   - 옷 칸 투명도 · 마네킹 사진 바뀜은 0.3s 등속 (시안 DISSOLVE), 몸 정보 목록 · 고른 값은 0.5s 등속, 맥 '동작 줄이기'여도 그대로 (주인님 지정)
    - 상품 상세 창 오른쪽 끝 '<' 칸은 이 페이지를 창 안 iframe으로 띄움 (.embed — 아래 .fitting-page.embed, 밀려 나오는 움직임은 상세 창 쪽 .fitting-sheet) */
 
 .fitting-page {
@@ -1490,17 +1490,23 @@ footer hr {
     opacity: 1;
 }
 
-/* ── 옷 칸: 마네킹 왼쪽(x 20 · y 193)에 70×106 칸 4개 (사이 10, 시안 ul.side-items 70×454 — 가운데 높이는 예전 70×80 칸과 같은 y 420) ──
-   접힌 칸은 입은 색 하나만 보이고, 펼치면(.active) 오른쪽으로 230(70 + 10 + 70 + 10 + 70)까지 늘어나며 색 3개가 보임
-   폭과 줄 위치가 함께 0.3s 등속으로 움직여서 입은 색은 늘어나는 칸의 오른쪽 끝에 붙어 따라감
-   상품 상세 창 썸네일(.gallery-thumbs)도 같은 칸 · 펼침을 씀 (모델 착용 줄은 두 벌이라 150까지 — 아래 상품 상세 창 블록) */
+/* ── 옷 칸: 마네킹 왼쪽(x 20)에 롱코트 3색 70×106 칸을 세로로 (사이 10 → 70×338, 가운데 높이는 예전 칸들과 같은 y 420 → 위끝 y 251, 시안 ul.side-items 세로 오토 레이아웃) ──
+   2026-10-30 주인님 지정: 색을 한 칸에 겹쳐 두고 눌러서 오른쪽으로 펼치던 것 대신 3색을 다 늘어놓음 → 누르면 바로 그 색을 입힘 (fitting-room.js)
+   입은 색은 100%, 나머지는 30% → 마우스를 올린 칸 100% (아래 .side-option)
+   상품 상세 창 썸네일(.gallery-thumbs)은 그대로 접힌 줄 · 오른쪽 펼침 (아래 .gallery-thumbs 규칙 · 상품 상세 창 블록) */
 .side-items {
     position: absolute;
-    top: calc(193 * var(--px));
+    top: calc(251 * var(--px));
     left: calc(20 * var(--px));
 }
 
-.side-item {
+.side-items .side-options {
+    flex-direction: column;
+}
+
+/* 접힌 줄 · 펼침 (상품 상세 창 썸네일만): 접힌 줄은 고른 색 하나만 보이고, 펼치면(.active) 오른쪽으로 230(70 + 10 + 70 + 10 + 70)까지 늘어나며 색이 다 보임
+   폭과 줄 위치가 함께 0.3s 등속으로 움직여서 고른 색은 늘어나는 칸의 오른쪽 끝에 붙어 따라감 (모델 착용 줄은 두 벌이라 150까지 — 아래 상품 상세 창 블록) */
+.gallery-thumbs .side-item {
     width: calc(70 * var(--px));
     overflow: hidden;
     transition: width .3s linear;
@@ -1510,25 +1516,29 @@ footer hr {
     margin-top: calc(10 * var(--px));
 }
 
-.side-item.active {
+.gallery-thumbs .side-item.active {
     width: calc(230 * var(--px));
 }
 
-/* --index: 입은 색의 순서 (피팅룸은 fitting-room.js, 상세 창 썸네일은 main.js) → 접힌 칸에서는 그 색이 칸 안에 오게 줄을 왼쪽으로 밂 */
+/* 색 칸 줄: 사이 10 (피팅룸은 세로 — 위 .side-items) */
 .side-options {
     display: flex;
     gap: calc(10 * var(--px));
+}
+
+/* --index: 고른 색의 순서 (main.js) → 접힌 줄에서는 그 색이 칸 안에 오게 줄을 왼쪽으로 밂 */
+.gallery-thumbs .side-options {
     width: calc(230 * var(--px));
     translate: calc(var(--index, 0) * -80 * var(--px)) 0;
     transition: translate .3s linear;
 }
 
-.side-item.active .side-options {
+.gallery-thumbs .side-item.active .side-options {
     translate: 0;
 }
 
 .side-option {
-    position: relative;   /* '추천' 꼬리표(.wear-tag — 피팅룸 셔츠 · 바지 · 로퍼 칸, 상품 상세 창 모델 착용 줄)를 칸 오른쪽 위에 띄움 */
+    position: relative;   /* '추천' 꼬리표(.wear-tag — 상품 상세 창 모델 착용 줄)를 칸 오른쪽 위에 띄움 */
     display: block;
     width: calc(70 * var(--px));
     height: calc(106 * var(--px));
@@ -1542,15 +1552,16 @@ footer hr {
 
 /* 옷 칸(피팅룸) · 썸네일(상품 상세 창 코트 줄 · 모델 착용 줄): 마우스를 올린 칸 하나만 100% (0.3s 등속)
    2026-10-28 주인님 지정 — 처음엔 줄 전체가 함께 밝아졌는데 같은 날 옷 하나씩으로 바꿈
-   키보드로 들어온 칸 · 펼친 줄의 고른 칸도 100% → 펼쳐서 고르는 동안 지금 고른 색이 보이게 */
+   키보드로 들어온 칸 · 펼친 줄의 고른 칸도 100% → 펼쳐서 고르는 동안 지금 고른 색이 보이게, 피팅룸 옷 칸은 늘 입은 색이 100% (3색이 다 보여서) */
 .side-option:hover,
 .side-option:focus-visible,
+.side-items .side-option[aria-pressed="true"],
 .side-item.active .side-option[aria-pressed="true"] {
     opacity: 1;
 }
 
-/* 접힌 칸의 다른 색: 다 접힌 뒤 숨김 → Tab · 스크린리더에는 입은 색만 (펼칠 땐 바로 보임) */
-.side-item:not(.active) .side-option[aria-pressed="false"] {
+/* 접힌 줄의 다른 색(상품 상세 창 썸네일): 다 접힌 뒤 숨김 → Tab · 스크린리더에는 고른 색만 (펼칠 땐 바로 보임) */
+.gallery-thumbs .side-item:not(.active) .side-option[aria-pressed="false"] {
     visibility: hidden;
     transition: opacity .3s linear, visibility 0s linear .3s;   /* 옅어지는 0.3s는 그대로 두고 숨김만 늦춤 */
 }
@@ -1725,7 +1736,7 @@ footer hr {
 }
 
 /* ── 썸네일: 갤러리 왼쪽(x 50 · y 223)에 고정 — 코트 색 줄 + 모델 착용 세 줄 (시안 .gallery-thumbs) ──
-   칸 70×106 · 사진 66×100 · 줄 사이 10 · 누르면 오른쪽으로 0.3s 등속 펼침은 피팅룸 옷 칸(.side-item)과 같음 (여닫기 · 고르기는 main.js) */
+   칸 70×106 · 사진 66×100 · 줄 사이 10 · 누르면 오른쪽으로 0.3s 등속 펼침 (위 .gallery-thumbs .side-item — 피팅룸 옷 칸과 같은 칸이지만 피팅룸은 2026-10-30부터 세로로 늘어놓아 펼침 없음, 여닫기 · 고르기는 main.js) */
 .gallery-thumbs {
     position: absolute;
     top: calc(223 * var(--px));
@@ -1752,7 +1763,7 @@ footer hr {
     width: calc(150 * var(--px));
 }
 
-/* '추천' 꼬리표 (시안 span.wear-tag, 주인님이 2026-10-27 고침 — 글자 '모델 착용' → '추천', 피팅룸 셔츠 · 바지 · 로퍼 칸에도 붙임): 칸 오른쪽 위(x 49 · y 2.5)에 18×18 파란 원, 흰 글자 5 */
+/* '추천' 꼬리표 (시안 span.wear-tag, 주인님이 2026-10-27 고침 — 글자 '모델 착용' → '추천', 피팅룸 셔츠 · 바지 · 로퍼 칸은 2026-10-29 뺌): 칸 오른쪽 위(x 49 · y 2.5)에 18×18 파란 원, 흰 글자 5 */
 .wear-tag {
     position: absolute;
     top: calc(2.5 * var(--px));
