@@ -1647,7 +1647,8 @@ footer hr {
 }
 
 /* ══════════ 상품 상세 창 (women-coat.html) ══════════
-   - 시안 146:889: 어두운 배경(dim) 가운데 1750×900 창 = 사진 갤러리 1100 + 상품 정보 650 (2026-10-28 수정 — 사이 없음, 리뷰 목록은 빠지고 오른쪽 끝에 피팅룸 열기 칸)
+   - 시안 146:889: 어두운 배경(dim) 가운데 1750×900 창 = 사진 갤러리 1100 + 상품 정보 650 (2026-10-28 수정 — 사이 없음, 오른쪽 끝에 피팅룸 열기 칸)
+     2026-10-30 시안: 사진 아래 리뷰(section.review) + 창 위에 뜨는 리뷰 쓰기 · 혜택 안내 창 3개 (아래 '리뷰' · '창 위에 뜨는 창')
    - dim은 반투명이라 뒤의 여자 코트 페이지가 어둡게 비침 → 다른 페이지가 아니라 페이지 위에 띄운 창 (주인님 지정)
    - 피팅룸처럼 페이지와 같은 비율(폭 1920 기준)로 줄고, 화면 높이가 모자랄 때만 위아래 20px을 남기고 더 줄어듦 (가운데 정렬 · 여백은 피팅룸 .dim을 같이 씀)
    - 여자 롱코트 01 카드(#detail-long-coat-01)를 누르면 열림: 여닫기 · 사진 고르기 · 피팅룸은 main.js, JS가 없으면 :target으로만 열림 (닫기는 뒤로 가기)
@@ -1696,12 +1697,11 @@ footer hr {
     outline: none;
 }
 
-/* ── 사진 갤러리 1100×900: 사진이 세로로 이어지고 창 안에서 위아래로 넘겨 봄 ── */
+/* ── 사진 갤러리 1100×900: 사진이 세로로 이어지고 창 안에서 위아래로 넘겨 봄 (맨 아래는 흰 바탕 리뷰 — 2026-10-30 시안) ── */
 .detail-gallery {
     position: relative;
     flex: none;
     width: calc(1100 * var(--px));
-    background: var(--gray-250);   /* 누끼 사진 뒤 바탕 (상품 카드 사진 양옆과 같은 회색) */
 }
 
 .gallery-track {
@@ -1715,11 +1715,13 @@ footer hr {
     display: none;
 }
 
-/* 시안처럼 폭 1100에 맞춤 → 원본이 2:3이라 한 장이 1650, 창 높이 900을 넘는 아래는 넘겨서 봄 */
-.gallery-track img {
+/* 시안처럼 폭 1100에 맞춤 → 원본이 2:3이라 한 장이 1650, 창 높이 900을 넘는 아래는 넘겨서 봄
+   누끼 사진 뒤 바탕은 시안 (사진 N) 칸 gray/300 (2026-10-30 시안 — 예전엔 갤러리 전체에 gray-250, 리뷰는 흰 바탕이라 사진에만) */
+.gallery-track > img {
     display: block;
     width: 100%;
     height: auto;
+    background: var(--gray-300);
 }
 
 /* ── 썸네일: 갤러리 왼쪽(x 50 · y 223)에 고정 — 코트 색 줄 + 모델 착용 세 줄 (시안 .gallery-thumbs) ──
@@ -1728,6 +1730,15 @@ footer hr {
     position: absolute;
     top: calc(223 * var(--px));
     left: calc(50 * var(--px));
+    transition: opacity .3s linear, visibility 0s;
+}
+
+/* 아래 리뷰가 썸네일 자리까지 올라오면 0.3s 등속으로 옅어져 숨음 → 후기 글 위에 썸네일이 겹치지 않게 (사진으로 돌아오면 다시 보임 — main.js)
+   시안은 썸네일이 사진 칸 밖(창)에 붙어 있어 리뷰까지 넘기면 후기 위에 겹침 */
+.gallery-thumbs.away {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s linear, visibility 0s linear .3s;
 }
 
 /* 코트 줄과 사이 10 (모델 착용 줄끼리는 .side-item + .side-item) */
@@ -1819,12 +1830,21 @@ footer hr {
     background: url(../images/icons/star-review.svg) no-repeat center / contain;
 }
 
-/* 리뷰: 아래 1px 선(gray/600) + 갈매기표 8×14 (시안 높이 25 = 글자 24 + 선 1, 2026-10-29 시안에서 글자 '리뷰 남기기' → '리뷰') */
+/* 리뷰: 아래 1px 선(gray/600) + 갈매기표 8×14 (시안 높이 25 = 글자 24 + 선 1, 2026-10-29 시안에서 글자 '리뷰 남기기' → '리뷰')
+   누르면 사진 칸 아래 리뷰로 스크롤 (2026-10-30 시안 프로토타입) → 버튼 기본 모양을 지움 */
 .review-title {
     display: flex;
     align-items: center;
     gap: calc(8 * var(--px));
+    padding: 0;
+    border: 0;
     border-bottom: 1px solid var(--gray-600);
+    background: none;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    cursor: pointer;
 }
 
 .review-title .chevron {
@@ -2224,4 +2244,923 @@ footer hr {
 /* 받는 동안 피팅룸 페이지의 기본 모습(어두운 dim 가운데 작은 창)이 잠깐 보이지 않게 (.embed가 붙은 뒤 fitting-room.js가 준비됐다고 알리면 .ready) */
 .fitting-frame:not(.ready) {
     visibility: hidden;
+}
+
+/* ── 리뷰 1100: 사진 11장 아래 흰 바탕 (시안 section.review 459:1684, 2026-10-30) ──
+   위 50 · 좌우 30 · 아래 80, 제목 묶음 → 후기 목록 1040 → 버튼 줄, 사이 40 · 가운데 정렬 */
+.review {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: calc(40 * var(--px));
+    padding: calc(50 * var(--px)) calc(30 * var(--px)) calc(80 * var(--px));
+    background: var(--surface-white);
+}
+
+/* 제목 REVIEW(메인 섹션 제목과 같은 Noto Serif KR 32) → 요약 두 줄(18, 사람 수 · 점수만 진하게), 제목과 요약 사이 16 · 요약 줄 사이 10 */
+.review-intro {
+    text-align: center;
+}
+
+/* 정보 칸 '리뷰'로 내려온 뒤 제목에 포커스를 줌(스크린리더가 여기부터 읽게) — 누르는 곳이 아니라 테두리는 그리지 않음 */
+.review-intro .section-title:focus {
+    outline: none;
+}
+
+.review-intro .section-desc {
+    margin-top: calc(10 * var(--px));
+}
+
+.review-intro .section-title + .section-desc {
+    margin-top: calc(16 * var(--px));
+}
+
+.review-intro strong {
+    color: var(--gray-1000);
+    font-weight: 400;   /* 시안은 굵기는 그대로 색만 진하게 */
+}
+
+/* 후기 목록: 위 · 줄마다 아래 1px 선(border/default), 줄은 위아래 24 · 좌우 10 (펼친 줄은 아래 32) */
+.review-list {
+    width: 100%;
+    border-top: 1px solid var(--border-default);
+}
+
+.review-item {
+    border-bottom: 1px solid var(--border-default);
+}
+
+.review-item details {
+    padding: calc(24 * var(--px)) calc(10 * var(--px));
+}
+
+.review-item details[open] {
+    padding-bottom: calc(32 * var(--px));
+}
+
+/* 첫 줄: 한 줄 후기(Noto Serif KR 20 · 줄 30) + 사이 40 + 사이즈 · 착용감 · 사진 수 · 별점(오른쪽 끝), 글자 아래끝 맞춤 */
+.review-head {
+    display: flex;
+    align-items: baseline;
+    gap: calc(40 * var(--px));
+    list-style: none;   /* 펼침 삼각형 지움 (시안에 없음) */
+    cursor: pointer;
+}
+
+.review-head::-webkit-details-marker {
+    display: none;
+}
+
+.review-line {
+    flex: 1;
+    min-width: 0;
+    color: var(--gray-1000);
+    font-family: "Noto Serif KR", serif;
+    font-size: calc(20 * var(--px));   /* 글자 스타일 없음: Noto Serif KR Regular 20 · 줄 30 · 자간 -0.2 */
+    font-weight: 400;
+    line-height: calc(30 * var(--px));
+    letter-spacing: -.2px;
+}
+
+.review-meta {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: calc(16 * var(--px));
+    color: var(--on-color-description);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));   /* 시안 글 상자 17 */
+}
+
+/* 채운 별 12 + 점수 (사이 4) — 정보 칸 평점 별(24)과 같은 그림 */
+.review-meta .rating {
+    display: flex;
+    align-items: center;
+    gap: calc(4 * var(--px));
+}
+
+.review-meta .rating::before {
+    content: "";
+    width: calc(12 * var(--px));
+    height: calc(12 * var(--px));
+    background: url(../images/icons/star-review.svg) no-repeat center / contain;
+}
+
+/* 펼친 본문: 첫 줄 아래 16, 글 → 사진 → 쓴 사람 · 도움돼요, 사이 20 */
+.review-card {
+    display: flex;
+    flex-direction: column;
+    gap: calc(20 * var(--px));
+    margin-top: calc(16 * var(--px));
+}
+
+.review-text {
+    width: calc(810 * var(--px));   /* 시안 글 상자 폭 810 */
+    color: var(--gray-900);
+    font-size: calc(16 * var(--px));   /* Body-md/line/regular */
+    font-weight: var(--body-md-line-regular-weight);
+    line-height: calc(24 * var(--px));   /* 150% */
+}
+
+/* 후기 사진 80×80 (사이 8): 상세 사진을 가운데 정사각형으로 잘라 보임 (시안 FILL) */
+.review-img {
+    display: flex;
+    gap: calc(8 * var(--px));
+}
+
+.review-img img {
+    display: block;
+    width: calc(80 * var(--px));
+    height: calc(80 * var(--px));
+    background: var(--gray-150);
+    object-fit: cover;
+}
+
+.review-credit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--on-color-description);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));
+}
+
+.review-credit .btn-like {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+/* 리뷰 더 읽기(테두리) · 리뷰 쓰기(검정) 280×52, 사이 12 */
+.review-more {
+    display: flex;
+    gap: calc(12 * var(--px));
+}
+
+.review-more button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: calc(280 * var(--px));
+    height: calc(52 * var(--px));
+    padding: 0;
+    cursor: pointer;
+}
+
+.review-more .btn-more {
+    gap: calc(8 * var(--px));
+    border: 1px solid var(--border-default);
+    background: var(--surface-white);
+    color: var(--on-color-description);
+    font-size: calc(16 * var(--px));   /* Body-md/regular */
+    font-weight: var(--body-md-regular-weight);
+    line-height: calc(19 * var(--px));
+}
+
+.review-more .btn-more .count {
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    line-height: calc(17 * var(--px));
+}
+
+/* 리뷰 쓰기: 흰 글자 15 Medium · 자간 4% + 흰 갈매기표 6×10 (사이 12) */
+.review-more .btn-review-write {
+    gap: calc(12 * var(--px));
+    border: 0;
+    background: var(--gray-1000);
+    color: var(--on-color-text);
+    font-size: calc(15 * var(--px));
+    font-weight: 500;
+    line-height: calc(18 * var(--px));
+    letter-spacing: .04em;
+}
+
+.review-more .btn-review-write::after {
+    content: "";
+    width: calc(7 * var(--px));
+    height: calc(11 * var(--px));
+    background: url(../images/icons/chevron-review-write.svg) no-repeat center / contain;
+}
+
+/* ══════════ 상품 상세 창 위에 뜨는 창 (리뷰 쓰기 · 신규 가입 혜택 · 카드 혜택 · 배송 정보) ══════════
+   - 시안 프로토타입 오버레이: 리뷰 쓰기 442:1669는 화면 아래 가운데에서 0.3s 등속으로 올라오고 뒤 25% 어둡게,
+     안내 창 3개(488:1681 · 486:1680 · 492:1683)는 화면 가운데 0.2s ease-out 페이드 · 뒤 배경 없음
+   - .modal-layer = 화면 전체(상세 창 dim 안): 바깥을 눌러도 닫히지 않음(시안 설정), 닫힐 땐 다 사라진 뒤 숨김 → 닫힌 창엔 포커스가 들어가지 않음
+   - 크기는 상세 창과 같은 --px, 외곽 · 줄 선은 1px (시안 선 1) */
+.modal-layer {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 3;   /* 상세 창의 피팅룸(2) · 펼친 컬러 · 사이즈 목록(1) 위 */
+    visibility: hidden;
+    transition: visibility 0s linear .2s;
+}
+
+.modal-layer.active {
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+/* 안내 창: 화면 가운데 600 (높이는 내용대로 — 723 · 752 · 720) */
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    width: calc(600 * var(--px));
+    background: var(--surface-white);
+    opacity: 0;
+    translate: -50% -50%;
+    transition: opacity .2s ease-out;   /* 시안 DISSOLVE 0.2s ease-out */
+}
+
+.modal-layer.active .modal {
+    opacity: 1;
+}
+
+/* 열 때 창에 포커스를 줌(스크린리더가 제목부터 읽음) — 누르는 곳이 아니라 테두리는 그리지 않음 */
+.modal:focus {
+    outline: none;
+}
+
+/* 리뷰 쓰기: 화면 아래 가운데 720×900, 뒤 검정 25% (시안 BOTTOM_CENTER · MOVE_IN 0.3s 등속) — 닫을 땐 거꾸로 내려감 */
+.review-write-layer {
+    transition: background-color .3s linear, visibility 0s linear .3s;
+}
+
+.review-write-layer.active {
+    background-color: rgba(0, 0, 0, .25);
+}
+
+.modal.review-write {
+    top: auto;
+    bottom: 0;
+    width: calc(720 * var(--px));
+    height: calc(900 * var(--px));
+    opacity: 1;
+    translate: -50% 100%;
+    transition: translate .3s linear;
+}
+
+.modal-layer.active .review-write {
+    translate: -50% 0;
+}
+
+/* ── 머리 64: 가운데 제목(H2/medium 24) + 오른쪽 위 닫기 40×40, 아래 1px 선 ── */
+.modal-header {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    height: calc(64 * var(--px));
+    padding: 0 calc(40 * var(--px));
+    border-bottom: 1px solid var(--border-default);
+}
+
+.review-write .modal-header {
+    align-items: flex-start;
+    padding-top: calc(20 * var(--px));   /* 시안 리뷰 쓰기 머리만 위 20 · 아래 15 */
+}
+
+.modal-title {
+    color: var(--on-color-description);
+    font-size: calc(24 * var(--px));   /* H2/medium */
+    font-weight: var(--h2-medium-weight);
+    line-height: calc(29 * var(--px));   /* 시안 글 상자 29 */
+    text-align: center;
+}
+
+/* 닫기: 피팅룸 닫기(.btn-close 40×40 · 가는 X)와 같은 부품 size=20 — 리뷰 쓰기는 오른쪽 위 끝, 안내 창은 위 12 · 오른쪽 16 */
+.modal .btn-close {
+    border: 0;
+    cursor: pointer;
+}
+
+.modal:not(.review-write) .btn-close {
+    top: calc(12 * var(--px));
+    right: calc(16 * var(--px));
+}
+
+/* ── 내용: 위아래 32 · 좌우 40, 덩어리 사이 28 ── */
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: calc(28 * var(--px));
+    padding: calc(32 * var(--px)) calc(40 * var(--px));
+}
+
+.delivery-info .modal-body {
+    padding-bottom: calc(28 * var(--px));   /* 시안 배송 정보만 아래 28 */
+}
+
+/* ── 아래 버튼 줄: 위 1px 선, 위 20 · 좌우 40 · 아래 24, 버튼 높이 52 · 사이 12 (버튼이 줄을 나눠 채움) ── */
+.modal-actions,
+.write-actions {
+    display: flex;
+    flex: none;
+    gap: calc(12 * var(--px));
+    padding: calc(20 * var(--px) - 1px) calc(40 * var(--px)) calc(24 * var(--px));   /* 위 선 1을 빼야 시안 높이 96 */
+    border-top: 1px solid var(--border-default);
+}
+
+.modal-actions button,
+.write-actions button {
+    flex: 1;
+    height: calc(52 * var(--px));
+    padding: 0;
+    border: 0;
+    cursor: pointer;
+    font-size: calc(15 * var(--px));   /* Body-sm/medium */
+    font-weight: var(--body-sm-medium-weight);
+    line-height: calc(18 * var(--px));
+}
+
+/* 테두리 버튼(로그인 · 취소) · 검정 버튼(회원가입하고 쿠폰 받기 · 리뷰 등록 · 확인) */
+.modal .btn-secondary,
+.modal .btn-cancel {
+    border: 1px solid var(--border-default);
+    background: var(--surface-white);
+    color: var(--on-color-description);
+}
+
+.modal .btn-primary,
+.modal .btn-submit,
+.modal .btn-confirm {
+    background: var(--gray-1000);
+    color: var(--on-color-text);
+}
+
+/* 확인 하나만 있는 창(카드 혜택 · 배송 정보)은 글자가 H3/medium 20 */
+.benefit-card .btn-confirm,
+.delivery-info .btn-primary {
+    font-size: calc(20 * var(--px));
+    font-weight: var(--h3-medium-weight);
+    line-height: calc(24 * var(--px));
+}
+
+/* ── 안내 창 공통: 회색 상자(gray/150), 표 · 목록 줄 선, '꼭 확인해 주세요' ── */
+.coupon-hero,
+.benefit-preview,
+.delivery-summary {
+    background: var(--gray-150);
+}
+
+/* 꼭 확인해 주세요: 제목 13(gray/900) → 사이 8 → 점 목록 12 · 줄 150% (줄 사이 2, 점과 글 사이 4) */
+.modal .notice,
+.modal .notice-body {
+    display: flex;
+    flex-direction: column;
+    gap: calc(8 * var(--px));
+}
+
+.benefit-coupon .notice {
+    gap: calc(12 * var(--px));   /* 신규 가입 혜택은 목록 → 문의 줄 사이 12 */
+}
+
+.notice-title {
+    color: var(--gray-900);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: calc(16 * var(--px));
+}
+
+.notice-list {
+    display: flex;
+    flex-direction: column;
+    gap: calc(2 * var(--px));
+    color: var(--gray-600);
+    font-size: calc(12 * var(--px));   /* Caption-md/line/regular */
+    font-weight: var(--caption-md-line-regular-weight);
+    line-height: calc(18 * var(--px));   /* 150% */
+}
+
+.notice-list li {
+    display: flex;
+    gap: calc(4 * var(--px));
+}
+
+.notice-list li::before {
+    content: "·";
+    flex: none;
+    width: calc(4 * var(--px));
+}
+
+.notice-help {
+    color: var(--gray-600);
+    font-size: calc(12 * var(--px));   /* Caption-md/regular */
+    font-weight: var(--caption-md-regular-weight);
+    line-height: calc(14 * var(--px));
+}
+
+/* ── 신규 가입 혜택: 쿠폰 상자(안 24, 줄 사이 6) → 조건 표(줄 40 · 이름 96) ── */
+.coupon-hero {
+    display: flex;
+    flex-direction: column;
+    gap: calc(6 * var(--px));
+    padding: calc(24 * var(--px));
+}
+
+.hero-eyebrow {
+    color: var(--gray-600);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: calc(16 * var(--px));
+}
+
+.hero-title {
+    color: var(--on-color-description);
+    font-size: calc(18 * var(--px));   /* H4/medium */
+    font-weight: var(--h4-medium-weight);
+    line-height: calc(21 * var(--px));
+}
+
+.hero-title strong {
+    color: var(--gray-900);
+    font-weight: inherit;
+}
+
+.hero-sub {
+    color: var(--on-color-description);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));
+}
+
+.coupon-terms {
+    border-top: 1px solid var(--border-default);
+}
+
+.terms-row {
+    display: flex;
+    align-items: center;
+    height: calc(40 * var(--px));
+    border-bottom: 1px solid var(--border-default);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));
+}
+
+.terms-row dt {
+    flex: none;
+    width: calc(96 * var(--px));
+    color: var(--gray-600);
+}
+
+.terms-row dd {
+    color: var(--on-color-description);
+}
+
+/* ── 카드 혜택: 한 달 금액 상자(안 20 · 24, 글 왼쪽 · 금액 오른쪽) → 카드사 표(머리 36 · 줄 44, 칸 248 · 136 · 136) → 표 아래 설명 ── */
+.benefit-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: calc(16 * var(--px));
+    padding: calc(20 * var(--px)) calc(24 * var(--px));
+}
+
+.preview-text {
+    display: flex;
+    flex-direction: column;
+    gap: calc(4 * var(--px));
+}
+
+.preview-lead {
+    color: var(--on-color-description);
+    font-size: calc(15 * var(--px));   /* Body-sm/regular */
+    font-weight: var(--body-sm-regular-weight);
+    line-height: calc(18 * var(--px));
+}
+
+.preview-guide,
+.installment-period {
+    color: var(--gray-600);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: calc(16 * var(--px));
+}
+
+.preview-monthly {
+    flex: none;
+    color: var(--gray-900);
+    font-size: calc(18 * var(--px));   /* H4/medium */
+    font-weight: var(--h4-medium-weight);
+    line-height: calc(21 * var(--px));
+}
+
+.installment {
+    display: flex;
+    flex-direction: column;
+    gap: calc(12 * var(--px));
+}
+
+.installment-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: calc(16 * var(--px));
+}
+
+.installment-title {
+    color: var(--gray-900);
+    font-size: calc(16 * var(--px));   /* Body-md/medium */
+    font-weight: var(--body-md-medium-weight);
+    line-height: calc(19 * var(--px));
+}
+
+.installment-table {
+    width: 100%;
+    border-collapse: separate;   /* 선을 칸마다 따로 그려 줄 높이가 시안대로 (실측표 .size-table과 같음) */
+    border-spacing: 0;
+    table-layout: fixed;
+    border-top: 1px solid var(--gray-900);
+    text-align: left;
+}
+
+.installment-table th,
+.installment-table td {
+    padding: 0 calc(12 * var(--px));
+    border-bottom: 1px solid var(--border-default);
+}
+
+.installment-table .col-card {
+    width: calc(248 * var(--px));
+}
+
+.installment-table thead th {
+    height: calc(35 * var(--px) + 1px);   /* 아래 선 1까지 시안 36 */
+    background: var(--gray-150);
+    color: var(--gray-600);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: calc(16 * var(--px));
+}
+
+.installment-table tbody th,
+.installment-table tbody td {
+    height: calc(43 * var(--px) + 1px);   /* 아래 선 1까지 시안 44 */
+    color: var(--on-color-description);
+    font-size: calc(15 * var(--px));   /* Body-sm/regular */
+    font-weight: var(--body-sm-regular-weight);
+    line-height: calc(18 * var(--px));
+}
+
+.installment-table tbody .col-free {
+    color: var(--gray-900);
+    font-size: calc(16 * var(--px));   /* Body-md/medium */
+    font-weight: var(--body-md-medium-weight);
+    line-height: calc(19 * var(--px));
+}
+
+.installment-table .none {
+    color: var(--gray-600);
+}
+
+.table-note {
+    display: flex;
+    flex-direction: column;
+    gap: calc(4 * var(--px));
+    color: var(--on-color-description);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: calc(16 * var(--px));
+}
+
+/* ── 배송 정보: 요약 상자(안 20 · 24, 줄 사이 4) → 배송 · 교환 반품 표(제목 16 → 사이 12 → 위 선 + 줄 33) → 안내 글 ── */
+.delivery-summary {
+    display: flex;
+    flex-direction: column;
+    gap: calc(4 * var(--px));
+    padding: calc(20 * var(--px)) calc(24 * var(--px));
+}
+
+.summary-lead,
+.info-title {
+    color: var(--gray-900);
+    font-size: calc(16 * var(--px));   /* Body-md/medium */
+    font-weight: var(--body-md-medium-weight);
+    line-height: calc(19 * var(--px));
+}
+
+.summary-sub {
+    color: var(--on-color-description);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));
+}
+
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: calc(12 * var(--px));
+}
+
+.info-list {
+    border-top: 1px solid var(--border-default);
+}
+
+.info-row {
+    display: flex;
+    padding: calc(8 * var(--px)) 0;
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));
+}
+
+.info-row dt {
+    flex: none;
+    width: calc(96 * var(--px));
+    color: var(--on-color-description);
+}
+
+.info-row dd {
+    color: var(--gray-900);
+}
+
+.info-note {
+    color: var(--gray-600);
+    font-size: calc(13 * var(--px));   /* Caption-lg/line/regular */
+    font-weight: var(--caption-lg-line-regular-weight);
+    line-height: calc(20 * var(--px));   /* 150% (시안 두 줄 상자 40) */
+}
+
+/* ── 리뷰 쓰기: 머리 64 → 내용 740(넘치면 이 안에서 스크롤 — 사진을 올리면 길어짐) → 버튼 줄 96 ── */
+.write-scroll {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: calc(28 * var(--px));
+    min-height: 0;
+    padding: calc(32 * var(--px)) calc(40 * var(--px));
+    overflow-y: auto;
+}
+
+/* 산 상품: 사진 64×80 + 사이 16 + 이름 · 옵션(사이 6) */
+.write-product {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: calc(16 * var(--px));
+}
+
+.write-product .thumb {
+    display: block;
+    width: calc(64 * var(--px));
+    height: calc(80 * var(--px));
+    background: var(--gray-150);
+    object-fit: cover;
+}
+
+.write-product .product-info {
+    display: flex;
+    flex-direction: column;
+    gap: calc(6 * var(--px));
+}
+
+.write-product .product-name {
+    color: var(--gray-900);
+    font-size: calc(16 * var(--px));   /* Body-md/medium */
+    font-weight: var(--body-md-medium-weight);
+    line-height: calc(19 * var(--px));
+}
+
+.write-product .product-option {
+    color: var(--gray-600);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: calc(16 * var(--px));
+}
+
+/* 칸: 이름 72 + 내용, 칸 사이 20 */
+.write-form,
+.write-options {
+    display: flex;
+    flex-direction: column;
+    gap: calc(20 * var(--px));
+}
+
+.write-rating,
+.write-options .field {
+    display: flex;
+    align-items: center;
+}
+
+.review-write .label {
+    flex: none;
+    width: calc(72 * var(--px));
+    color: var(--on-color-description);
+    font-size: calc(16 * var(--px));   /* Body-md/regular */
+    font-weight: var(--body-md-regular-weight);
+    line-height: calc(19 * var(--px));
+}
+
+.review-write .hint {
+    color: var(--gray-600);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: calc(16 * var(--px));
+}
+
+/* 만족도: 별 24 다섯 개(사이 4) → 사이 16 → 'N / 5' → 사이 16 → 안내 — 고른 별까지 검정, 나머지는 gray/300 (main.js가 .on) */
+.rating-body {
+    display: flex;
+    align-items: center;
+    gap: calc(16 * var(--px));
+}
+
+.star-select {
+    display: flex;
+    gap: calc(4 * var(--px));
+}
+
+.star-select .star {
+    position: relative;   /* 숨긴 라디오(.blind)가 이 칸 안에 머물게 */
+    display: block;
+    width: calc(24 * var(--px));
+    height: calc(24 * var(--px));
+    background: url(../images/icons/star-review-off.svg) no-repeat center / contain;
+    cursor: pointer;
+}
+
+.star-select .star.on {
+    background-image: url(../images/icons/star-review.svg);
+}
+
+.rating-body .score {
+    color: var(--on-color-description);
+    font-size: calc(16 * var(--px));   /* Body-md/regular */
+    font-weight: var(--body-md-regular-weight);
+    line-height: calc(19 * var(--px));
+}
+
+/* 아이템 · 사이즈: 568×48 고르기 칸(테두리 1, 좌우 16, 오른쪽 끝 갈매기표 10×5) */
+.field-select {
+    flex: 1;
+    height: calc(48 * var(--px));
+    padding: 0 calc(16 * var(--px));
+    border: 1px solid var(--border-default);
+    border-radius: 0;
+    background: var(--surface-white) url(../images/icons/chevron-field.svg) no-repeat right calc(15 * var(--px)) center / calc(12 * var(--px)) auto;
+    color: var(--gray-900);
+    font-size: calc(15 * var(--px));   /* Body-sm/regular */
+    font-weight: var(--body-sm-regular-weight);
+    line-height: calc(18 * var(--px));
+    appearance: none;
+    cursor: pointer;
+}
+
+/* 착용감 3칸 · 품질 4칸: 칸 높이 44 · 사이 8로 줄을 나눠 채움, 고른 칸은 검정 바탕 흰 글자 Medium */
+.fit-chips,
+.quality-chips {
+    display: flex;
+    flex: 1;
+    gap: calc(8 * var(--px));
+}
+
+.fit-chips li,
+.quality-chips li {
+    flex: 1;
+}
+
+.review-write .chip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(44 * var(--px));
+    border: 1px solid var(--border-default);
+    color: var(--on-color-description);
+    font-size: calc(14 * var(--px));   /* Body-xsm/regular */
+    font-weight: var(--body-xsm-regular-weight);
+    line-height: calc(17 * var(--px));
+    cursor: pointer;
+}
+
+.review-write .chip:has(:checked) {
+    border-color: var(--gray-1000);
+    background: var(--gray-1000);
+    color: var(--on-color-text);
+    font-weight: var(--body-xsm-medium-weight);
+}
+
+/* 칩 · 별 · 사진 칸은 안의 라디오 · 파일 칸이 숨어 있어서 키보드 포커스 테두리를 바깥 칸에 그림 */
+.review-write .chip:has(:focus-visible),
+.star-select .star:has(:focus-visible),
+.photo-add:has(:focus-visible) {
+    outline: 2px solid var(--brand-blue);
+    outline-offset: 2px;
+}
+
+/* 글: 640×160 테두리 상자(안 16) — 입력 칸 + 오른쪽 아래 글자 수 */
+.review-input {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    height: calc(160 * var(--px));
+    padding: calc(16 * var(--px));
+    border: 1px solid var(--border-default);
+}
+
+.review-input:focus-within {
+    border-color: var(--border-hover);
+}
+
+.review-input textarea {
+    flex: 1;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    outline: none;   /* 상자 테두리가 진해지는 것으로 포커스를 보임 (위 :focus-within) */
+    background: none;
+    color: var(--gray-900);
+    font-size: calc(15 * var(--px));   /* Body-sm/line/regular */
+    font-weight: var(--body-sm-line-regular-weight);
+    line-height: calc(22.5 * var(--px));   /* 150% */
+    resize: none;
+}
+
+.review-input textarea::placeholder {
+    color: var(--body-placeholder);
+}
+
+.review-input .count {
+    color: var(--gray-600);
+    font-size: calc(13 * var(--px));   /* Caption-lg/regular */
+    font-weight: var(--caption-lg-regular-weight);
+    line-height: calc(16 * var(--px));
+    text-align: right;
+}
+
+/* 사진: + 칸 80×80(gray/150, + 14 → 사이 6 → 'N / 10') + 사이 12 + 안내 → 올리면 아래 줄에 80×80 미리보기(사이 12, 오른쪽 위 18×18 빼기) */
+.write-photo {
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    gap: calc(12 * var(--px));
+}
+
+.photo-row {
+    display: flex;
+    align-items: center;
+    gap: calc(12 * var(--px));
+}
+
+.photo-add {
+    position: relative;
+    display: flex;
+    flex: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: calc(6 * var(--px));
+    width: calc(80 * var(--px));
+    height: calc(80 * var(--px));
+    background: var(--gray-150);
+    cursor: pointer;
+}
+
+.photo-add::before {
+    content: "";
+    width: calc(15.2 * var(--px));
+    height: calc(15.2 * var(--px));
+    background: url(../images/icons/plus.svg) no-repeat center / contain;
+}
+
+.photo-count {
+    color: var(--gray-600);
+    font-size: calc(12 * var(--px));   /* Caption-md/regular */
+    font-weight: var(--caption-md-regular-weight);
+    line-height: calc(14 * var(--px));
+}
+
+.write-photo .review-img {
+    flex-wrap: wrap;
+    gap: calc(12 * var(--px));
+}
+
+.write-photo .review-img[hidden] {
+    display: none;
+}
+
+.write-photo .review-img li {
+    position: relative;
+}
+
+.btn-remove {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(18 * var(--px));
+    height: calc(18 * var(--px));
+    padding: 0;
+    border: 0;
+    background: rgba(42, 42, 42, .8) url(../images/icons/close-photo.svg) no-repeat center / 100% 100%;   /* 시안 gray/1000 80% */
+    font-size: 0;
+    cursor: pointer;
 }

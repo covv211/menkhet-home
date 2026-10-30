@@ -338,6 +338,7 @@ if (detail) {
     function closeDetail() {
         if (!detail.classList.contains('active')) return;
         detail.classList.remove('active');
+        hideModal(false);   // 뒤로 가기로 닫으면 떠 있던 창(리뷰 쓰기 · 안내)도 같이 닫음
         closeFitting(false);   // 피팅룸이 열려 있었으면 같이 닫음 (포커스는 아래에서 카드로)
         closeRow(false);   // 펼친 썸네일 줄 · 컬러 · 사이즈 목록도 접어 둠 → 다시 열면 처음처럼 접힌 모습 (고른 컬러 · 사이즈는 그대로)
         closeOption(false);
@@ -392,6 +393,20 @@ if (detail) {
     // 포커스가 피팅룸 iframe 안에 있을 땐 키가 이 페이지로 오지 않음 → Esc · Tab은 fitting-room.js가 맡고, 피팅룸 끝에서 Tab을 넘기면 위 tabOutOfFitting
     document.addEventListener('keydown', (e) => {
         if (!detail.classList.contains('active')) return;
+        // 창 위에 창(리뷰 쓰기 · 안내)이 떠 있으면 Esc는 그 창만 닫고, Tab은 그 창 안에서 처음 ↔ 끝으로 돎 (상세 창은 inert)
+        if (openModal) {
+            if (e.key === 'Escape') hideModal(true, true);
+            if (e.key !== 'Tab') return;
+            const items = [...openModal.querySelectorAll(MODAL_FOCUSABLE)];
+            if (e.shiftKey && (document.activeElement === items[0] || document.activeElement === openModal)) {
+                e.preventDefault();
+                items[items.length - 1].focus({ focusVisible: true });
+            } else if (!e.shiftKey && document.activeElement === items[items.length - 1]) {
+                e.preventDefault();
+                items[0].focus({ focusVisible: true });
+            }
+            return;
+        }
         if (e.key === 'Escape') {
             if (openSelect) closeOption(true);   // 접고 그 칸으로 포커스
             else if (openItem) closeRow(true);   // 접고 그 줄의 고른 칸으로 포커스
@@ -432,11 +447,13 @@ if (detail) {
        한 번에 한 줄만 열림: 바깥을 누르거나 다른 곳으로 포커스가 가면 닫힘, Esc → 닫고 그 줄의 고른 칸으로 포커스 (위 keydown)
        넘겨 보면 가운데 사진에 맞춰 코트 줄 · 모델 착용 줄만 바뀜 (컬러 칸은 직접 고를 때만 — 아래 옵션 고르기) */
     const track = detail.querySelector('.gallery-track');
-    const shots = [...track.querySelectorAll('img')];
+    const shots = [...track.querySelectorAll(':scope > img')];   // 사진 11장 (아래 리뷰 속 후기 사진은 빼고)
+    const thumbs = gallery.querySelector('.gallery-thumbs');
     const coatRow = gallery.querySelector('.side-item[data-part="coat"]');
     const wearRows = [...gallery.querySelectorAll('.model-wear .side-item')];   // 셔츠 · 바지 · 로퍼
     let openItem = null;   // 펼친 썸네일 줄
     let seenShot = shots[0];   // 썸네일이 맞춰 둔 사진 (넘기는 동안 같은 사진이면 다시 맞추지 않음)
+    let reviewScroll = 0;   // 리뷰로 내려가는 스크롤 (아래 '리뷰' — 그사이 사진을 고르면 멈춤)
 
     // 줄을 여닫는 건 고른 칸 버튼 하나 → aria-expanded는 그 버튼에만 (fitting-room.js와 같음)
     // 접힌 줄의 고르지 않은 칸은 Tab에서 바로 뺌 (style.css visibility는 0.3s 접힌 뒤에야 숨어서, 그 사이 Tab이 숨는 칸에 멈추지 않게)
@@ -491,6 +508,7 @@ if (detail) {
 
     // 고른 사진으로 옮기고 썸네일을 그 사진에 맞춤
     function showShot(shot) {
+        cancelAnimationFrame(reviewScroll);
         track.scrollTop = shot.offsetTop;
         matchThumbs(shot);
     }
@@ -511,12 +529,48 @@ if (detail) {
         });
     });
 
-    // 갤러리 가운데 높이에 걸친 사진 = 지금 보는 사진 → 썸네일만 맞춤 (고른 컬러는 그대로 둠)
+    // 갤러리 가운데 높이에 걸친 사진 = 지금 보는 사진 → 썸네일만 맞춤 (고른 컬러는 그대로 둠), 리뷰까지 내려가면 썸네일을 숨김 (아래 hideThumbs)
     track.addEventListener('scroll', () => {
         const middle = track.scrollTop + track.clientHeight / 2;
         const shot = shots.findLast((item) => item.offsetTop <= middle);
         if (shot !== seenShot) matchThumbs(shot);
+        hideThumbs();
     }, { passive: true });
+
+    /* 리뷰: 사진 11장 아래 (시안 section.review 459:1684, 2026-10-30)
+       정보 칸 '리뷰'를 누르면 사진 칸을 리뷰 위끝까지 0.3s 등속으로 스크롤 (시안 프로토타입 341:2191 SCROLL_TO 0.3s linear — 동작 줄이기여도 그대로, 주인님 지정)
+       다 내려가면 리뷰 제목에 포커스 → 스크린리더 · Tab이 리뷰부터 이어 감
+       리뷰 위끝이 썸네일 아래끝보다 올라오면 썸네일을 숨김(style.css .away · inert) → 후기 글 위에 썸네일이 겹치지 않게, 사진으로 돌아오면 다시 보임 */
+    const review = track.querySelector('.review');
+    const reviewTitle = review.querySelector('.section-title');
+    const REVIEW_SCROLL = 300;   // 리뷰로 내려가는 시간 (ms)
+
+    function scrollToReview() {
+        cancelAnimationFrame(reviewScroll);
+        const from = track.scrollTop;
+        const to = Math.min(review.offsetTop, track.scrollHeight - track.clientHeight);
+        const start = performance.now();
+        const step = (now) => {
+            const k = Math.min((now - start) / REVIEW_SCROLL, 1);
+            track.scrollTop = from + (to - from) * k;
+            if (k < 1) reviewScroll = requestAnimationFrame(step);
+            else reviewTitle.focus({ preventScroll: true });
+        };
+        reviewScroll = requestAnimationFrame(step);
+    }
+
+    function hideThumbs() {
+        const away = review.offsetTop - track.scrollTop < thumbs.offsetTop + thumbs.offsetHeight;
+        if (away === thumbs.classList.contains('away')) return;
+        if (away) {
+            closeRow(false);
+            if (thumbs.contains(document.activeElement)) track.focus({ preventScroll: true });   // 숨는 썸네일에 있던 포커스는 사진 칸으로 (body로 빠지지 않게)
+        }
+        thumbs.classList.toggle('away', away);
+        thumbs.inert = away;
+    }
+
+    detail.querySelector('.review-title').addEventListener('click', scrollToReview);
 
     /* 옵션 고르기: 컬러 · 사이즈 칸 (시안 Component 1 · 2) — 칸을 누르면 아래로 목록이 0.3s 등속으로 펼쳐짐(style.css), 한 번에 하나만 열림
        컬러를 고르면 칸에 그 색 이름이 나오고 그 색의 첫 사진으로 옮김 (사진 · 썸네일을 넘겨 봐도 고른 컬러는 그대로 — 사려고 고른 값이 사진을 볼 때마다 바뀌지 않게)
@@ -627,6 +681,124 @@ if (detail) {
     // 피팅룸 iframe 안을 누르면 클릭 · 포커스가 이 페이지로 오지 않음 → 창(window)에서 포커스가 빠질 때 썸네일 줄을 접음
     // 옵션 목록은 그대로 둠: 피팅룸이 열려 있는 동안 정보 칸은 inert라 목록이 열려 있을 수 없고, 앱 · 탭을 바꿀 때 접으면 목록 안 포커스가 body로 빠짐
     window.addEventListener('blur', () => closeRow(false));
+
+    /* 창 위에 뜨는 창 (시안 프로토타입 오버레이): 리뷰의 '리뷰 쓰기' → 리뷰 쓰기 442:1669, 정보 칸 쿠폰 글자 · 안내(!) → 신규 가입 혜택 488:1681 · 카드 혜택 486:1680 · 배송 정보 492:1683
+       누른 버튼의 aria-controls = 띄울 창, 한 번에 하나만 뜸 · 뜬 동안 상품 상세 창은 inert (Tab은 뜬 창 안에서만 돎 — 위 keydown)
+       닫기: 창 안 data-close 버튼(닫기 · 취소 · 확인) · 리뷰 등록 · Esc, 바깥을 눌러도 닫히지 않음(시안 설정) → 연 버튼으로 포커스를 돌려줌
+       움직임은 style.css (리뷰 쓰기 = 아래에서 0.3s 등속으로 올라옴 + 뒤 25% 어둡게, 안내 창 = 0.2s 페이드) */
+    const MODAL_FOCUSABLE = 'button:not(:disabled), input:not(:disabled), select, textarea';   // 뜬 창 안에서 Tab이 멈추는 곳 (처음 · 끝만 봄)
+    let openModal = null;   // 떠 있는 창 (.modal)
+    let modalOpener = null;   // 닫을 때 포커스를 돌려줄 버튼
+
+    function showModal(modal, opener) {
+        if (openModal) return;
+        openModal = modal;
+        modalOpener = opener;
+        if (modal === writeModal) resetWrite();
+        modal.parentElement.classList.add('active');
+        panel.inert = true;
+        modal.focus();   // 창에 포커스 → 스크린리더가 제목부터 읽음, Tab 한 번이면 닫기
+    }
+
+    function hideModal(focusOpener, byKey) {
+        if (!openModal) return;
+        openModal.parentElement.classList.remove('active');
+        openModal = null;
+        panel.inert = false;
+        if (focusOpener && modalOpener) modalOpener.focus({ focusVisible: byKey });   // 키보드로 닫았을 때만 테두리
+    }
+
+    detail.querySelectorAll('[aria-haspopup="dialog"]').forEach((button) => {
+        button.addEventListener('click', () => showModal(document.getElementById(button.getAttribute('aria-controls')), button));
+    });
+
+    detail.querySelectorAll('.modal [data-close]').forEach((button) => {
+        button.addEventListener('click', (e) => hideModal(true, e.detail === 0));   // 키보드 Enter로 누른 클릭은 detail 0
+    });
+
+    /* 리뷰 쓰기: 열 때마다 처음 모습(시안에 그려진 값 — 별 4 · 롱코트 01 · 블랙 M · 딱 맞아요 · 아주 좋아요, 글 · 사진 없음)
+       별은 라디오 → 고른 별까지 채우고 'N / 5', 글은 글자 수, 사진은 이 브라우저 안에서만 미리보기(최대 10장, 빼기 단추 — 어디에도 보내지 않음)
+       리뷰 등록 = 후기를 받을 곳이 정해지기 전이라 보내지 않고 닫기만 함 (시안 프로토타입도 CLOSE) */
+    const writeModal = detail.querySelector('.modal.review-write');
+    const writeForm = writeModal.querySelector('.write-form');
+    const stars = [...writeForm.querySelectorAll('.star')];
+    const scoreText = writeForm.querySelector('.rating-body .score');
+    const textCount = writeForm.querySelector('.review-input .count');
+    const photoInput = writeForm.querySelector('.photo-add input');
+    const photoCount = writeForm.querySelector('.photo-count');
+    const photoList = writeForm.querySelector('.write-photo .review-img');
+    const PHOTO_MAX = 10;   // 사진 최대 장수 (시안 '최대 10장')
+    let photos = [];   // 올린 사진 미리보기 주소 (object URL)
+
+    function showStars() {
+        const score = Number(writeForm.elements.score.value) || 0;
+        stars.forEach((star, at) => star.classList.toggle('on', at < score));
+        scoreText.textContent = `${score} / 5`;
+    }
+
+    function showCount() {
+        const text = writeForm.elements.text;
+        textCount.textContent = `${text.value.length} / ${text.maxLength}`;
+    }
+
+    // 미리보기 줄을 다시 그림: 80×80 사진 + 빼기 단추, 10장이 차면 + 칸을 막음
+    function showPhotos() {
+        photoList.replaceChildren(...photos.map((url, at) => {
+            const li = document.createElement('li');
+            const img = document.createElement('img');
+            const remove = document.createElement('button');
+            img.src = url;
+            img.alt = `올린 사진 ${at + 1}`;
+            remove.type = 'button';
+            remove.className = 'btn-remove';
+            remove.dataset.index = at;
+            remove.textContent = `사진 ${at + 1} 빼기`;
+            li.append(img, remove);
+            return li;
+        }));
+        photoList.hidden = !photos.length;
+        photoCount.textContent = `${photos.length} / ${PHOTO_MAX}`;
+        photoInput.disabled = photos.length >= PHOTO_MAX;
+    }
+
+    function resetWrite() {
+        writeForm.reset();
+        photos.forEach((url) => URL.revokeObjectURL(url));
+        photos = [];
+        showStars();
+        showCount();
+        showPhotos();
+        writeModal.querySelector('.write-scroll').scrollTop = 0;
+    }
+
+    writeForm.addEventListener('change', (e) => {
+        if (e.target.name === 'score') showStars();
+        if (e.target !== photoInput) return;
+        const files = [...photoInput.files].filter((file) => file.type.startsWith('image/')).slice(0, PHOTO_MAX - photos.length);
+        photos.push(...files.map((file) => URL.createObjectURL(file)));
+        photoInput.value = '';   // 같은 사진을 다시 골라도 change가 오게
+        showPhotos();
+    });
+
+    writeForm.addEventListener('input', (e) => {
+        if (e.target.name === 'text') showCount();
+    });
+
+    // 빼기: 그 사진을 지우고 포커스는 다음 빼기 단추(없으면 + 칸)로
+    photoList.addEventListener('click', (e) => {
+        const remove = e.target.closest('.btn-remove');
+        if (!remove) return;
+        const at = Number(remove.dataset.index);
+        URL.revokeObjectURL(photos[at]);
+        photos.splice(at, 1);
+        showPhotos();
+        (photoList.querySelectorAll('.btn-remove')[Math.min(at, photos.length - 1)] || photoInput).focus();
+    });
+
+    writeForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        hideModal(true);
+    });
 
     if (location.hash === hash) openDetail();   // 해시를 달고 들어오면 바로 열림 (주소 공유)
 }

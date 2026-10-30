@@ -7,15 +7,15 @@
     <title>여자 코트 | MENKHET</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- 헤더 글자 로고 글꼴(Patua One) -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patua+One&display=swap">
+    <!-- 헤더 글자 로고 글꼴(Patua One) + 상품 상세 리뷰 제목 · 한 줄 후기 글꼴(Noto Serif KR, 메인 .section-title과 같음) -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400&family=Patua+One&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css" integrity="sha384-IFb872aCXZQb6BKRUHmGn0YHKnFl4ylZjkgVRRyMTEQ5bjo/H6xFUiLJm6opOO66" crossorigin="anonymous">
     <!-- ?v=날짜(같은 날 또 고치면 뒤에 b · c …): CSS · JS · 아이콘을 고치면 같이 올림 → GitHub Pages가 파일을 10분씩 캐시해서 새 HTML에 예전 CSS가 섞여 깨져 보이던 것 막음 (2026-10-29) -->
-    <link rel="stylesheet" href="styles/default.css?v=1029f">
-    <link rel="stylesheet" href="styles/token.css?v=1029f">
-    <link rel="stylesheet" href="styles/style.css?v=1029f">
+    <link rel="stylesheet" href="styles/default.css?v=1030">
+    <link rel="stylesheet" href="styles/token.css?v=1030">
+    <link rel="stylesheet" href="styles/style.css?v=1030">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js" integrity="sha384-JiF4eFN9V3I2Fry7TzFM3XKdq0P3abiVxpOeHjGz4cwvas+uNg6pFWVmuD6MKXqG" crossorigin="anonymous" defer></script>
-    <script src="scripts/main.js?v=1029f" defer></script>
+    <script src="scripts/main.js?v=1030" defer></script>
 </head>
 
 <body>
@@ -777,17 +777,18 @@
     </main>
 
     <!-- 상품 상세 창: 시안 146:889 — 여자 코트 페이지 위를 반투명 어두운 배경(dim)으로 덮고 가운데 1750×900 창을 띄움 (다른 페이지로 가지 않음), 여자 롱코트 01 카드를 누르면 열림 (여닫기 · 사진 고르기 · 피팅룸은 main.js)
-         내용은 롱코트 01 사진 · 썸네일 + 시안 2026-10-28 수정본의 정보 칸 (제목 · 가격은 시안 문구 그대로 → 카드의 상품명 · 가격과 다름), 시안에서 리뷰 목록은 빠짐 (평점 옆 '리뷰'만) -->
-    <!-- content-required: 제목 · 가격 · 평점 · 혜택 · 실측 · 모델 착용 정보는 시안 문구라 실제 데이터 필요 -->
+         내용은 롱코트 01 사진 · 썸네일 → 사진 아래 리뷰(2026-10-30 시안 section.review 459:1684) + 시안 2026-10-28 수정본의 정보 칸 (제목 · 가격은 시안 문구 그대로 → 카드의 상품명 · 가격과 다름)
+         창 위에 뜨는 창 4개(리뷰 쓰기 · 신규 가입 혜택 · 카드 혜택 · 배송 정보)는 창 아래 .modal-layer — 시안 프로토타입 오버레이 그대로 (main.js) -->
+    <!-- content-required: 제목 · 가격 · 평점 · 혜택 · 실측 · 모델 착용 정보 · 리뷰 · 쿠폰 · 카드 무이자 · 배송 안내는 시안 문구라 실제 데이터 필요 -->
     <!-- 해시 id는 창(.product-detail)에 둠: 주소로 열 때 브라우저가 창에 바로 포커스를 줌 (배경 dim에 두면 포커스가 풀림) -->
     <div class="dim detail-dim">
         <div class="product-detail" id="detail-long-coat-01" role="dialog" aria-modal="true" aria-labelledby="detail-long-coat-01-title" tabindex="-1">
             <!-- 사진: 세로로 이어진 사진을 창 안에서 위아래로 넘겨 봄 (키보드는 사진 칸에 포커스 후 화살표), 왼쪽 썸네일 · 컬러 칸을 누르면 그 사진으로
                  피팅룸이 열려도 사진 · 썸네일은 그대로 써서 피팅룸 코디와 비교해 봄 (가려지는 정보 · 닫기만 막힘 — main.js) -->
             <div class="detail-gallery">
-                <!-- 시안 .gallery-track 299:1172의 11칸 순서 그대로: 모델 착용 4장 → 상품 3색 → 가까이 찍은 4장 (모두 1024×1536 누끼, 첫 장만 바로 받고 나머지는 보일 때)
+                <!-- 시안 .gallery-track 299:1172의 11칸 순서 그대로: 모델 착용 4장 → 상품 3색 → 가까이 찍은 4장 (모두 1024×1536 누끼, 첫 장만 바로 받고 나머지는 보일 때) → 맨 아래 리뷰
                      data-color = 코트 색 (썸네일 코트 줄 · 컬러 칸), data-look = 모델 차림 (black = 검정 코트 차림, brown = 브라운 코트 차림 → 썸네일 모델 착용 줄) -->
-                <div class="gallery-track" tabindex="0" role="region" aria-label="상품 사진">
+                <div class="gallery-track" tabindex="0" role="region" aria-label="상품 사진 · 리뷰">
                     <img src="images/women-coat/long-coat/detail/long-coat-01-model-black-1.webp" alt="모델 착용: 검정 롱코트 · 하늘색 셔츠 · 검정 바지 · 검정 로퍼" width="1024" height="1536" data-color="black" data-look="black">
                     <img src="images/women-coat/long-coat/detail/long-coat-01-model-black-2.webp" alt="모델 착용(다른 자세): 검정 롱코트 · 하늘색 셔츠 · 검정 바지 · 검정 로퍼" width="1024" height="1536" loading="lazy" data-color="black" data-look="black">
                     <img src="images/women-coat/long-coat/detail/long-coat-01-model-brown-1.webp" alt="모델 착용: 브라운 롱코트 · 검정 셔츠 · 그레이 바지 · 브라운 로퍼" width="1024" height="1536" loading="lazy" data-color="brown" data-look="brown">
@@ -799,6 +800,112 @@
                     <img src="images/women-coat/long-coat/detail/long-coat-01-brown-pocket.webp" alt="롱코트 브라운 주머니 · 단추 가까이" width="1024" height="1536" loading="lazy" data-color="brown">
                     <img src="images/women-coat/long-coat/detail/long-coat-01-black-collar.webp" alt="롱코트 검정 깃 · 안감 가까이" width="1024" height="1536" loading="lazy" data-color="black">
                     <img src="images/women-coat/long-coat/detail/long-coat-01-black-pocket.webp" alt="롱코트 검정 주머니 · 단추 가까이" width="1024" height="1536" loading="lazy" data-color="black">
+
+                    <!-- 리뷰: 시안 section.review 459:1684 (2026-10-30) — 사진 11장 아래 흰 바탕, 정보 칸의 '리뷰'를 누르면 여기로 0.3s 등속 스크롤 (시안 프로토타입 SCROLL_TO)
+                         제목 · 요약 → 후기 목록(누르면 펼침, 첫 후기는 펼친 채) → 리뷰 더 읽기 · 리뷰 쓰기
+                         제목 글꼴은 메인 섹션 제목(.section-title · .section-desc)과 같아서 그대로 씀 (시안 이름 p.review-title · .review-summary는 정보 칸 '리뷰'와 겹쳐 .review-intro로)
+                         후기는 시안 견본 — 01만 시안에 본문이 있고, 접힌 02 · 04 · 09 · 10의 본문은 첫 줄 · 사이즈 · 사진 수에 맞춰 코브가 채운 견본 문구 (content-required)
+                         '리뷰 더 읽기' · '도움돼요'는 리뷰를 받아 올 곳이 정해지면 연결 (지금은 동작 없음, 시안 프로토타입도 연결 없음) -->
+                    <section class="review" aria-labelledby="long-coat-01-review-title">
+                        <div class="review-intro">
+                            <h2 class="section-title" id="long-coat-01-review-title" tabindex="-1">REVIEW</h2>
+                            <p class="section-desc"><strong>128명</strong>이 평균 <strong>4.6점</strong>을 주셨고, <strong>104명</strong>은 품질이 아주 좋다고 하셨어요.</p>
+                            <p class="section-desc">사이즈는 <strong>97명</strong>이 딱 맞는다고, <strong>22명</strong>은 크다고, <strong>9명</strong>은 작다고 하셨어요.</p>
+                        </div>
+
+                        <!-- 후기 한 줄 = details: 첫 줄(한 줄 후기 · 사이즈 · 착용감 · 사진 수 · 별점)을 누르면 본문(글 · 사진 · 쓴 사람 · 도움돼요)이 펼쳐짐 -->
+                        <ul class="review-list">
+                            <li class="review-item">
+                                <details open>
+                                    <summary class="review-head">
+                                        <span class="review-line">원단이 적당히 묵직하고 손에 닿는 촉감이 부드러워요.</span>
+                                        <span class="review-meta"><span class="review-fact">M · 딱 맞아요 · 사진 3</span><span class="rating"><span class="blind">별점</span><span class="score">5.0</span></span></span>
+                                    </summary>
+                                    <div class="review-card">
+                                        <p class="review-text">평소 M을 입는데 어깨선이 딱 맞고, 기장은 종아리 중간까지 와서 니트 위에 걸쳐도 단정해요. 블랙이 새까맣지 않고 깊은 먹색이라 낮에 봐도 고급스러워 보여요.</p>
+                                        <ul class="review-img">
+                                            <li><img src="images/women-coat/long-coat/detail/long-coat-01-model-black-1.webp" alt="후기 사진 1: 검정 롱코트 착용" width="1024" height="1536" loading="lazy"></li>
+                                            <li><img src="images/women-coat/long-coat/detail/long-coat-01-model-black-2.webp" alt="후기 사진 2: 검정 롱코트 착용 (다른 자세)" width="1024" height="1536" loading="lazy"></li>
+                                            <li><img src="images/women-coat/long-coat/detail/long-coat-01-black-collar.webp" alt="후기 사진 3: 검정 롱코트 깃 가까이" width="1024" height="1536" loading="lazy"></li>
+                                        </ul>
+                                        <div class="review-credit">
+                                            <p class="review-by">— linen*** · 2026.10.18 · 롱코트 01 블랙 M · 품질 아주 좋아요</p>
+                                            <button type="button" class="btn-like">도움돼요 24</button>
+                                        </div>
+                                    </div>
+                                </details>
+                            </li>
+                            <li class="review-item">
+                                <details>
+                                    <summary class="review-head">
+                                        <span class="review-line">키 162cm에 S를 입었는데 무릎 아래로 떨어지는 기장이 예뻐요.</span>
+                                        <span class="review-meta"><span class="review-fact">S · 딱 맞아요 · 사진 2</span><span class="rating"><span class="blind">별점</span><span class="score">5.0</span></span></span>
+                                    </summary>
+                                    <div class="review-card">
+                                        <p class="review-text">평소 S를 입어요. 어깨와 품이 잘 맞고 단추를 다 채워도 팔을 움직이기 편해요. 무릎 아래로 떨어지는 기장이라 플랫 슈즈에도 잘 어울려요.</p>
+                                        <ul class="review-img">
+                                            <li><img src="images/women-coat/long-coat/detail/long-coat-01-model-brown-1.webp" alt="후기 사진 1: 브라운 롱코트 착용" width="1024" height="1536" loading="lazy"></li>
+                                            <li><img src="images/women-coat/long-coat/detail/long-coat-01-model-brown-2.webp" alt="후기 사진 2: 브라운 롱코트 착용 (다른 자세)" width="1024" height="1536" loading="lazy"></li>
+                                        </ul>
+                                        <div class="review-credit">
+                                            <p class="review-by">— seoul*** · 2026.10.16 · 롱코트 01 브라운 S · 품질 아주 좋아요</p>
+                                            <button type="button" class="btn-like">도움돼요 17</button>
+                                        </div>
+                                    </div>
+                                </details>
+                            </li>
+                            <li class="review-item">
+                                <details>
+                                    <summary class="review-head">
+                                        <span class="review-line">두꺼운 니트를 안에 입으려고 L로 샀더니 소매가 손등을 살짝 덮어요.</span>
+                                        <span class="review-meta"><span class="review-fact">L · 커요</span><span class="rating"><span class="blind">별점</span><span class="score">4.0</span></span></span>
+                                    </summary>
+                                    <div class="review-card">
+                                        <p class="review-text">어깨가 조금 내려와서 오버핏으로 입게 돼요. 두꺼운 니트를 받쳐 입기엔 넉넉해서 좋은데, 셔츠 한 장 위에 입을 거면 한 치수 작게 고르시는 걸 추천해요.</p>
+                                        <div class="review-credit">
+                                            <p class="review-by">— knit*** · 2026.10.14 · 롱코트 01 아이보리 L · 품질 좋아요</p>
+                                            <button type="button" class="btn-like">도움돼요 9</button>
+                                        </div>
+                                    </div>
+                                </details>
+                            </li>
+                            <li class="review-item">
+                                <details>
+                                    <summary class="review-head">
+                                        <span class="review-line">2주 동안 거의 매일 입었는데 보풀 없이 겉감이 깔끔하게 유지돼요.</span>
+                                        <span class="review-meta"><span class="review-fact">M · 딱 맞아요</span><span class="rating"><span class="blind">별점</span><span class="score">4.0</span></span></span>
+                                    </summary>
+                                    <div class="review-card">
+                                        <p class="review-text">출퇴근길에 가방을 메고 다녀도 어깨 쪽에 보풀이 생기지 않았어요. 비 오는 날 입은 뒤에는 옷걸이에 걸어 바로 말려 주는 게 좋아요.</p>
+                                        <div class="review-credit">
+                                            <p class="review-by">— daily*** · 2026.10.09 · 롱코트 01 블랙 M · 품질 좋아요</p>
+                                            <button type="button" class="btn-like">도움돼요 6</button>
+                                        </div>
+                                    </div>
+                                </details>
+                            </li>
+                            <li class="review-item">
+                                <details>
+                                    <summary class="review-head">
+                                        <span class="review-line">뒤트임이 있어서 걸을 때 코트 자락이 다리에 감기지 않아요.</span>
+                                        <span class="review-meta"><span class="review-fact">S · 작아요</span><span class="rating"><span class="blind">별점</span><span class="score">4.0</span></span></span>
+                                    </summary>
+                                    <div class="review-card">
+                                        <p class="review-text">평소 S와 M 사이를 입는데 S는 팔을 앞으로 뻗을 때 등이 조금 당겨요. 걸음이 편한 건 정말 좋아서 안에 얇게 입는 날 위주로 입고 있어요.</p>
+                                        <div class="review-credit">
+                                            <p class="review-by">— walk*** · 2026.10.05 · 롱코트 01 브라운 S · 품질 보통이에요</p>
+                                            <button type="button" class="btn-like">도움돼요 4</button>
+                                        </div>
+                                    </div>
+                                </details>
+                            </li>
+                        </ul>
+
+                        <div class="review-more">
+                            <button type="button" class="btn-more">리뷰 더 읽기 <span class="count">10 / 128</span></button>
+                            <button type="button" class="btn-review-write" aria-haspopup="dialog" aria-controls="long-coat-01-review-write">리뷰 쓰기</button>
+                        </div>
+                    </section>
                 </div>
                 <!-- 썸네일: 시안 .gallery-thumbs 299:1143 (갤러리 안 x 50 · y 223) — 피팅룸 옷 칸과 같은 칸(70×106, 사진 66×100)이 사이 10으로 세로로
                      접힌 줄에는 고른 칸 하나만 보이고, 누르면 오른쪽으로 펼쳐짐(0.3s 등속) → 고르면 그 사진으로 옮기고 접힘 · 넘겨 보면 가운데 사진에 맞춰 바뀜 (main.js) -->
@@ -844,10 +951,10 @@
                     <div class="product-head">
                         <p class="brand">MENKHET</p>
                         <h2 class="title" id="detail-long-coat-01-title">오버사이즈 여자 롱 코트 블랙 앤 화이트 가져가세요 최고의 아이템입니다.</h2>
-                        <!-- 평점 + 리뷰 (리뷰 페이지가 정해지면 연결, 지금은 동작 없음) -->
+                        <!-- 평점 + 리뷰: '리뷰'를 누르면 사진 칸이 아래 리뷰로 0.3s 등속 스크롤 (시안 프로토타입 341:2191 → 459:1684 SCROLL_TO, main.js) -->
                         <div class="review-summary">
                             <p class="rating"><span class="blind">평점</span><span class="score">4.5</span></p>
-                            <p class="review-title"><span>리뷰</span><i class="chevron" aria-hidden="true"></i></p>
+                            <button type="button" class="review-title"><span>리뷰</span><i class="chevron" aria-hidden="true"></i></button>
                         </div>
                     </div>
 
@@ -858,22 +965,23 @@
                     </div>
 
                     <!-- 혜택: 이름 110 + 사이 40 + 내용 400, 줄 사이 7
-                         안내(!) 버튼 · 쿠폰 글자는 안내 · 쿠폰 내용이 정해지면 연결 (지금은 동작 없음), 안내 아이콘은 다른 사이트 그림 대신 새로 그린 것 (images/icons/info.svg) -->
+                         쿠폰 글자 · 안내(!) 버튼을 누르면 그 안내 창이 화면 가운데 뜸 (시안 프로토타입: 쿠폰 · 첫 안내 → 신규 가입 혜택 488:1681, 둘째 → 카드 혜택 486:1680, 셋째 → 배송 정보 492:1683 — main.js)
+                         안내 아이콘은 다른 사이트 그림 대신 새로 그린 것 (images/icons/info.svg) -->
                     <dl class="benefit-list">
                         <div class="benefit">
                             <dt>신규 가입 혜택</dt>
                             <dd>
                                 <p class="benefit-text">신규 회원 축하!</p>
-                                <p class="benefit-note"><button type="button" class="coupon">신규 회원 10% 할인 쿠폰</button><button type="button" class="btn-info">신규 회원 쿠폰 안내</button></p>
+                                <p class="benefit-note"><button type="button" class="coupon" aria-haspopup="dialog" aria-controls="long-coat-01-coupon">신규 회원 10% 할인 쿠폰</button><button type="button" class="btn-info" aria-haspopup="dialog" aria-controls="long-coat-01-coupon">신규 회원 쿠폰 안내</button></p>
                             </dd>
                         </div>
                         <div class="benefit">
                             <dt>카드 혜택</dt>
-                            <dd><p class="benefit-text">카드 결제시 최대 12개월 무이자!<button type="button" class="btn-info">카드 무이자 안내</button></p></dd>
+                            <dd><p class="benefit-text">카드 결제시 최대 12개월 무이자!<button type="button" class="btn-info" aria-haspopup="dialog" aria-controls="long-coat-01-card">카드 무이자 안내</button></p></dd>
                         </div>
                         <div class="benefit">
                             <dt>배송 정보</dt>
-                            <dd><p class="benefit-text">30,000 원&nbsp; 이상 결제시 무료 배송<button type="button" class="btn-info">무료 배송 안내</button></p></dd>
+                            <dd><p class="benefit-text">30,000 원&nbsp; 이상 결제시 무료 배송<button type="button" class="btn-info" aria-haspopup="dialog" aria-controls="long-coat-01-delivery">무료 배송 안내</button></p></dd>
                         </div>
                     </dl>
 
@@ -941,6 +1049,237 @@
             <!-- 피팅룸: 창 오른쪽 끝에서 700×900 피팅룸이 밀려 들어와 창 오른쪽(x 1050)에 겹침 (시안 프로토타입 341:2229 → 231:1372 오버레이)
                  자리(.fitting-popup)는 그대로 두고 안의 판(.fitting-sheet)만 밀려 들어옴 (style.css) · 판 안 내용은 fitting-room.html?embed=1 하나를 처음 열 때 iframe으로 넣고, 닫으면 새로 읽어 두어 다시 열면 처음부터 (main.js) -->
             <div class="fitting-popup"><div class="fitting-sheet"></div></div>
+        </div>
+
+        <!-- 창 위에 뜨는 창 4개: 시안 프로토타입 오버레이 그대로 — 바깥을 눌러도 닫히지 않고 닫기 · Esc로 닫힘, 떠 있는 동안 상품 상세 창은 inert (main.js)
+             .modal-layer는 화면 전체(뒤 창 누르기를 막음), 안의 .modal이 시안 위치에 뜸 · data-close 버튼이 닫음 -->
+
+        <!-- 리뷰 쓰기: 시안 modal.review-write 442:1669 (720×900) — 리뷰의 '리뷰 쓰기'를 누르면 화면 아래 가운데에서 0.3s 등속으로 올라오고 뒤는 25% 어두워짐 (시안 BOTTOM_CENTER · MOVE_IN · 배경 검정 25%)
+             열 때마다 처음 모습(시안에 그려진 값: 별 4 · 롱코트 01 · 블랙 M · 딱 맞아요 · 아주 좋아요, 글 · 사진 없음)으로 돌아감
+             리뷰 등록은 후기를 받을 곳이 정해지기 전이라 보내지 않고 닫기만 함 (시안 프로토타입도 CLOSE), 올린 사진은 이 브라우저 안에서 미리보기만 하고 어디에도 보내지 않음 -->
+        <div class="modal-layer review-write-layer">
+            <div class="modal review-write" id="long-coat-01-review-write" role="dialog" aria-modal="true" aria-labelledby="long-coat-01-review-write-title" tabindex="-1">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="long-coat-01-review-write-title">리뷰 쓰기</h2>
+                    <button type="button" class="btn-close" data-close>리뷰 쓰기 닫기</button>
+                </div>
+                <div class="write-scroll">
+                    <div class="write-product">
+                        <img class="thumb" src="images/women-coat/long-coat/detail/long-coat-01-black.webp" alt="" width="1024" height="1536" loading="lazy">
+                        <div class="product-info">
+                            <p class="product-name">MENKHET 롱코트 01</p>
+                            <p class="product-option">블랙 · M · 2026.10.12 구매</p>
+                        </div>
+                    </div>
+                    <form class="write-form" id="long-coat-01-review-form">
+                        <!-- 만족도: 별 다섯 개 = 라디오 (고른 별까지 채움 · 점수 글자는 main.js), 착용감 · 품질 칩도 라디오 (고른 칩은 style.css :has(:checked)) -->
+                        <div class="write-rating" role="radiogroup" aria-labelledby="long-coat-01-rating-label">
+                            <span class="label" id="long-coat-01-rating-label">만족도</span>
+                            <div class="rating-body">
+                                <ul class="star-select">
+                                    <li><label class="star"><input class="blind" type="radio" name="score" value="1"><span class="blind">1점</span></label></li>
+                                    <li><label class="star"><input class="blind" type="radio" name="score" value="2"><span class="blind">2점</span></label></li>
+                                    <li><label class="star"><input class="blind" type="radio" name="score" value="3"><span class="blind">3점</span></label></li>
+                                    <li><label class="star"><input class="blind" type="radio" name="score" value="4" checked><span class="blind">4점</span></label></li>
+                                    <li><label class="star"><input class="blind" type="radio" name="score" value="5"><span class="blind">5점</span></label></li>
+                                </ul>
+                                <span class="score" aria-hidden="true">4 / 5</span>
+                                <p class="hint">별을 눌러 만족도를 선택해 주세요.</p>
+                            </div>
+                        </div>
+                        <div class="write-options">
+                            <div class="field">
+                                <label class="label" for="long-coat-01-review-item">아이템</label>
+                                <select class="field-select" id="long-coat-01-review-item" name="item">
+                                    <option selected>롱코트 01</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label class="label" for="long-coat-01-review-size">사이즈</label>
+                                <select class="field-select" id="long-coat-01-review-size" name="size">
+                                    <option>블랙 · S</option>
+                                    <option selected>블랙 · M</option>
+                                    <option>블랙 · L</option>
+                                    <option>블랙 · XL</option>
+                                    <option>브라운 · S</option>
+                                    <option>브라운 · M</option>
+                                    <option>브라운 · L</option>
+                                    <option>브라운 · XL</option>
+                                    <option>아이보리 · S</option>
+                                    <option>아이보리 · M</option>
+                                    <option>아이보리 · L</option>
+                                    <option>아이보리 · XL</option>
+                                </select>
+                            </div>
+                            <div class="field" role="radiogroup" aria-labelledby="long-coat-01-fit-label">
+                                <span class="label" id="long-coat-01-fit-label">착용감</span>
+                                <ul class="fit-chips">
+                                    <li><label class="chip"><input class="blind" type="radio" name="fit" value="small">작아요</label></li>
+                                    <li><label class="chip"><input class="blind" type="radio" name="fit" value="fit" checked>딱 맞아요</label></li>
+                                    <li><label class="chip"><input class="blind" type="radio" name="fit" value="large">커요</label></li>
+                                </ul>
+                            </div>
+                            <div class="field" role="radiogroup" aria-labelledby="long-coat-01-quality-label">
+                                <span class="label" id="long-coat-01-quality-label">품질</span>
+                                <ul class="quality-chips">
+                                    <li><label class="chip"><input class="blind" type="radio" name="quality" value="great" checked>아주 좋아요</label></li>
+                                    <li><label class="chip"><input class="blind" type="radio" name="quality" value="good">좋아요</label></li>
+                                    <li><label class="chip"><input class="blind" type="radio" name="quality" value="okay">보통이에요</label></li>
+                                    <li><label class="chip"><input class="blind" type="radio" name="quality" value="poor">아쉬워요</label></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- 글: 테두리 상자 안에 입력 칸 + 글자 수 (최대 1000자) -->
+                        <div class="review-input">
+                            <textarea name="text" maxlength="1000" aria-label="후기" aria-describedby="long-coat-01-review-count" placeholder="첫 문장이 리뷰 목록에 그대로 실려요. 입어 본 느낌부터 적어 주세요. (최소 20자)&#10;원단 촉감, 기장, 어깨선, 보온감을 적어 주시면 다른 분들께 큰 도움이 돼요."></textarea>
+                            <span class="count" id="long-coat-01-review-count">0 / 1000</span>
+                        </div>
+                        <!-- 사진: + 칸을 누르면 사진 고르기 (최대 10장) → 아래 줄에 미리보기 80×80 + 빼기 단추 (시안 숨은 층 '사진 첨부 시 표시' 442:1803) -->
+                        <div class="write-photo">
+                            <div class="photo-row">
+                                <label class="photo-add"><input class="blind" type="file" name="photos" accept="image/*" multiple><span class="blind">사진 올리기</span><span class="photo-count">0 / 10</span></label>
+                                <p class="hint">사진은 최대 10장까지 올릴 수 있어요.</p>
+                            </div>
+                            <ul class="review-img" aria-label="올린 사진" hidden></ul>
+                        </div>
+                    </form>
+                </div>
+                <div class="write-actions">
+                    <button type="button" class="btn-cancel" data-close>취소</button>
+                    <button type="submit" class="btn-submit" form="long-coat-01-review-form">리뷰 등록</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 신규 가입 혜택: 시안 modal.benefit-coupon 488:1681 (600×723) — 정보 칸의 쿠폰 글자 · 첫 안내(!)를 누르면 화면 가운데 0.2s 페이드 (시안 CENTER · DISSOLVE · 뒤 배경 없음)
+             로그인 · 회원가입 페이지가 정해지면 아래 두 버튼 연결 (지금은 동작 없음, 시안 프로토타입도 연결 없음) -->
+        <div class="modal-layer">
+            <div class="modal benefit-coupon" id="long-coat-01-coupon" role="dialog" aria-modal="true" aria-labelledby="long-coat-01-coupon-title" tabindex="-1">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="long-coat-01-coupon-title">신규 가입 혜택</h2>
+                    <button type="button" class="btn-close" data-close>신규 가입 혜택 닫기</button>
+                </div>
+                <div class="modal-body">
+                    <div class="coupon-hero">
+                        <p class="hero-eyebrow">신규 회원 10% 할인 쿠폰</p>
+                        <p class="hero-title">이 코트에 쓰면 <strong>81,000원</strong></p>
+                        <p class="hero-sub">판매가 90,000원에서 9,000원이 한 번 더 빠져요.</p>
+                    </div>
+                    <dl class="coupon-terms">
+                        <div class="terms-row"><dt>할인</dt><dd>10% (최대 10,000원)</dd></div>
+                        <div class="terms-row"><dt>사용 조건</dt><dd>30,000원 이상 구매 시 · 주문 1건에 1장</dd></div>
+                        <div class="terms-row"><dt>받는 방법</dt><dd>가입 즉시 자동 발급</dd></div>
+                        <div class="terms-row"><dt>사용 기간</dt><dd>발급일로부터 30일</dd></div>
+                        <div class="terms-row"><dt>확인 위치</dt><dd>마이페이지 &gt; 쿠폰</dd></div>
+                    </dl>
+                    <section class="notice" aria-labelledby="long-coat-01-coupon-notice">
+                        <div class="notice-body">
+                            <h3 class="notice-title" id="long-coat-01-coupon-notice">꼭 확인해 주세요</h3>
+                            <ul class="notice-list">
+                                <li>할인 중인 상품에도 쓸 수 있어요. 일부 한정 상품은 제외돼요.</li>
+                                <li>다른 쿠폰과는 함께 쓸 수 없어요. 카드 무이자 할부와 무료 배송은 함께 받을 수 있어요.</li>
+                                <li>주문을 취소하거나 반품하면 사용 기간이 남은 쿠폰은 돌려드려요.</li>
+                                <li>탈퇴 후 재가입하면 쿠폰이 다시 발급되지 않아요.</li>
+                            </ul>
+                        </div>
+                        <p class="notice-help">쿠폰 문의 고객센터 1588-0000 · 평일 10:00–17:00</p>
+                    </section>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary">로그인</button>
+                    <button type="button" class="btn-primary">회원가입하고 쿠폰 받기</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 카드 혜택: 시안 modal.benefit-card 486:1680 (600×752) — 둘째 안내(!)를 누르면 화면 가운데 0.2s 페이드 -->
+        <div class="modal-layer">
+            <div class="modal benefit-card" id="long-coat-01-card" role="dialog" aria-modal="true" aria-labelledby="long-coat-01-card-title" tabindex="-1">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="long-coat-01-card-title">카드 혜택</h2>
+                    <button type="button" class="btn-close" data-close>카드 혜택 닫기</button>
+                </div>
+                <div class="modal-body">
+                    <div class="benefit-preview">
+                        <div class="preview-text">
+                            <p class="preview-lead">이 코트를 12개월 무이자로 나눠 내면</p>
+                            <p class="preview-guide">신청 없이, 신한·삼성카드로 결제할 때 12개월만 고르면 돼요</p>
+                        </div>
+                        <strong class="preview-monthly">월 7,500원</strong>
+                    </div>
+                    <section class="installment" aria-labelledby="long-coat-01-installment-title">
+                        <div class="installment-head">
+                            <h3 class="installment-title" id="long-coat-01-installment-title">카드사별 무이자 할부</h3>
+                            <p class="installment-period">2026년 11월 1일~30일 · 5만 원 이상</p>
+                        </div>
+                        <table class="installment-table">
+                            <thead>
+                                <tr><th scope="col" class="col-card">카드사</th><th scope="col" class="col-free">무이자</th><th scope="col" class="col-partial">부분 무이자</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><th scope="row" class="col-card">신한 · 삼성</th><td class="col-free">2~12개월</td><td class="col-partial none"><span aria-hidden="true">–</span><span class="blind">없음</span></td></tr>
+                                <tr><th scope="row" class="col-card">하나 · 우리 · NH농협</th><td class="col-free">2~6개월</td><td class="col-partial">10·12개월</td></tr>
+                                <tr><th scope="row" class="col-card">KB국민 · 롯데 · BC</th><td class="col-free">2~5개월</td><td class="col-partial">10·12개월</td></tr>
+                                <tr><th scope="row" class="col-card">현대</th><td class="col-free">2~3개월</td><td class="col-partial">10·12개월</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="table-note">
+                            <p>부분 무이자는 10개월은 1~4회차, 12개월은 1~5회차 수수료만 내요.</p>
+                            <p>신한·삼성 7~12개월 무이자는 MENKHET 단독 혜택이에요.</p>
+                        </div>
+                    </section>
+                    <section class="notice" aria-labelledby="long-coat-01-card-notice">
+                        <h3 class="notice-title" id="long-coat-01-card-notice">꼭 확인해 주세요</h3>
+                        <ul class="notice-list">
+                            <li>쿠폰·적립금을 쓴 뒤 최종 결제 금액이 5만 원 이상일 때 적용돼요.</li>
+                            <li>법인·체크·선불·기프트 카드는 제외되고, 간편결제는 결제사 기준을 따라요.</li>
+                            <li>무이자로 결제하면 카드 포인트가 적립되지 않을 수 있어요.</li>
+                            <li>카드사 사정에 따라 혜택이 바뀌거나 일찍 끝날 수 있어요.</li>
+                        </ul>
+                    </section>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-confirm" data-close>확인</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 배송 정보: 시안 modal.delivery-info 492:1683 (600×720) — 셋째 안내(!)를 누르면 화면 가운데 0.2s 페이드
+             소제목은 시안 이름 h3.section-title이 메인 섹션 제목(.section-title)과 겹쳐 .info-title로 -->
+        <div class="modal-layer">
+            <div class="modal delivery-info" id="long-coat-01-delivery" role="dialog" aria-modal="true" aria-labelledby="long-coat-01-delivery-title" tabindex="-1">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="long-coat-01-delivery-title">배송 정보</h2>
+                    <button type="button" class="btn-close" data-close>배송 정보 닫기</button>
+                </div>
+                <div class="modal-body">
+                    <div class="delivery-summary">
+                        <p class="summary-lead">이 코트는 무료로 배송돼요</p>
+                        <p class="summary-sub">오후 2시 전에 결제하면 오늘 출고해요.</p>
+                    </div>
+                    <section class="info-section" aria-labelledby="long-coat-01-delivery-ship">
+                        <h3 class="info-title" id="long-coat-01-delivery-ship">배송</h3>
+                        <dl class="info-list">
+                            <div class="info-row"><dt>배송비</dt><dd>30,000원 이상 무료, 미만 3,000원</dd></div>
+                            <div class="info-row"><dt>추가 배송비</dt><dd>제주 3,000원, 도서산간 5,000원</dd></div>
+                            <div class="info-row"><dt>출고</dt><dd>평일 오후 2시 전 결제 시 당일 (주말·공휴일 제외)</dd></div>
+                            <div class="info-row"><dt>도착</dt><dd>출고 후 1–3일, CJ대한통운</dd></div>
+                        </dl>
+                    </section>
+                    <section class="info-section" aria-labelledby="long-coat-01-delivery-return">
+                        <h3 class="info-title" id="long-coat-01-delivery-return">교환·반품</h3>
+                        <dl class="info-list">
+                            <div class="info-row"><dt>신청 기간</dt><dd>받은 다음 날부터 7일 이내</dd></div>
+                            <div class="info-row"><dt>배송비</dt><dd>단순 변심 왕복 6,000원, 불량·오배송 무료</dd></div>
+                            <div class="info-row"><dt>어려운 경우</dt><dd>착용·세탁 흔적이 있거나 택을 뗀 상품</dd></div>
+                        </dl>
+                    </section>
+                    <p class="info-note">교환·반품은 마이페이지 &gt; 주문 내역에서 신청할 수 있어요.<br>고객센터 1588-0000 · 평일 10:00–17:00</p>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-primary" data-close>확인</button>
+                </div>
+            </div>
         </div>
     </div>
 </body>
