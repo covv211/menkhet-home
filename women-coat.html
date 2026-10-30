@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400&family=Patua+One&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css" integrity="sha384-IFb872aCXZQb6BKRUHmGn0YHKnFl4ylZjkgVRRyMTEQ5bjo/H6xFUiLJm6opOO66" crossorigin="anonymous">
     <!-- ?v=날짜(같은 날 또 고치면 뒤에 b · c …): CSS · JS · 아이콘을 고치면 같이 올림 → GitHub Pages가 파일을 10분씩 캐시해서 새 HTML에 예전 CSS가 섞여 깨져 보이던 것 막음 (2026-10-29) -->
-    <link rel="stylesheet" href="styles/default.css?v=1030">
-    <link rel="stylesheet" href="styles/token.css?v=1030">
-    <link rel="stylesheet" href="styles/style.css?v=1030">
+    <link rel="stylesheet" href="styles/default.css?v=1030b">
+    <link rel="stylesheet" href="styles/token.css?v=1030b">
+    <link rel="stylesheet" href="styles/style.css?v=1030b">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js" integrity="sha384-JiF4eFN9V3I2Fry7TzFM3XKdq0P3abiVxpOeHjGz4cwvas+uNg6pFWVmuD6MKXqG" crossorigin="anonymous" defer></script>
-    <script src="scripts/main.js?v=1030" defer></script>
+    <script src="scripts/main.js?v=1030b" defer></script>
 </head>
 
 <body>
@@ -778,7 +778,7 @@
 
     <!-- 상품 상세 창: 시안 146:889 — 여자 코트 페이지 위를 반투명 어두운 배경(dim)으로 덮고 가운데 1750×900 창을 띄움 (다른 페이지로 가지 않음), 여자 롱코트 01 카드를 누르면 열림 (여닫기 · 사진 고르기 · 피팅룸은 main.js)
          내용은 롱코트 01 사진 · 썸네일 → 사진 아래 리뷰(2026-10-30 시안 section.review 459:1684) + 시안 2026-10-28 수정본의 정보 칸 (제목 · 가격은 시안 문구 그대로 → 카드의 상품명 · 가격과 다름)
-         창 위에 뜨는 창 4개(리뷰 쓰기 · 신규 가입 혜택 · 카드 혜택 · 배송 정보)는 창 아래 .modal-layer — 시안 프로토타입 오버레이 그대로 (main.js) -->
+         창 위에 뜨는 창 4개(리뷰 쓰기 · 신규 가입 혜택 · 카드 혜택 · 배송 정보)는 창 아래 .modal-layer — 시안 프로토타입 오버레이 (자리 · 딤은 2026-10-30 주인님 지정으로 넷 다 화면 가운데 + 25% 딤, main.js) -->
     <!-- content-required: 제목 · 가격 · 평점 · 혜택 · 실측 · 모델 착용 정보 · 리뷰 · 쿠폰 · 카드 무이자 · 배송 안내는 시안 문구라 실제 데이터 필요 -->
     <!-- 해시 id는 창(.product-detail)에 둠: 주소로 열 때 브라우저가 창에 바로 포커스를 줌 (배경 dim에 두면 포커스가 풀림) -->
     <div class="dim detail-dim">
@@ -1051,10 +1051,10 @@
             <div class="fitting-popup"><div class="fitting-sheet"></div></div>
         </div>
 
-        <!-- 창 위에 뜨는 창 4개: 시안 프로토타입 오버레이 그대로 — 바깥을 눌러도 닫히지 않고 닫기 · Esc로 닫힘, 떠 있는 동안 상품 상세 창은 inert (main.js)
-             .modal-layer는 화면 전체(뒤 창 누르기를 막음), 안의 .modal이 시안 위치에 뜸 · data-close 버튼이 닫음 -->
+        <!-- 창 위에 뜨는 창 4개: 시안 프로토타입 오버레이 (자리 · 딤만 주인님 지정으로 바꿈) — 바깥을 눌러도 닫히지 않고 닫기 · Esc로 닫힘, 떠 있는 동안 상품 상세 창은 inert (main.js)
+             .modal-layer는 화면 전체를 덮는 25% 딤(뒤 창 누르기를 막음), 안의 .modal이 화면 가운데 뜸 (2026-10-30 주인님 지정) · data-close 버튼이 닫음 -->
 
-        <!-- 리뷰 쓰기: 시안 modal.review-write 442:1669 (720×900) — 리뷰의 '리뷰 쓰기'를 누르면 화면 아래 가운데에서 0.3s 등속으로 올라오고 뒤는 25% 어두워짐 (시안 BOTTOM_CENTER · MOVE_IN · 배경 검정 25%)
+        <!-- 리뷰 쓰기: 시안 modal.review-write 442:1669 (720×900) — 리뷰의 '리뷰 쓰기'를 누르면 화면 아래 밖에서 가운데까지 0.3s 등속으로 올라오고 뒤는 25% 어두워짐 (시안 MOVE_IN · 배경 검정 25%, 자리는 2026-10-30 주인님 지정으로 시안 아래 가운데 → 화면 가운데)
              열 때마다 처음 모습(시안에 그려진 값: 별 4 · 롱코트 01 · 블랙 M · 딱 맞아요 · 아주 좋아요, 글 · 사진 없음)으로 돌아감
              리뷰 등록은 후기를 받을 곳이 정해지기 전이라 보내지 않고 닫기만 함 (시안 프로토타입도 CLOSE), 올린 사진은 이 브라우저 안에서 미리보기만 하고 어디에도 보내지 않음 -->
         <div class="modal-layer review-write-layer">
@@ -1151,7 +1151,7 @@
             </div>
         </div>
 
-        <!-- 신규 가입 혜택: 시안 modal.benefit-coupon 488:1681 (600×723) — 정보 칸의 쿠폰 글자 · 첫 안내(!)를 누르면 화면 가운데 0.2s 페이드 (시안 CENTER · DISSOLVE · 뒤 배경 없음)
+        <!-- 신규 가입 혜택: 시안 modal.benefit-coupon 488:1681 (600×723) — 정보 칸의 쿠폰 글자 · 첫 안내(!)를 누르면 화면 가운데 0.2s 페이드 + 뒤 25% 딤 (시안 CENTER · DISSOLVE, 딤은 2026-10-30 주인님 지정 — 시안은 배경 없음)
              로그인 · 회원가입 페이지가 정해지면 아래 두 버튼 연결 (지금은 동작 없음, 시안 프로토타입도 연결 없음) -->
         <div class="modal-layer">
             <div class="modal benefit-coupon" id="long-coat-01-coupon" role="dialog" aria-modal="true" aria-labelledby="long-coat-01-coupon-title" tabindex="-1">
@@ -1192,7 +1192,7 @@
             </div>
         </div>
 
-        <!-- 카드 혜택: 시안 modal.benefit-card 486:1680 (600×752) — 둘째 안내(!)를 누르면 화면 가운데 0.2s 페이드 -->
+        <!-- 카드 혜택: 시안 modal.benefit-card 486:1680 (600×752) — 둘째 안내(!)를 누르면 화면 가운데 0.2s 페이드 + 뒤 25% 딤 -->
         <div class="modal-layer">
             <div class="modal benefit-card" id="long-coat-01-card" role="dialog" aria-modal="true" aria-labelledby="long-coat-01-card-title" tabindex="-1">
                 <div class="modal-header">
@@ -1244,7 +1244,7 @@
             </div>
         </div>
 
-        <!-- 배송 정보: 시안 modal.delivery-info 492:1683 (600×720) — 셋째 안내(!)를 누르면 화면 가운데 0.2s 페이드
+        <!-- 배송 정보: 시안 modal.delivery-info 492:1683 (600×720) — 셋째 안내(!)를 누르면 화면 가운데 0.2s 페이드 + 뒤 25% 딤
              소제목은 시안 이름 h3.section-title이 메인 섹션 제목(.section-title)과 겹쳐 .info-title로 -->
         <div class="modal-layer">
             <div class="modal delivery-info" id="long-coat-01-delivery" role="dialog" aria-modal="true" aria-labelledby="long-coat-01-delivery-title" tabindex="-1">

@@ -2446,9 +2446,9 @@ footer hr {
 }
 
 /* ══════════ 상품 상세 창 위에 뜨는 창 (리뷰 쓰기 · 신규 가입 혜택 · 카드 혜택 · 배송 정보) ══════════
-   - 시안 프로토타입 오버레이: 리뷰 쓰기 442:1669는 화면 아래 가운데에서 0.3s 등속으로 올라오고 뒤 25% 어둡게,
-     안내 창 3개(488:1681 · 486:1680 · 492:1683)는 화면 가운데 0.2s ease-out 페이드 · 뒤 배경 없음
-   - .modal-layer = 화면 전체(상세 창 dim 안): 바깥을 눌러도 닫히지 않음(시안 설정), 닫힐 땐 다 사라진 뒤 숨김 → 닫힌 창엔 포커스가 들어가지 않음
+   - 시안 프로토타입 오버레이: 리뷰 쓰기 442:1669는 화면 아래 밖에서 0.3s 등속으로 올라오고(MOVE_IN), 안내 창 3개(488:1681 · 486:1680 · 492:1683)는 0.2s ease-out 페이드(DISSOLVE)
+   - 2026-10-30 주인님 지정: 넷 다 화면 가운데(시안의 리뷰 쓰기는 아래 가운데) + 뒤 검정 25% 딤(시안은 리뷰 쓰기만, 안내 창은 배경 없음)
+   - .modal-layer = 화면 전체(상세 창 dim 안) = 딤: 바깥을 눌러도 닫히지 않음(시안 설정), 닫힐 땐 다 사라진 뒤 숨김 → 닫힌 창엔 포커스가 들어가지 않음
    - 크기는 상세 창과 같은 --px, 외곽 · 줄 선은 1px (시안 선 1) */
 .modal-layer {
     position: absolute;
@@ -2458,12 +2458,19 @@ footer hr {
     left: 0;
     z-index: 3;   /* 상세 창의 피팅룸(2) · 펼친 컬러 · 사이즈 목록(1) 위 */
     visibility: hidden;
-    transition: visibility 0s linear .2s;
+    transition: background-color .2s ease-out, visibility 0s linear .2s;   /* 딤은 안내 창과 같이 0.2s 페이드 (리뷰 쓰기는 아래 .review-write-layer에서 0.3s 등속) */
 }
 
+/* 딤: 검정 25% (시안 리뷰 쓰기 오버레이 배경 값을 안내 창에도 — 2026-10-30 주인님 지정) → 뒤 상세 창이 한 겹 더 어두워져 흰 창 가장자리가 보임 */
 .modal-layer.active {
+    background-color: rgba(0, 0, 0, .25);
     visibility: visible;
     transition-delay: 0s;
+}
+
+/* 닫히는 0.2 · 0.3s 동안 옅어지는 딤이 아래 상세 창 누르기를 막지 않게 (피팅룸 .fitting-popup과 같음) */
+.modal-layer:not(.active) {
+    pointer-events: none;
 }
 
 /* 안내 창: 화면 가운데 600 (높이는 내용대로 — 723 · 752 · 720) */
@@ -2489,27 +2496,22 @@ footer hr {
     outline: none;
 }
 
-/* 리뷰 쓰기: 화면 아래 가운데 720×900, 뒤 검정 25% (시안 BOTTOM_CENTER · MOVE_IN 0.3s 등속) — 닫을 땐 거꾸로 내려감 */
+/* 리뷰 쓰기: 화면 가운데 720×900 (2026-10-30 주인님 지정 — 시안은 아래 가운데, 1920×1080이면 상세 창과 같은 위아래 90),
+   화면 아래 밖에서 가운데까지 0.3s 등속으로 올라오고 딤도 0.3s 등속 (시안 MOVE_IN) — 닫을 땐 거꾸로 내려감 */
 .review-write-layer {
     transition: background-color .3s linear, visibility 0s linear .3s;
 }
 
-.review-write-layer.active {
-    background-color: rgba(0, 0, 0, .25);
-}
-
 .modal.review-write {
-    top: auto;
-    bottom: 0;
     width: calc(720 * var(--px));
     height: calc(900 * var(--px));
     opacity: 1;
-    translate: -50% 100%;
+    translate: -50% 50dvh;   /* 닫힘: 위끝(화면 가운데 + 화면 높이 절반)이 화면 아래끝 → 밖에서 올라옴 */
     transition: translate .3s linear;
 }
 
 .modal-layer.active .review-write {
-    translate: -50% 0;
+    translate: -50% -50%;
 }
 
 /* ── 머리 64: 가운데 제목(H2/medium 24) + 오른쪽 위 닫기 40×40, 아래 1px 선 ── */

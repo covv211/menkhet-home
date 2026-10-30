@@ -398,7 +398,11 @@ if (detail) {
             if (e.key === 'Escape') hideModal(true, true);
             if (e.key !== 'Tab') return;
             const items = [...openModal.querySelectorAll(MODAL_FOCUSABLE)];
-            if (e.shiftKey && (document.activeElement === items[0] || document.activeElement === openModal)) {
+            if (!openModal.contains(document.activeElement)) {
+                // 앱 · 탭을 바꿨다 오는 등으로 포커스가 창 밖에 있으면 창 처음(Shift+Tab은 끝)으로 데려옴
+                e.preventDefault();
+                (e.shiftKey ? items[items.length - 1] : items[0]).focus({ focusVisible: true });
+            } else if (e.shiftKey && (document.activeElement === items[0] || document.activeElement === openModal)) {
                 e.preventDefault();
                 items[items.length - 1].focus({ focusVisible: true });
             } else if (!e.shiftKey && document.activeElement === items[items.length - 1]) {
@@ -685,7 +689,7 @@ if (detail) {
     /* 창 위에 뜨는 창 (시안 프로토타입 오버레이): 리뷰의 '리뷰 쓰기' → 리뷰 쓰기 442:1669, 정보 칸 쿠폰 글자 · 안내(!) → 신규 가입 혜택 488:1681 · 카드 혜택 486:1680 · 배송 정보 492:1683
        누른 버튼의 aria-controls = 띄울 창, 한 번에 하나만 뜸 · 뜬 동안 상품 상세 창은 inert (Tab은 뜬 창 안에서만 돎 — 위 keydown)
        닫기: 창 안 data-close 버튼(닫기 · 취소 · 확인) · 리뷰 등록 · Esc, 바깥을 눌러도 닫히지 않음(시안 설정) → 연 버튼으로 포커스를 돌려줌
-       움직임은 style.css (리뷰 쓰기 = 아래에서 0.3s 등속으로 올라옴 + 뒤 25% 어둡게, 안내 창 = 0.2s 페이드) */
+       자리 · 움직임은 style.css (넷 다 화면 가운데 + 뒤 검정 25% 딤, 리뷰 쓰기 = 아래에서 0.3s 등속으로 올라옴, 안내 창 = 0.2s 페이드) */
     const MODAL_FOCUSABLE = 'button:not(:disabled), input:not(:disabled), select, textarea';   // 뜬 창 안에서 Tab이 멈추는 곳 (처음 · 끝만 봄)
     let openModal = null;   // 떠 있는 창 (.modal)
     let modalOpener = null;   // 닫을 때 포커스를 돌려줄 버튼
@@ -714,6 +718,13 @@ if (detail) {
 
     detail.querySelectorAll('.modal [data-close]').forEach((button) => {
         button.addEventListener('click', (e) => hideModal(true, e.detail === 0));   // 키보드 Enter로 누른 클릭은 detail 0
+    });
+
+    // 딤(창 바깥)을 눌러도 포커스가 창 밖(body)으로 빠지지 않게 → Shift+Tab이 창 밖으로 나가지 않음 (닫히지 않는 건 시안 설정 그대로)
+    detail.querySelectorAll('.modal-layer').forEach((layer) => {
+        layer.addEventListener('mousedown', (e) => {
+            if (e.target === layer) e.preventDefault();
+        });
     });
 
     /* 리뷰 쓰기: 열 때마다 처음 모습(시안에 그려진 값 — 별 4 · 롱코트 01 · 블랙 M · 딱 맞아요 · 아주 좋아요, 글 · 사진 없음)
