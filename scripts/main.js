@@ -2,6 +2,7 @@
    - index.html · women-coat.html이 같이 씀 → 페이지에 없는 요소는 건너뜀
    - 헤더 전체 메뉴(.sub): 햄버거 → 1차 → 2차 → 3차 메뉴, 단계마다 하나만 열림 (1차는 위→아래, 2 · 3차는 왼쪽→오른쪽 0.3s 펼침 · 높이 800 흰 판 · 밑줄은 style.css)
    - 검색: 결과 페이지가 정해지기 전이라 제출만 막음
+   - 히어로 위 영상: 소리 없이 자동 반복, 멈춤 · 재생 버튼, 화면 밖이면 쉼
    - 히어로 Swiper: 한 장씩 옆으로 1.5s 등속, 자동 넘김 (동작 줄이기여도 넘김 그대로 — 주인님 지정)
    - 랭킹 · 추천 코디(예전 나라별 룩) · 여자 코트 Swiper, 프로모션 두 줄 흐름
    - 여자 코트 상품 상세 창: 롱코트 01 카드를 누르면 페이지 위에 열림 (주소 해시 · 뒤로 가기와 맞춤, 0.3s 페이드는 style.css)
@@ -64,6 +65,39 @@ document.addEventListener('keydown', (e) => {
 document.querySelector('#search').addEventListener('submit', (e) => {
     e.preventDefault();   // 검색 결과 페이지가 생기면 form action으로 연결
 });
+
+/* ── 히어로 위 영상: 소리 없이 자동 반복 (동작 줄이기여도 그대로 — 주인님 지정) ── */
+// 5초 넘게 저절로 움직이는 화면이라 멈춤 · 재생 버튼을 둠 (멈춘 동안 active → 재생 삼각형은 style.css)
+// 화면 밖으로 나가면 쉬었다가 돌아오면 이어서 재생 (발열 줄이기), 직접 멈춘 건 돌아와도 그대로
+const heroVideo = document.querySelector('#hero-video');
+
+if (heroVideo) {
+    const videoButton = document.querySelector('.hero-video .btn-video');
+    let userPaused = false;
+
+    // 버튼 글자 · 모양을 지금 재생 상태에 맞춤 (자동 재생이 막힌 브라우저면 처음부터 '영상 재생')
+    function syncVideoButton() {
+        videoButton.classList.toggle('active', heroVideo.paused);
+        videoButton.textContent = heroVideo.paused ? '영상 재생' : '영상 멈춤';
+    }
+
+    heroVideo.addEventListener('play', syncVideoButton);
+    heroVideo.addEventListener('pause', syncVideoButton);
+
+    videoButton.addEventListener('click', () => {
+        userPaused = !heroVideo.paused;
+        if (userPaused) heroVideo.pause();
+        else heroVideo.play().catch(syncVideoButton);
+    });
+
+    new IntersectionObserver(([entry]) => {
+        if (userPaused) return;
+        if (entry.isIntersecting) heroVideo.play().catch(syncVideoButton);
+        else heroVideo.pause();
+    }).observe(heroVideo);
+
+    syncVideoButton();
+}
 
 /* ── 히어로 Swiper ── */
 const SPEED = 1500;   // 넘김 1.5s (등속은 style.css의 linear)

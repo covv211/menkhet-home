@@ -11,11 +11,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;1,6..96,400&family=Noto+Serif+KR:wght@400&family=Patua+One&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css" integrity="sha384-IFb872aCXZQb6BKRUHmGn0YHKnFl4ylZjkgVRRyMTEQ5bjo/H6xFUiLJm6opOO66" crossorigin="anonymous">
     <!-- ?v=날짜(같은 날 또 고치면 뒤에 b · c …): CSS · JS · 아이콘을 고치면 같이 올림 → GitHub Pages가 파일을 10분씩 캐시해서 새 HTML에 예전 CSS가 섞여 깨져 보이던 것 막음 (2026-10-29) -->
-    <link rel="stylesheet" href="styles/default.css?v=1030c">
-    <link rel="stylesheet" href="styles/token.css?v=1030c">
-    <link rel="stylesheet" href="styles/style.css?v=1030c">
+    <link rel="stylesheet" href="styles/default.css?v=1103">
+    <link rel="stylesheet" href="styles/token.css?v=1103">
+    <link rel="stylesheet" href="styles/style.css?v=1103">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js" integrity="sha384-JiF4eFN9V3I2Fry7TzFM3XKdq0P3abiVxpOeHjGz4cwvas+uNg6pFWVmuD6MKXqG" crossorigin="anonymous" defer></script>
-    <script src="scripts/main.js?v=1030c" defer></script>
+    <script src="scripts/main.js?v=1103" defer></script>
 </head>
 
 <body>
@@ -275,6 +275,16 @@
     </header>
 
     <main>
+        <!-- 히어로 위 영상: 20초 반복 런웨이 필름 (2026-11-03 Soul 2 첫 장면 + Kling 3.0 Pro, 원본 · 만든 과정은 시안/2026-11-03_히어로-영상) — 소리 없이 자동 재생, 멈춤 · 재생은 main.js -->
+        <section class="hero-video">
+            <h2 class="blind">MENKHET 런웨이 영상</h2>
+            <video id="hero-video" autoplay muted loop playsinline preload="auto" poster="images/hero-video/hero-runway-v2-poster.webp" width="1920" height="1080" aria-label="카멜 벨트 롱코트를 입은 모델이 런웨이를 걷는 영상">
+                <source src="images/hero-video/hero-runway-v2.webm" type="video/webm">
+                <source src="images/hero-video/hero-runway-v2.mp4" type="video/mp4">
+            </video>
+            <button type="button" class="btn-video">영상 멈춤</button>
+        </section>
+
         <!-- 히어로: 런웨이 룩 5장 — 모델 · 옷은 Soul 2로 만든 피팅 룩(남자 · 여자 폴더의 실제 옷), 2026-10-28 나라별 국기 의상에서 룩 이름으로 바꿈 (Swiper, 설정은 main.js) -->
         <section class="hero">
             <div class="hero-swiper">
